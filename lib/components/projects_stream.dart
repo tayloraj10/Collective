@@ -26,7 +26,7 @@ class _ProjectsStreamState extends State<ProjectsStream> {
 
         return Column(
           children: snapshot.data.docs.map((DocumentSnapshot document) {
-            print(document.data());
+            // print(document.data());
             return ProjectCard(
               data: document.data(),
             );

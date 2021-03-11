@@ -33,7 +33,7 @@ class TopicCard extends StatelessWidget {
                   return Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10, left: 5, top: 5),
+                        padding: EdgeInsets.only(bottom: 10, left: 5, top: 15),
                         child: Align(
                           child: Text(
                             '\u2022 ' + e['title'] + ": " + e['description'],
@@ -42,6 +42,9 @@ class TopicCard extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                         ),
                       ),
+                      Divider(
+                        thickness: 4,
+                      )
                     ],
                   );
                 }).toList(),

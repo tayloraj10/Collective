@@ -25,7 +25,7 @@ class _TopicsStreamState extends State<TopicsStream> {
 
         return Column(
           children: snapshot.data.docs.map((DocumentSnapshot document) {
-            print(document.data());
+            // print(document.data());
             return TopicCard(
               title: document.data()['topic'],
               subtopics: document.data()['subtopics'],

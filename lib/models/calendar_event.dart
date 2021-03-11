@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-_AppointmentDataSource getCalendarDataSource() {
+_AppointmentDataSource getCalendarDataSource(List events) {
   List<Appointment> appointments = <Appointment>[];
-  appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(Duration(minutes: 30)),
-      subject: 'Meeting',
-      color: Colors.blue,
-      startTimeZone: '',
-      endTimeZone: '',
-      notes: 'Here are the meeting notes',
-      isAllDay: false));
+
+  for (var e in events) {
+    // print(e);
+
+    DateTime startTime = e['start'].containsKey("dateTime")
+        ? DateTime.parse(e['start']['dateTime'])
+        : DateTime.parse(e['start']['date']);
+    DateTime endTime = e['end'].containsKey("dateTime")
+        ? DateTime.parse(e['end']['dateTime'])
+        : DateTime.parse(e['end']['date']).subtract(const Duration(minutes: 1));
+
+    appointments.add(Appointment(
+        startTime: startTime,
+        endTime: endTime,
+        subject: e['summary'],
+        color: Colors.blue,
+        startTimeZone: '',
+        endTimeZone: '',
+        notes: e['description'],
+        isAllDay: false));
+  }
 
   return _AppointmentDataSource(appointments);
 }

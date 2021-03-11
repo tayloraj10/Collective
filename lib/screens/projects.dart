@@ -10,27 +10,35 @@ class Projects extends StatefulWidget {
 class _ProjectsState extends State<Projects> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Scrollbar(
-        child: Container(
-          color: SecondaryColor,
-          child: Padding(
-            padding: EdgeInsets.all(40),
-            child: Column(
-              children: [
-                Text(
-                  'These are the currently ongoing projects',
-                  style: pageTextStyle,
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: viewportConstraints.maxHeight,
+          ),
+          child: Scrollbar(
+            child: Container(
+              color: SecondaryColor,
+              child: Padding(
+                padding: EdgeInsets.all(40),
+                child: Column(
+                  children: [
+                    Text(
+                      'These are the currently ongoing projects',
+                      style: pageTextStyle,
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    ProjectsStream()
+                  ],
                 ),
-                SizedBox(
-                  height: 25,
-                ),
-                ProjectsStream()
-              ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

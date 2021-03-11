@@ -2,10 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:collective/constants.dart';
 
 class appData extends ChangeNotifier {
+  Map calendarEvents = {};
   // List<Map<dynamic, dynamic>> homeBanners = [];
   // String sessionID = '';
+  get getCalendarEvents {
+    return calendarEvents;
+  }
 
-  // List getNMovies(int n) {
+  void updateCalendarEvents(Map newData) {
+    calendarEvents = newData;
+    notifyListeners();
+  }
+
+// List getNMovies(int n) {
   //   return getRandomMovies(n, movieData);
   // }
   //
