@@ -1,5 +1,6 @@
 import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:accordion/accordion.dart';
 
 class TopicCard extends StatelessWidget {
   final String title;
@@ -12,6 +13,7 @@ class TopicCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 25),
         width: MediaQuery.of(context).size.width * 0.7,
+        height: 100,
         child: ExpansionTile(
           title: Container(
             color: Colors.green,

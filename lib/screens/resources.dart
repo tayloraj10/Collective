@@ -25,7 +25,7 @@ class _ResourcesState extends State<Resources> {
                 child: Column(
                   children: [
                     Text(
-                      "The idea behind Collective is simple: to do cool stuff\n\nCollective is a place to find interesting and fun things going on and to find people to do those things with\n\nAnything is game from finding volunteering/social good opportunities to launching a new project/business venture to finding talent for a viral tiktok idea",
+                      "Collective is simple\n\nIt's a platform to do interesting things with interesting people\n\nCurrently only operating in Philadelphia",
                       style: pageTextStyle,
                       textAlign: TextAlign.center,
                     ),

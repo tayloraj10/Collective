@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/accordion_content.dart';
 import 'package:collective/components/topic_card.dart';
 import 'package:flutter/material.dart';
+import 'package:accordion/accordion.dart';
 
 class TopicsStream extends StatefulWidget {
   @override
@@ -23,17 +25,42 @@ class _TopicsStreamState extends State<TopicsStream> {
           return CircularProgressIndicator();
         }
 
-        return Column(
-          children: snapshot.data.docs.map((DocumentSnapshot document) {
-            // print(document.data());
-            return TopicCard(
-              title: document.data()['topic'],
-              subtopics: document.data()['subtopics'],
-            );
-          }).toList(),
+        return Container(
+          margin: EdgeInsets.only(bottom: 25),
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height,
+          child: Accordion(
+            maxOpenSections: 1,
+            children: snapshot.data.docs.map((DocumentSnapshot document) {
+              // print(document.data());
+              return AccordionSection(
+                isOpen: false,
+                header: Text(
+                  document.data()['topic'],
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                content: AccordionContent(
+                  title: document.data()['topic'],
+                  subtopics: document.data()['subtopics'],
+                ),
+              );
+            }).toList(),
+          ),
         );
+        // Column(
+        //   children: snapshot.data.docs.map((DocumentSnapshot document) {
+        //     // print(document.data());
+        //     return TopicCard(
+        //       title: document.data()['topic'],
+        //       subtopics: document.data()['subtopics'],
+        //     );
+        //   }).toList(),
+        // );
       },
     );
-    ;
   }
 }

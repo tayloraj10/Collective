@@ -1,40 +1,50 @@
 import 'package:collective/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProjectCard extends StatelessWidget {
   final Map data;
-  ProjectCard({this.data});
+  final Color color;
+  ProjectCard({this.data, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AccentColorDark,
-            border: Border.all(
-              color: AccentColor,
-              width: 2,
-            ),
-          ),
-          width: MediaQuery.of(context).size.width * 0.5,
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: ListTile(
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 6),
-                child: Text(
-                  data['title'],
-                  style: pageTextStyle.copyWith(
-                      decoration: TextDecoration.underline),
-                ),
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: Card(
+        color: color,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                data['title'],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18),
               ),
-              subtitle: Text(
-                  data['description'] + "\n\nTopic: " + data['topic'],
-                  style: pageTextStyle.copyWith(fontSize: 16)),
-            ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                data['description'],
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                data['topic'],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
           ),
         ),
       ),

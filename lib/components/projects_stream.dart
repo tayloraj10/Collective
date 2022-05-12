@@ -9,12 +9,23 @@ class ProjectsStream extends StatefulWidget {
 }
 
 class _ProjectsStreamState extends State<ProjectsStream> {
-  var topics = FirebaseFirestore.instance.collection('projects');
+  var projects = FirebaseFirestore.instance.collection('projects');
 
   @override
   Widget build(BuildContext context) {
+    List<Color> colors = [
+      Colors.blue,
+      Colors.red,
+      Colors.orange,
+      Colors.green,
+      Colors.yellow,
+      Colors.grey,
+    ];
+    int colorIndex = 0;
+    Map<String, Color> colorMapping = {};
+
     return StreamBuilder<QuerySnapshot>(
-      stream: topics.snapshots(),
+      stream: projects.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // if (snapshot.hasError) {
         //   return Text('Something went wrong');
@@ -27,8 +38,20 @@ class _ProjectsStreamState extends State<ProjectsStream> {
         return Column(
           children: snapshot.data.docs.map((DocumentSnapshot document) {
             // print(document.data());
+            Color color;
+            if (colorMapping.containsKey(document.data()['topic'])) {
+              color = colorMapping[document.data()['topic']];
+            } else {
+              colorMapping[document.data()['topic']] = colors[colorIndex];
+              color = colors[colorIndex];
+              colorIndex++;
+              if (colorIndex == colors.length) {
+                colorIndex = 0;
+              }
+            }
             return ProjectCard(
               data: document.data(),
+              color: color,
             );
           }).toList(),
         );
