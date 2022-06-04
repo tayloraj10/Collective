@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instant/instant.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 _AppointmentDataSource getCalendarDataSource(List events) {
@@ -7,12 +8,21 @@ _AppointmentDataSource getCalendarDataSource(List events) {
   for (var e in events) {
     // print(e);
 
-    DateTime startTime = e['start'].containsKey("dateTime")
-        ? DateTime.parse(e['start']['dateTime'])
-        : DateTime.parse(e['start']['date']);
-    DateTime endTime = e['end'].containsKey("dateTime")
-        ? DateTime.parse(e['end']['dateTime'])
-        : DateTime.parse(e['end']['date']).subtract(const Duration(minutes: 1));
+    DateTime startTime =
+        DateTime.parse(e['start']['dateTime']).subtract(Duration(hours: 4));
+    // dateTimeToZone(
+    //     zone: "EST",
+    //     datetime: e['start'].containsKey("dateTime")
+    //         ? DateTime.parse(e['start']['dateTime'])
+    //         : DateTime.parse(e['start']['date']));
+    DateTime endTime =
+        DateTime.parse(e['end']['dateTime']).subtract(Duration(hours: 4));
+    // dateTimeToZone(
+    //     zone: "EST",
+    //     datetime: e['end'].containsKey("dateTime")
+    //         ? DateTime.parse(e['end']['dateTime'])
+    //         : DateTime.parse(e['end']['date'])
+    //             .subtract(const Duration(minutes: 1)));
 
     appointments.add(Appointment(
         startTime: startTime,
