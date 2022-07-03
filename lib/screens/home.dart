@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        initialIndex: 1,
+        initialIndex: 0,
         length: 4,
         child: Scaffold(
           appBar: AppBar(
