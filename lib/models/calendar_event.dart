@@ -5,16 +5,18 @@ _AppointmentDataSource getCalendarDataSource(List events) {
   List<Appointment> appointments = <Appointment>[];
 
   for (var e in events) {
+    bool recur = false;
     int recurrence = 10;
     if (e.containsKey('recurrence')) {
       print(e);
       recurrence = 1;
+      recur = true;
     }
 
     while (recurrence <= 10) {
       DateTime startTime = DateTime.parse(e['start']['dateTime'])
           .subtract(Duration(hours: 4))
-          .add(Duration(days: 7 * recurrence));
+          .add(Duration(days: 7 * (recur ? recurrence : 0)));
       // dateTimeToZone(
       //     zone: "EST",
       //     datetime: e['start'].containsKey("dateTime")
@@ -22,7 +24,7 @@ _AppointmentDataSource getCalendarDataSource(List events) {
       //         : DateTime.parse(e['start']['date']));
       DateTime endTime = DateTime.parse(e['end']['dateTime'])
           .subtract(Duration(hours: 4))
-          .add(Duration(days: 7 * recurrence));
+          .add(Duration(days: 7 * (recur ? recurrence : 0)));
       // dateTimeToZone(
       //     zone: "EST",
       //     datetime: e['end'].containsKey("dateTime")
