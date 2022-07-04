@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:collective/constants.dart';
 
 class appData extends ChangeNotifier {
   Map calendarEvents = {};
