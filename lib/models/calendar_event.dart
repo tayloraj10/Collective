@@ -8,13 +8,27 @@ _AppointmentDataSource getCalendarDataSource(List events) {
   for (var e in events) {
     bool recur = false;
     int recurrence = 0;
-    print(e);
+    int recurrenceLimit = 12;
+    // print(e);
     if (e.containsKey('recurrence')) {
-      print('recur');
+      if (e['recurrence'][0].contains('UNTIL')) {
+        recurrenceLimit = ((DateUtils.dateOnly(DateTime.parse(e['recurrence'][0]
+                            .split(';UNTIL=')[1]
+                            .split(';')[0]
+                            .substring(0, 8)))
+                        .difference(DateUtils.dateOnly(
+                            DateTime.parse(e['start']['dateTime'])
+                                .subtract(Duration(hours: 4))))
+                        .inDays /
+                    7) +
+                1)
+            .round();
+      }
+
       recurrence = 1;
       recur = true;
 
-      while (recurrence < 10) {
+      while (recurrence < recurrenceLimit) {
         DateTime startTime = DateTime.parse(e['start']['dateTime'])
             .subtract(Duration(hours: 4))
             .add(Duration(days: 7 * (recur ? recurrence : 0)));
@@ -31,7 +45,6 @@ _AppointmentDataSource getCalendarDataSource(List events) {
             endTimeZone: '',
             notes: e['description'],
             isAllDay: false));
-        print('adding');
 
         recurrence += 1;
       }
@@ -60,7 +73,6 @@ _AppointmentDataSource getCalendarDataSource(List events) {
     }
   }
 
-  print('returning');
   return _AppointmentDataSource(appointments);
 }
 

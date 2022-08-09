@@ -17,7 +17,7 @@ class _CalendarState extends State<Calendar> {
   getCalendarEvents() {
     var events = Provider.of<appData>(context, listen: false).getCalendarEvents;
     var data = getCalendarDataSource(events['items']);
-    print(data);
+    // print(data);
     return data;
   }
 
