@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:collective/models/calendar_event.dart';
 import 'package:provider/provider.dart';
+import 'package:collective/models/calendar_event.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -13,13 +14,16 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List getCalendarEvents() {
+  getCalendarEvents() {
     var events = Provider.of<appData>(context, listen: false).getCalendarEvents;
-    return events['items'];
+    var data = getCalendarDataSource(events['items']);
+    print(data);
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
+    print(getCalendarEvents());
     return SingleChildScrollView(
       child: Scrollbar(
         child: Column(
@@ -48,7 +52,7 @@ class _CalendarState extends State<Calendar> {
                       showAgenda: true,
                       appointmentDisplayMode:
                           MonthAppointmentDisplayMode.appointment),
-                  dataSource: getCalendarDataSource(getCalendarEvents()),
+                  dataSource: getCalendarEvents(),
                   // dataSource: CalendarDataSource,
                 ),
               ),

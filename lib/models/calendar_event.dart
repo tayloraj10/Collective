@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instant/instant.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 _AppointmentDataSource getCalendarDataSource(List events) {
@@ -6,31 +7,46 @@ _AppointmentDataSource getCalendarDataSource(List events) {
 
   for (var e in events) {
     bool recur = false;
-    int recurrence = 10;
+    int recurrence = 0;
+    print(e);
     if (e.containsKey('recurrence')) {
-      print(e);
+      print('recur');
       recurrence = 1;
       recur = true;
-    }
 
-    while (recurrence <= 10) {
-      DateTime startTime = DateTime.parse(e['start']['dateTime'])
-          .subtract(Duration(hours: 4))
-          .add(Duration(days: 7 * (recur ? recurrence : 0)));
-      // dateTimeToZone(
-      //     zone: "EST",
-      //     datetime: e['start'].containsKey("dateTime")
-      //         ? DateTime.parse(e['start']['dateTime'])
-      //         : DateTime.parse(e['start']['date']));
-      DateTime endTime = DateTime.parse(e['end']['dateTime'])
-          .subtract(Duration(hours: 4))
-          .add(Duration(days: 7 * (recur ? recurrence : 0)));
-      // dateTimeToZone(
-      //     zone: "EST",
-      //     datetime: e['end'].containsKey("dateTime")
-      //         ? DateTime.parse(e['end']['dateTime'])
-      //         : DateTime.parse(e['end']['date'])
-      //             .subtract(const Duration(minutes: 1)));
+      while (recurrence < 10) {
+        DateTime startTime = DateTime.parse(e['start']['dateTime'])
+            .subtract(Duration(hours: 4))
+            .add(Duration(days: 7 * (recur ? recurrence : 0)));
+        DateTime endTime = DateTime.parse(e['end']['dateTime'])
+            .subtract(Duration(hours: 4))
+            .add(Duration(days: 7 * (recur ? recurrence : 0)));
+
+        appointments.add(Appointment(
+            startTime: startTime,
+            endTime: endTime,
+            subject: e['summary'],
+            color: Colors.blue,
+            startTimeZone: '',
+            endTimeZone: '',
+            notes: e['description'],
+            isAllDay: false));
+        print('adding');
+
+        recurrence += 1;
+      }
+    } else {
+      DateTime startTime = dateTimeToZone(
+          zone: "EST",
+          datetime: e['start'].containsKey("dateTime")
+              ? DateTime.parse(e['start']['dateTime'])
+              : DateTime.parse(e['start']['date']));
+      DateTime endTime = dateTimeToZone(
+          zone: "EST",
+          datetime: e['end'].containsKey("dateTime")
+              ? DateTime.parse(e['end']['dateTime'])
+              : DateTime.parse(e['end']['date'])
+                  .subtract(const Duration(minutes: 1)));
 
       appointments.add(Appointment(
           startTime: startTime,
@@ -41,11 +57,10 @@ _AppointmentDataSource getCalendarDataSource(List events) {
           endTimeZone: '',
           notes: e['description'],
           isAllDay: false));
-
-      recurrence += 1;
     }
   }
 
+  print('returning');
   return _AppointmentDataSource(appointments);
 }
 

@@ -57,6 +57,5 @@ class _ProjectsStreamState extends State<ProjectsStream> {
         );
       },
     );
-    ;
   }
 }

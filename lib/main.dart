@@ -25,8 +25,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           fontFamily: 'Oxygen',
-          accentColor: AccentColor,
-          primaryColor: PrimaryColor,
+          primaryColor: PrimaryColor, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AccentColor),
         ),
         home: Scaffold(
           // appBar: UPickAppBar(),
