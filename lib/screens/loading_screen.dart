@@ -27,7 +27,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   Future<void> getData() async {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyBU7AZ9mzRdYODCPUqZcwL4RLrha_opcl4",
+            authDomain: "collective-e06e1.firebaseapp.com",
+            projectId: "collective-e06e1",
+            storageBucket: "collective-e06e1.appspot.com",
+            messagingSenderId: "1097949131260",
+            appId: "1:1097949131260:web:68bc0051c431e72cbe0279",
+            measurementId: "G-JPHHPCC2XP"));
     FirebaseAuth auth = FirebaseAuth.instance;
 
     FetchURL fetch = new FetchURL();
@@ -35,11 +43,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // print(data);
     Provider.of<appData>(context, listen: false).updateCalendarEvents(data);
     if (auth.currentUser == null) {
-      print('NO USER');
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SignIn(),
+          builder: (context) => Home(),
         ),
       );
     } else {

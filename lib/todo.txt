@@ -8,3 +8,5 @@
 6. groups that people can join and host projects through
 7. domain name
 8. contact info
+9. POI map
+10. admin tools

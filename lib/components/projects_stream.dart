@@ -36,13 +36,14 @@ class _ProjectsStreamState extends State<ProjectsStream> {
         }
 
         return Column(
-          children: snapshot.data.docs.map((DocumentSnapshot document) {
+          children: snapshot.data.docs.map((DocumentSnapshot<Object> document) {
             // print(document.data());
             Color color;
-            if (colorMapping.containsKey(document.data()['topic'])) {
-              color = colorMapping[document.data()['topic']];
+            Map data = document.data() as Map;
+            if (colorMapping.containsKey(data['topic'])) {
+              color = colorMapping[data['topic']];
             } else {
-              colorMapping[document.data()['topic']] = colors[colorIndex];
+              colorMapping[data['topic']] = colors[colorIndex];
               color = colors[colorIndex];
               colorIndex++;
               if (colorIndex == colors.length) {

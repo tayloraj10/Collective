@@ -33,10 +33,12 @@ class _TopicsStreamState extends State<TopicsStream> {
             maxOpenSections: 1,
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               // print(document.data());
+              Map data = document.data() as Map;
+
               return AccordionSection(
                 isOpen: false,
                 header: Text(
-                  document.data()['topic'],
+                  data['topic'],
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -44,8 +46,8 @@ class _TopicsStreamState extends State<TopicsStream> {
                   ),
                 ),
                 content: AccordionContent(
-                  title: document.data()['topic'],
-                  subtopics: document.data()['subtopics'],
+                  title: data['topic'],
+                  subtopics: data['subtopics'],
                 ),
               );
             }).toList(),

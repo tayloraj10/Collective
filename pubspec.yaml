@@ -22,18 +22,19 @@ environment:
 
 dependencies:
   accordion: ^2.1.0
-  cloud_firestore: ^0.16.0+1
+  cloud_firestore: ^3.4.6
   cupertino_icons: ^1.0.1
   dropdown_search: ^0.6.3
-  firebase_auth: ^0.20.0+1 
-  firebase_core: ^0.7.0
+  firebase_auth: ^3.7.0 
+  firebase_core: ^1.21.1
   flutter:
     sdk: flutter
-  http: ^0.12.2
+  flutterfire_ui: ^0.4.3+7
+  http: ^0.13.5
   instant: ^0.4.1
   provider: ^4.3.2+3
   syncfusion_flutter_calendar: ^18.4.44
-  url_launcher: ^5.5.2
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_test:
