@@ -22,10 +22,13 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<appData>(
       create: (context) => appData(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           fontFamily: 'Oxygen',
-          primaryColor: PrimaryColor, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AccentColor),
+          primaryColor: PrimaryColor,
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: AccentColor),
         ),
         home: Scaffold(
           // appBar: UPickAppBar(),

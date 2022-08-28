@@ -1,0 +1,10 @@
+1. Authentication
+    a. hide stuff for non-authenticated users like topic adding
+2. calendar enhancements
+    a. 
+3. open chat tab where anyone can leave a message
+4. project details and project adding
+5. user page with user contact info
+6. groups that people can join and host projects through
+7. domain name
+8. contact info
