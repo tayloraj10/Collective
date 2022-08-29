@@ -1,12 +1,9 @@
 import 'package:collective/components/resource_link.dart';
-import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:collective/models/calendar_event.dart';
 import 'package:provider/provider.dart';
-import 'package:collective/models/calendar_event.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -15,7 +12,7 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   getCalendarEvents() {
-    var events = Provider.of<appData>(context, listen: false).getCalendarEvents;
+    var events = Provider.of<AppData>(context, listen: false).getCalendarEvents;
     var data = getCalendarDataSource(events['items']);
     // print(data);
     return data;

@@ -15,7 +15,7 @@ const TextStyle pageTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 22);
 
-Color TitleColor = Colors.grey[200];
+Color titleColor = Colors.grey[200];
 
 const String calendarAPIkey = 'AIzaSyBykyx3g2Vf986Vsd4MZ2zKvNoh7XG5zLE';
 const String calendarID =
@@ -26,11 +26,7 @@ const String calendarAPI =
     "https://www.googleapis.com/calendar/v3/calendars/494eudb3n3rsqib0id77cjklco@group.calendar.google.com/events?key=AIzaSyDE7bbnSB-EbLI2wsn3P01uqVgf4UoaqTQ";
 
 void launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    print('Could not launch $url');
-  }
+  await launchUrl(Uri.parse(url));
 }
 
 class FetchURL {

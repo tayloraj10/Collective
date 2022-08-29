@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class appData extends ChangeNotifier {
-  FirebaseAuth auth = null;
+class AppData extends ChangeNotifier {
+  FirebaseAuth auth;
 
   Map calendarEvents = {};
 

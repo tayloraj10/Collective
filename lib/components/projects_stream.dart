@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/project_card.dart';
-import 'package:collective/components/topic_card.dart';
 import 'package:flutter/material.dart';
 
 class ProjectsStream extends StatefulWidget {

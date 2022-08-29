@@ -1,6 +1,5 @@
 import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:accordion/accordion.dart';
 
 class TopicCard extends StatelessWidget {
   final String title;

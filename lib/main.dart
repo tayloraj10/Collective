@@ -1,9 +1,7 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
-import 'package:collective/screens/home.dart';
 import 'package:collective/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 // void main() {
@@ -19,8 +17,8 @@ Future main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<appData>(
-      create: (context) => appData(),
+    return ChangeNotifierProvider<AppData>(
+      create: (context) => AppData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

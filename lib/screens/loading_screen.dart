@@ -40,8 +40,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     FetchURL fetch = new FetchURL();
     var data = await fetch.getData(calendarAPI);
     // print(data);
-    Provider.of<appData>(context, listen: false).updateCalendarEvents(data);
-    Provider.of<appData>(context, listen: false).updateFirebaseAuth(auth);
+    Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
+    Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -61,7 +61,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             Text(
               'Collective',
               style: TextStyle(
-                color: TitleColor,
+                color: titleColor,
                 fontSize: 40,
                 fontWeight: FontWeight.w700,
               ),

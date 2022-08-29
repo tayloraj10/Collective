@@ -7,7 +7,6 @@ import 'package:collective/screens/sign_in.dart';
 import 'package:collective/screens/topics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -21,11 +20,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    auth = Provider.of<appData>(context, listen: false).getFirebaseAuth();
+    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
   Widget build(BuildContext context) {
+    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+
     return MaterialApp(
       home: DefaultTabController(
         initialIndex: 0,
@@ -63,7 +64,7 @@ class _HomeState extends State<Home> {
                   'Collective',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: TitleColor,
+                      color: titleColor,
                       fontSize: 40,
                       fontStyle: FontStyle.italic),
                 ),

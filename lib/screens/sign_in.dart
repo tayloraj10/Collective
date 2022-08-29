@@ -6,7 +6,7 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:provider/provider.dart';
 
 class SignIn extends StatelessWidget {
-  FirebaseAuth auth;
+  final FirebaseAuth auth;
 
   SignIn({this.auth});
 
@@ -23,9 +23,9 @@ class SignIn extends StatelessWidget {
             providerConfigs: [EmailProviderConfiguration()],
             actions: [
               AuthStateChangeAction<SignedIn>((context, state) {
-                Provider.of<appData>(context, listen: false)
+                Provider.of<AppData>(context, listen: false)
                     .updateFirebaseAuth(auth);
-                print(Provider.of<appData>(context, listen: false)
+                print(Provider.of<AppData>(context, listen: false)
                     .getFirebaseAuth());
 
                 Navigator.push(

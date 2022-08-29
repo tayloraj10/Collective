@@ -38,7 +38,7 @@ class _TopicsState extends State<Topics> {
 
   void initState() {
     super.initState();
-    auth = Provider.of<appData>(context, listen: false).getFirebaseAuth();
+    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
