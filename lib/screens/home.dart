@@ -1,9 +1,14 @@
 import 'package:collective/constants.dart';
+import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/calendar.dart';
 import 'package:collective/screens/projects.dart';
 import 'package:collective/screens/resources.dart';
+import 'package:collective/screens/sign_in.dart';
 import 'package:collective/screens/topics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,6 +16,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  FirebaseAuth auth;
+
+  @override
+  void initState() {
+    super.initState();
+    auth = Provider.of<appData>(context, listen: false).getFirebaseAuth();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,16 +53,72 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            title: Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Collective',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: TitleColor,
-                    fontSize: 40,
-                    fontStyle: FontStyle.italic),
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Spacer(
+                  flex: 2,
+                ),
+                Text(
+                  'Collective',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: TitleColor,
+                      fontSize: 40,
+                      fontStyle: FontStyle.italic),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: ElevatedButton(
+                      child: Text(
+                        auth.currentUser == null
+                            ? "Log In"
+                            : "Logged In As: ${auth.currentUser.email}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.blue,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
+                        if (auth.currentUser == null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignIn(auth: auth),
+                            ),
+                          );
+                        } else {
+                          // auth.signOut();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content:
+                                      const Text('Do you want to sign out?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'Cancel'),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => {
+                                        auth.signOut(),
+                                        setState(() {}),
+                                        Navigator.pop(context, 'OK')
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.white)),
+                )
+              ],
             ),
           ),
           body: TabBarView(

@@ -1,8 +1,8 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class appData extends ChangeNotifier {
-  // FirebaseAuth auth = null;
+  FirebaseAuth auth = null;
 
   Map calendarEvents = {};
 
@@ -12,19 +12,19 @@ class appData extends ChangeNotifier {
     return calendarEvents;
   }
 
-  // void updateFirebaseAuth(FirebaseAuth newAuth) {
-  //   auth = newAuth;
-  //   notifyListeners();
-  // }
+  void updateFirebaseAuth(FirebaseAuth newAuth) {
+    auth = newAuth;
+    notifyListeners();
+  }
 
   void updateCalendarEvents(Map newData) {
     calendarEvents = newData;
     notifyListeners();
   }
 
-  // FirebaseAuth getFirebaseAuth() {
-  //   return auth;
-  // }
+  FirebaseAuth getFirebaseAuth() {
+    return auth;
+  }
 
 // List getNMovies(int n) {
   //   return getRandomMovies(n, movieData);

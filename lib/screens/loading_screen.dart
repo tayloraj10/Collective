@@ -1,7 +1,6 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
-import 'package:collective/screens/sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,21 +41,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
     var data = await fetch.getData(calendarAPI);
     // print(data);
     Provider.of<appData>(context, listen: false).updateCalendarEvents(data);
-    if (auth.currentUser == null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
-    }
+    Provider.of<appData>(context, listen: false).updateFirebaseAuth(auth);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+    );
   }
 
   @override

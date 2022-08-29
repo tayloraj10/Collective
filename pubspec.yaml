@@ -25,7 +25,7 @@ dependencies:
   cloud_firestore: ^3.4.6
   cupertino_icons: ^1.0.1
   dropdown_search: ^0.6.3
-  firebase_auth: ^3.7.0 
+  firebase_auth: ^3.7.0
   firebase_core: ^1.21.1
   flutter:
     sdk: flutter

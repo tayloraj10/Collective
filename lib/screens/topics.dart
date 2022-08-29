@@ -1,8 +1,11 @@
 import 'package:collective/components/topics_stream.dart';
 import 'package:collective/constants.dart';
+import 'package:collective/models/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:provider/provider.dart';
 
 class Topics extends StatefulWidget {
   @override
@@ -10,6 +13,8 @@ class Topics extends StatefulWidget {
 }
 
 class _TopicsState extends State<Topics> {
+  FirebaseAuth auth;
+
   var topics = FirebaseFirestore.instance.collection('topics');
   List<String> topicList = [];
   bool newTopic = false;
@@ -31,6 +36,11 @@ class _TopicsState extends State<Topics> {
     topicList.add('New Topic');
   }
 
+  void initState() {
+    super.initState();
+    auth = Provider.of<appData>(context, listen: false).getFirebaseAuth();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -47,138 +57,117 @@ class _TopicsState extends State<Topics> {
                 padding: EdgeInsets.all(40),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await getTopics();
-                        showModalBottomSheet<void>(
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5),
+                    if (auth.currentUser != null)
+                      ElevatedButton(
+                        onPressed: () async {
+                          await getTopics();
+                          showModalBottomSheet<void>(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5),
+                              ),
                             ),
-                          ),
-                          builder: (BuildContext builderContext) {
-                            return StatefulBuilder(
-                              builder: (BuildContext statefulBuilderContext,
-                                  StateSetter setState) {
-                                return Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * .5,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          width: 150,
-                                          child: DropdownSearch<String>(
-                                            mode: Mode.MENU,
-                                            showSelectedItem: true,
-                                            items: topicList,
-                                            hint: "Choose a Topic",
-                                            onChanged: (value) {
-                                              setState(() {
-                                                topic = value;
-                                                value == 'New Topic'
-                                                    ? newTopic = true
-                                                    : newTopic = false;
-                                              });
-                                            },
+                            builder: (BuildContext builderContext) {
+                              return StatefulBuilder(
+                                builder: (BuildContext statefulBuilderContext,
+                                    StateSetter setState) {
+                                  return Container(
+                                    height:
+                                        MediaQuery.of(context).size.height * .5,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: 150,
+                                            child: DropdownSearch<String>(
+                                              mode: Mode.MENU,
+                                              showSelectedItem: true,
+                                              items: topicList,
+                                              hint: "Choose a Topic",
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  topic = value;
+                                                  value == 'New Topic'
+                                                      ? newTopic = true
+                                                      : newTopic = false;
+                                                });
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                        // DropdownButton<String>(
-                                        //   value: topic,
-                                        //   hint: Text("Choose a Topic"),
-                                        //   items: topicList.map((String value) {
-                                        //     return DropdownMenuItem<String>(
-                                        //       value: value,
-                                        //       child: Text(value),
-                                        //     );
-                                        //   }).toList(),
-                                        //   onChanged: (v) {
-                                        //     setState(() {
-                                        //       topic = v;
-                                        //     });
-                                        //     // print(topic);
-                                        //   },
-                                        // ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        if (newTopic)
+                                          // DropdownButton<String>(
+                                          //   value: topic,
+                                          //   hint: Text("Choose a Topic"),
+                                          //   items: topicList.map((String value) {
+                                          //     return DropdownMenuItem<String>(
+                                          //       value: value,
+                                          //       child: Text(value),
+                                          //     );
+                                          //   }).toList(),
+                                          //   onChanged: (v) {
+                                          //     setState(() {
+                                          //       topic = v;
+                                          //     });
+                                          //     // print(topic);
+                                          //   },
+                                          // ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          if (newTopic)
+                                            Container(
+                                              width: 150,
+                                              child: TextField(
+                                                controller: topicCont,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Topic',
+                                                ),
+                                              ),
+                                            ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                           Container(
                                             width: 150,
                                             child: TextField(
-                                              controller: topicCont,
+                                              controller: titleCont,
                                               decoration: InputDecoration(
-                                                labelText: 'Topic',
+                                                labelText: 'Idea Name',
                                               ),
                                             ),
                                           ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          width: 150,
-                                          child: TextField(
-                                            controller: titleCont,
-                                            decoration: InputDecoration(
-                                              labelText: 'Idea Name',
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            width: 150,
+                                            child: TextField(
+                                              controller: descriptionCont,
+                                              decoration: InputDecoration(
+                                                  labelText:
+                                                      'Idea Description'),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          width: 150,
-                                          child: TextField(
-                                            controller: descriptionCont,
-                                            decoration: InputDecoration(
-                                                labelText: 'Idea Description'),
+                                          SizedBox(
+                                            height: 20,
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                                child: Text('Submit'),
-                                                onPressed: () {
-                                                  if (topic == null) {
-                                                    AlertDialog alert =
-                                                        AlertDialog(
-                                                      title: Text("Error"),
-                                                      content: Text(
-                                                          "Please pick a topic option"),
-                                                      actions: [],
-                                                    );
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return alert;
-                                                      },
-                                                    );
-                                                  } else if (newTopic ||
-                                                      topic == null) {
-                                                    if (topicCont.text.isEmpty ||
-                                                        titleCont
-                                                            .text.isEmpty ||
-                                                        descriptionCont
-                                                            .text.isEmpty ||
-                                                        topicList.contains(
-                                                            topicCont.text)) {
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                  child: Text('Submit'),
+                                                  onPressed: () {
+                                                    if (topic == null) {
                                                       AlertDialog alert =
                                                           AlertDialog(
                                                         title: Text("Error"),
                                                         content: Text(
-                                                            "Topic cannot be empty or already exist"),
+                                                            "Please pick a topic option"),
                                                         actions: [],
                                                       );
                                                       showDialog(
@@ -188,88 +177,116 @@ class _TopicsState extends State<Topics> {
                                                           return alert;
                                                         },
                                                       );
+                                                    } else if (newTopic ||
+                                                        topic == null) {
+                                                      if (topicCont.text.isEmpty ||
+                                                          titleCont
+                                                              .text.isEmpty ||
+                                                          descriptionCont
+                                                              .text.isEmpty ||
+                                                          topicList.contains(
+                                                              topicCont.text)) {
+                                                        AlertDialog alert =
+                                                            AlertDialog(
+                                                          title: Text("Error"),
+                                                          content: Text(
+                                                              "Topic cannot be empty or already exist"),
+                                                          actions: [],
+                                                        );
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return alert;
+                                                          },
+                                                        );
+                                                      } else {
+                                                        topics.doc().set({
+                                                          'topic':
+                                                              topicCont.text,
+                                                          'subtopics': [
+                                                            {
+                                                              'title': titleCont
+                                                                  .text,
+                                                              'description':
+                                                                  descriptionCont
+                                                                      .text
+                                                            }
+                                                          ]
+                                                        });
+                                                      }
                                                     } else {
-                                                      topics.doc().set({
-                                                        'topic': topicCont.text,
-                                                        'subtopics': [
-                                                          {
-                                                            'title':
-                                                                titleCont.text,
-                                                            'description':
-                                                                descriptionCont
-                                                                    .text
-                                                          }
-                                                        ]
+                                                      String id;
+                                                      Map data;
+                                                      topics
+                                                          .where('topic',
+                                                              isEqualTo: topic)
+                                                          .get()
+                                                          .then((value) {
+                                                        id =
+                                                            value.docs.first.id;
+                                                        data = value.docs.first
+                                                            .data();
+                                                        data['subtopics'].add({
+                                                          'description':
+                                                              descriptionCont
+                                                                  .text,
+                                                          'title':
+                                                              titleCont.text
+                                                        });
+                                                        topics
+                                                            .doc(id)
+                                                            .set(data);
                                                       });
                                                     }
-                                                  } else {
-                                                    String id;
-                                                    Map data;
-                                                    topics
-                                                        .where('topic',
-                                                            isEqualTo: topic)
-                                                        .get()
-                                                        .then((value) {
-                                                      id = value.docs.first.id;
-                                                      data = value.docs.first
-                                                          .data();
-                                                      data['subtopics'].add({
-                                                        'description':
-                                                            descriptionCont
-                                                                .text,
-                                                        'title': titleCont.text
-                                                      });
-                                                      topics.doc(id).set(data);
-                                                    });
-                                                  }
-                                                  Navigator.pop(context);
-                                                }),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.red),
-                                              child: Text('Cancel'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            )
-                                          ],
-                                        ),
-                                      ],
+                                                    Navigator.pop(context);
+                                                  }),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Colors.red),
+                                                child: Text('Cancel'),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
-                        // topics.add({
-                        //   'description': 'test', // John Doe
-                        //   'title': 'test', // Stokes and Sons
-                        //   'topic': 'test'
-                        // });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(Icons.add),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              'Add an Idea',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                          // topics.add({
+                          //   'description': 'test', // John Doe
+                          //   'title': 'test', // Stokes and Sons
+                          //   'topic': 'test'
+                          // });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Icon(Icons.add),
+                              SizedBox(
+                                width: 4,
                               ),
-                            )
-                          ],
+                              Text(
+                                'Add an Idea',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     SizedBox(
                       height: 25,
                     ),

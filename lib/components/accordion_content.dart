@@ -1,7 +1,4 @@
-import 'package:collective/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:accordion/accordion.dart';
 
 class AccordionContent extends StatelessWidget {
   final String title;
