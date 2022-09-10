@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
 import 'package:collective/screens/profile.dart';
@@ -13,6 +14,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool newUser = false;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey,
@@ -24,25 +27,39 @@ class SignIn extends StatelessWidget {
             providerConfigs: [EmailProviderConfiguration()],
             actions: [
               AuthStateChangeAction<UserCreated>((context, state) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Profile(),
-                  ),
-                );
+                newUser = true;
+                CollectionReference users =
+                    FirebaseFirestore.instance.collection('users');
+                users
+                    .add({
+                      'first_name': "",
+                      'last_name': "",
+                      'phone': 0,
+                      'email': auth.currentUser.email,
+                      'uid': auth.currentUser.uid
+                    })
+                    .then((value) => print("User Added"))
+                    .catchError((error) => print("Failed to add user: $error"));
               }),
               AuthStateChangeAction<SignedIn>((context, state) {
                 Provider.of<AppData>(context, listen: false)
                     .updateFirebaseAuth(auth);
-                print(Provider.of<AppData>(context, listen: false)
-                    .getFirebaseAuth());
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Home(),
-                  ),
-                );
+                if (newUser) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Profile(),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Home(),
+                    ),
+                  );
+                }
               }),
             ],
           )))

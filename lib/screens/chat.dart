@@ -71,6 +71,7 @@ class _ChatState extends State<Chat> {
                                             padding: const EdgeInsets.all(10),
                                             child: TextFormField(
                                               controller: messageController,
+                                              autofocus: true,
                                             ),
                                           ),
                                           Padding(

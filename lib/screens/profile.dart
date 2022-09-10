@@ -1,5 +1,6 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
+import 'package:collective/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -22,25 +23,40 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-          ),
-          child: Scrollbar(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey,
+        body: Column(children: [
+          Expanded(
             child: Container(
-              color: SecondaryColor,
               child: ProfileScreen(
+                auth: auth,
                 providerConfigs: [
                   EmailProviderConfiguration(),
+                ],
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Home(),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Go Home',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22)),
+                    ),
+                  )
                 ],
               ),
             ),
           ),
-        ),
-      );
-    });
+        ]),
+      ),
+    );
   }
 }

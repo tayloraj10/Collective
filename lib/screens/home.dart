@@ -2,6 +2,7 @@ import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/calendar.dart';
 import 'package:collective/screens/chat.dart';
+import 'package:collective/screens/profile.dart';
 import 'package:collective/screens/projects.dart';
 import 'package:collective/screens/resources.dart';
 import 'package:collective/screens/sign_in.dart';
@@ -21,12 +22,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+    print(auth.currentUser?.email);
   }
 
   @override
   Widget build(BuildContext context) {
     auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+    print(auth.currentUser?.email);
 
     return MaterialApp(
       home: DefaultTabController(
@@ -88,7 +91,8 @@ class _HomeState extends State<Home> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                content: const Text('Do you want to sign out?'),
+                                content: const Text(
+                                    'Do you want to sign out or view your profile?'),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () =>
@@ -96,12 +100,21 @@ class _HomeState extends State<Home> {
                                     child: const Text('Cancel'),
                                   ),
                                   TextButton(
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Profile(),
+                                      ),
+                                    ),
+                                    child: const Text('View Profile'),
+                                  ),
+                                  TextButton(
                                     onPressed: () => {
                                       auth.signOut(),
                                       setState(() {}),
-                                      Navigator.pop(context, 'OK')
+                                      Navigator.pop(context)
                                     },
-                                    child: const Text('OK'),
+                                    child: const Text('Sign Out'),
                                   ),
                                 ],
                               );

@@ -10,3 +10,4 @@
 8. contact info
 9. POI map
 10. admin tools
+11. firebase rules

@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       create: (context) => AppData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Collective',
         theme: ThemeData(
           fontFamily: 'Oxygen',
           primaryColor: PrimaryColor,
