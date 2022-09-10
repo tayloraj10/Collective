@@ -7,15 +7,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:provider/provider.dart';
 
-class Topics extends StatefulWidget {
+class Ideas extends StatefulWidget {
   @override
-  _TopicsState createState() => _TopicsState();
+  _IdeasState createState() => _IdeasState();
 }
 
-class _TopicsState extends State<Topics> {
+class _IdeasState extends State<Ideas> {
   FirebaseAuth auth;
 
-  var topics = FirebaseFirestore.instance.collection('topics');
+  var ideas = FirebaseFirestore.instance.collection('topics');
   List<String> topicList = [];
   bool newTopic = false;
   String topic;
@@ -25,7 +25,7 @@ class _TopicsState extends State<Topics> {
 
   Future<void> getTopics() async {
     topicList = [];
-    var t = await topics.get();
+    var t = await ideas.get();
     t.docs.forEach((e) {
       if (!topicList.contains(e.data()['topic'])) {
         setState(() {
@@ -201,7 +201,7 @@ class _TopicsState extends State<Topics> {
                                                           },
                                                         );
                                                       } else {
-                                                        topics.doc().set({
+                                                        ideas.doc().set({
                                                           'topic':
                                                               topicCont.text,
                                                           'subtopics': [
@@ -218,7 +218,7 @@ class _TopicsState extends State<Topics> {
                                                     } else {
                                                       String id;
                                                       Map data;
-                                                      topics
+                                                      ideas
                                                           .where('topic',
                                                               isEqualTo: topic)
                                                           .get()
@@ -234,9 +234,7 @@ class _TopicsState extends State<Topics> {
                                                           'title':
                                                               titleCont.text
                                                         });
-                                                        topics
-                                                            .doc(id)
-                                                            .set(data);
+                                                        ideas.doc(id).set(data);
                                                       });
                                                     }
                                                     Navigator.pop(context);
