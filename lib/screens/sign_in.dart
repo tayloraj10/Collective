@@ -1,5 +1,6 @@
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
+import 'package:collective/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -22,6 +23,14 @@ class SignIn extends StatelessWidget {
             auth: auth,
             providerConfigs: [EmailProviderConfiguration()],
             actions: [
+              AuthStateChangeAction<UserCreated>((context, state) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profile(),
+                  ),
+                );
+              }),
               AuthStateChangeAction<SignedIn>((context, state) {
                 Provider.of<AppData>(context, listen: false)
                     .updateFirebaseAuth(auth);
@@ -35,9 +44,6 @@ class SignIn extends StatelessWidget {
                   ),
                 );
               }),
-              AuthStateChangeAction<UserCreated>((context, state) {
-                print('USER CREATED');
-              })
             ],
           )))
         ]),
