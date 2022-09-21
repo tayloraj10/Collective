@@ -26,15 +26,14 @@ class SignIn extends StatelessWidget {
             auth: auth,
             providerConfigs: [EmailProviderConfiguration()],
             actions: [
-              AuthStateChangeAction<UserCreated>((context, state) {
+              AuthStateChangeAction<UserCreated>((context, state) async {
                 newUser = true;
                 CollectionReference users =
                     FirebaseFirestore.instance.collection('users');
-                users
+                await users
                     .add({
-                      'first_name': "",
-                      'last_name': "",
-                      'phone': 0,
+                      'name': "",
+                      'phone': "",
                       'email': auth.currentUser.email,
                       'uid': auth.currentUser.uid
                     })

@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutterfire_ui: ^0.4.3+7
+  fluttertoast: ^8.0.9
   http: ^0.13.5
   instant: ^0.4.1
   intl: ^0.17.0

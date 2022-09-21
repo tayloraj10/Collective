@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class AppData extends ChangeNotifier {
   FirebaseAuth auth;
+  Map<dynamic, dynamic> userData = {};
 
   Map calendarEvents = {};
 
@@ -17,6 +18,11 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateUserData(Map<dynamic, dynamic> newData) {
+    userData = newData;
+    notifyListeners();
+  }
+
   void updateCalendarEvents(Map newData) {
     calendarEvents = newData;
     notifyListeners();
@@ -24,6 +30,10 @@ class AppData extends ChangeNotifier {
 
   FirebaseAuth getFirebaseAuth() {
     return auth;
+  }
+
+  Map<dynamic, dynamic> getUserData() {
+    return userData;
   }
 
 // List getNMovies(int n) {

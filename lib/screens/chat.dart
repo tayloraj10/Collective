@@ -84,7 +84,13 @@ class _ChatState extends State<Chat> {
                                                     'timestamp':
                                                         Timestamp.now(),
                                                     'user_id':
-                                                        auth.currentUser.uid
+                                                        auth.currentUser.uid,
+                                                    'initials': auth.currentUser
+                                                            .displayName
+                                                            .split(" ")[0][0] +
+                                                        auth.currentUser
+                                                            .displayName
+                                                            .split(" ")[1][0]
                                                   };
                                                   FirebaseFirestore.instance
                                                       .collection('chat')
@@ -163,6 +169,10 @@ class _ChatState extends State<Chat> {
                                                     data['timestamp'].toDate()),
                                             style:
                                                 TextStyle(color: Colors.black)),
+                                        trailing: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          child: Text(data['initials']),
+                                        ),
                                       ),
                                     ),
                                   );

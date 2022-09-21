@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   FirebaseAuth auth;
+  var userData = {};
 
   @override
   void initState() {
@@ -25,14 +26,20 @@ class _HomeState extends State<Home> {
     FirebaseAuth auth = FirebaseAuth.instance;
     Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
 
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+    getUser();
     print(auth.currentUser?.email);
     print(auth.currentUser);
+
+    userData = Provider.of<AppData>(context, listen: false).getUserData();
+  }
+
+  void getUser() {
+    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
   Widget build(BuildContext context) {
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
+    getUser();
     print(auth.currentUser?.email);
 
     return MaterialApp(
@@ -74,7 +81,7 @@ class _HomeState extends State<Home> {
                     child: Text(
                       auth.currentUser == null
                           ? "Log In"
-                          : "Logged In As: \n${auth.currentUser.email}",
+                          : "Logged In As: \n${userData['name'] != "" ? userData['name'] : auth.currentUser.email}",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.blue,

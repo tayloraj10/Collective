@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
@@ -40,8 +41,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
     FetchURL fetch = new FetchURL();
     var data = await fetch.getData(calendarAPI);
     // print(data);
-    Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
-    Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
+    await Provider.of<AppData>(context, listen: false)
+        .updateCalendarEvents(data);
+    await Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
+
+    if (auth.currentUser != null) {
+      var user = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: auth.currentUser.uid)
+          .get();
+      var docId = user.docs.first.id;
+      var userData =
+          await FirebaseFirestore.instance.collection('users').doc(docId).get();
+      await Provider.of<AppData>(context, listen: false)
+          .updateUserData(userData.data());
+      print(Provider.of<AppData>(context, listen: false).getUserData());
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
