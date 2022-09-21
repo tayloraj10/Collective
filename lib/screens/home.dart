@@ -22,8 +22,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
+
     auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
     print(auth.currentUser?.email);
+    print(auth.currentUser);
   }
 
   @override
@@ -121,7 +125,8 @@ class _HomeState extends State<Home> {
                             });
                       }
                     },
-                    style: ElevatedButton.styleFrom(primary: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white)),
               )
             ],
             centerTitle: true,

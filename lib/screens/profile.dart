@@ -1,4 +1,3 @@
-import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,6 +33,7 @@ class _ProfileState extends State<Profile> {
                 providerConfigs: [
                   EmailProviderConfiguration(),
                 ],
+                avatarSize: 0,
                 children: [
                   ElevatedButton(
                     onPressed: () {

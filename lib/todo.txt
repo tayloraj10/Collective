@@ -11,3 +11,4 @@
 9. POI map
 10. admin tools
 11. firebase rules
+12. Friendly Competition - track differently daily acitivites to see how you stack up

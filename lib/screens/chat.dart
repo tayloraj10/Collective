@@ -42,7 +42,7 @@ class _ChatState extends State<Chat> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Text('Welcome to Open Chat',
+                    child: Text('Welcome to Open Chat!',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
