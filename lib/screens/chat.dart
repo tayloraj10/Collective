@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/constants.dart';
-import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +13,6 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  FirebaseAuth auth;
-
   final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance
       .collection('chat')
       .orderBy('timestamp', descending: true)
@@ -23,11 +20,12 @@ class _ChatState extends State<Chat> {
 
   void initState() {
     super.initState();
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<User>(context);
+
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
       return SingleChildScrollView(
@@ -46,7 +44,7 @@ class _ChatState extends State<Chat> {
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
-                  if (auth.currentUser != null)
+                  if (user != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 20),
@@ -83,13 +81,10 @@ class _ChatState extends State<Chat> {
                                                         messageController.text,
                                                     'timestamp':
                                                         Timestamp.now(),
-                                                    'user_id':
-                                                        auth.currentUser.uid,
-                                                    'initials': auth.currentUser
-                                                            .displayName
+                                                    'user_id': user.uid,
+                                                    'initials': user.displayName
                                                             .split(" ")[0][0] +
-                                                        auth.currentUser
-                                                            .displayName
+                                                        user.displayName
                                                             .split(" ")[1][0]
                                                   };
                                                   FirebaseFirestore.instance

@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
 import 'package:collective/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:provider/provider.dart';
 
 class SignIn extends StatelessWidget {
   final FirebaseAuth auth;
@@ -41,8 +39,8 @@ class SignIn extends StatelessWidget {
                     .catchError((error) => print("Failed to add user: $error"));
               }),
               AuthStateChangeAction<SignedIn>((context, state) {
-                Provider.of<AppData>(context, listen: false)
-                    .updateFirebaseAuth(auth);
+                // Provider.of<AppData>(context, listen: false)
+                //     .updateFirebaseAuth(auth);
 
                 if (newUser) {
                   Navigator.push(

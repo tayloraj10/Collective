@@ -12,7 +12,7 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   getCalendarEvents() {
-    var events = Provider.of<AppData>(context, listen: false).getCalendarEvents;
+    var events = Provider.of<AppData>(context, listen: true).getCalendarEvents;
     var data = getCalendarDataSource(events['items']);
     // print(data);
     return data;
@@ -20,7 +20,6 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    print(getCalendarEvents());
     return SingleChildScrollView(
       child: Scrollbar(
         child: Column(

@@ -1,6 +1,5 @@
 import 'package:collective/components/topics_stream.dart';
 import 'package:collective/constants.dart';
-import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,8 +12,6 @@ class Ideas extends StatefulWidget {
 }
 
 class _IdeasState extends State<Ideas> {
-  FirebaseAuth auth;
-
   var ideas = FirebaseFirestore.instance.collection('topics');
   List<String> topicList = [];
   bool newTopic = false;
@@ -38,11 +35,12 @@ class _IdeasState extends State<Ideas> {
 
   void initState() {
     super.initState();
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<User>(context);
+
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
       return SingleChildScrollView(
@@ -57,7 +55,7 @@ class _IdeasState extends State<Ideas> {
                 padding: EdgeInsets.all(40),
                 child: Column(
                   children: [
-                    if (auth.currentUser != null)
+                    if (user != null)
                       ElevatedButton(
                         onPressed: () async {
                           await getTopics();

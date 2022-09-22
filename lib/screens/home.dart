@@ -17,34 +17,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  FirebaseAuth auth;
-  var userData = {};
-
   @override
   void initState() {
     super.initState();
-    FirebaseAuth auth = FirebaseAuth.instance;
-    Provider.of<AppData>(context, listen: false).updateFirebaseAuth(auth);
-
-    getUser();
-    print(auth.currentUser?.email);
-    print(auth.currentUser);
-
-    userData = Provider.of<AppData>(context, listen: false).getUserData();
-  }
-
-  void getUser() {
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
   }
 
   @override
   Widget build(BuildContext context) {
-    getUser();
-    print(auth.currentUser?.email);
+    var user = Provider.of<User>(context);
+    var userData = Provider.of<AppData>(context, listen: true).getUserData();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
 
     return MaterialApp(
       home: DefaultTabController(
-        initialIndex: 4,
+        initialIndex: 0,
         length: 5,
         child: Scaffold(
           appBar: AppBar(
@@ -64,12 +51,12 @@ class _HomeState extends State<Home> {
                   text: 'Projects',
                 ),
                 Tab(
-                  icon: Icon(Icons.file_copy),
-                  text: 'Info',
-                ),
-                Tab(
                   icon: Icon(Icons.chat_bubble),
                   text: 'Chat',
+                ),
+                Tab(
+                  icon: Icon(Icons.file_copy),
+                  text: 'Info',
                 ),
               ],
             ),
@@ -79,9 +66,9 @@ class _HomeState extends State<Home> {
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
                 child: ElevatedButton(
                     child: Text(
-                      auth.currentUser == null
+                      user == null
                           ? "Log In"
-                          : "Logged In As: \n${userData['name'] != "" ? userData['name'] : auth.currentUser.email}",
+                          : "Logged In As: \n${userData['name'] != null && userData['name'] != "" ? userData['name'] : user.email}",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.blue,
@@ -89,7 +76,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     onPressed: () {
-                      if (auth.currentUser == null) {
+                      if (user == null) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -147,7 +134,13 @@ class _HomeState extends State<Home> {
             ),
           ),
           body: TabBarView(
-            children: [Calendar(), Ideas(), Projects(), Resources(), Chat()],
+            children: [
+              Calendar(),
+              Ideas(),
+              Projects(),
+              Chat(),
+              Resources(),
+            ],
           ),
         ),
       ),

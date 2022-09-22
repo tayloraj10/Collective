@@ -1,6 +1,8 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/loading_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,15 +12,30 @@ import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyBU7AZ9mzRdYODCPUqZcwL4RLrha_opcl4",
+          authDomain: "collective-e06e1.firebaseapp.com",
+          projectId: "collective-e06e1",
+          storageBucket: "collective-e06e1.appspot.com",
+          messagingSenderId: "1097949131260",
+          appId: "1:1097949131260:web:68bc0051c431e72cbe0279",
+          measurementId: "G-JPHHPCC2XP"));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AppData>(
-      create: (context) => AppData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppData>(
+          create: (_) => AppData(),
+        ),
+        StreamProvider<User>.value(
+          value: FirebaseAuth.instance.authStateChanges(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Collective',
@@ -29,7 +46,6 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: AccentColor),
         ),
         home: Scaffold(
-          // appBar: UPickAppBar(),
           body: SafeArea(
             child: LoadingScreen(),
           ),

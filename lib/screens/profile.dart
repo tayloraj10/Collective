@@ -15,33 +15,33 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  FirebaseAuth auth;
-
   void initState() {
     super.initState();
-    auth = Provider.of<AppData>(context, listen: false).getFirebaseAuth();
-    getUserData();
+    // getUserData();
   }
 
-  void getUserData() async {
-    if (auth.currentUser != null) {
-      var user = await FirebaseFirestore.instance
+  void getUserData(user) async {
+    if (user != null) {
+      var userID = await FirebaseFirestore.instance
           .collection('users')
-          .where('uid', isEqualTo: auth.currentUser.uid)
+          .where('uid', isEqualTo: user.uid)
           .get();
-      var docId = user.docs.first.id;
+      var docId = userID.docs.first.id;
       var userData =
           await FirebaseFirestore.instance.collection('users').doc(docId).get();
-      await Provider.of<AppData>(context, listen: false)
+      Provider.of<AppData>(context, listen: false)
           .updateUserData(userData.data());
     } else {
-      await Provider.of<AppData>(context, listen: false).updateUserData({});
+      Provider.of<AppData>(context, listen: false).updateUserData({});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var userData = Provider.of<AppData>(context, listen: false).getUserData();
+    var user = Provider.of<User>(context);
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    var userData = Provider.of<AppData>(context, listen: true).getUserData();
     TextEditingController phoneController = new TextEditingController();
 
     userData['phone'] == null
@@ -97,7 +97,7 @@ class _ProfileState extends State<Profile> {
                               : "",
                           'phone': phoneController.text
                         }).then((documentSnapshot) => {
-                                  getUserData(),
+                                  getUserData(user),
                                   Fluttertoast.showToast(
                                       msg: "Profile Updated",
                                       toastLength: Toast.LENGTH_LONG,
@@ -106,7 +106,7 @@ class _ProfileState extends State<Profile> {
                                       webPosition: 'center',
                                       timeInSecForIosWeb: 3)
                                 });
-                        await getUserData();
+                        getUserData(user);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange),
@@ -122,8 +122,7 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await getUserData();
-                        print(userData);
+                        getUserData(user);
                         if (auth.currentUser.displayName == "" ||
                             auth.currentUser.displayName == null ||
                             userData['phone'] == "" ||
