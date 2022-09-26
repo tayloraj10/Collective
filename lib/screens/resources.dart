@@ -53,6 +53,17 @@ class _ResourcesState extends State<Resources> {
                       text: 'Volunteer Opportunities',
                       url:
                           'https://docs.google.com/spreadsheets/d/1tjOrcGyvZ9yVKB8QLvHV-ZrNb0wtwedlDJgpEneL5hc/edit?usp=sharing',
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Tooltip(
+                      message: 'tayloraj10@gmail.com',
+                      waitDuration: Duration(seconds: 1),
+                      child: ResourceLink(
+                        text: 'Contact Me',
+                        url: 'mailto:<tayloraj10@gmail.com>',
+                      ),
                     )
                   ],
                 ),

@@ -11,11 +11,13 @@ BUG PRIORITIES:
     c. show notes on calendar
 3. open chat tab where anyone can leave a message
 4. project details and project adding
-5. user page with user contact info
-6. groups that people can join and host projects through
-7. DONE - domain name
+5. user page with user contact info and authentication tasks like password reset
+6. check why passoword reset and email verify emails aren't sending
+7. groups that people can join and host projects through
+8. DONE - domain name
 9. POI map
 10. admin tools
 11. firebase rules
 12. Friendly Competition - track differently daily acitivites to see how you stack up
 13. Delete user info from firebase when user is deleted in profile page
+14. contact info for me on home page
