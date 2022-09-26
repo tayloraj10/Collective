@@ -35,7 +35,6 @@ class _HomeState extends State<Home> {
         length: 5,
         child: Scaffold(
           appBar: AppBar(
-            // backgroundColor: SecondaryColor,
             bottom: TabBar(
               tabs: [
                 Tab(
@@ -61,9 +60,25 @@ class _HomeState extends State<Home> {
               ],
             ),
             actions: [
+              if (Provider.of<User>(context, listen: true) != null &&
+                  userData['name'] == '')
+                Tooltip(
+                  message: 'Please complete your profile',
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.red),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
+                padding: const EdgeInsets.only(
+                    right: 30, left: 4, top: 6, bottom: 6),
                 child: ElevatedButton(
                     child: Text(
                       user == null
@@ -84,7 +99,6 @@ class _HomeState extends State<Home> {
                           ),
                         );
                       } else {
-                        // auth.signOut();
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {

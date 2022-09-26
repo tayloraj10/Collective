@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
@@ -15,7 +14,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
   @override
@@ -23,23 +21,26 @@ class _LoadingScreenState extends State<LoadingScreen> {
     super.dispose();
   }
 
-  Future<void> getData() async {
+  Future<void> getDataLoggedIn(userID) async {
     FetchURL fetch = new FetchURL();
     var data = await fetch.getData(calendarAPI);
     // print(data);
+
     Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
+    Provider.of<AppData>(context, listen: false).fetchUserData(userID);
 
-    var userID = await FirebaseFirestore.instance
-        .collection('users')
-        .where('uid', isEqualTo: Provider.of<User>(context, listen: false).uid)
-        .get();
-    var docId = userID.docs.first.id;
-    var userData =
-        await FirebaseFirestore.instance.collection('users').doc(docId).get();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+    );
+  }
 
-    Provider.of<AppData>(context, listen: false)
-        .updateUserData(userData.data());
-    print(Provider.of<AppData>(context, listen: false).getUserData());
+  Future<void> getDataLoggedOut() async {
+    FetchURL fetch = new FetchURL();
+    var data = await fetch.getData(calendarAPI);
+    Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
 
     Navigator.push(
       context,
@@ -51,12 +52,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // getData();
-    // print(Provider.of<User>(context, listen: false));
     if (Provider.of<User>(context) != null) {
-      getData();
+      getDataLoggedIn(Provider.of<User>(context, listen: false).uid);
       return Container();
     } else {
+      getDataLoggedOut();
       return Container(
           color: SecondaryColor,
           child: Center(

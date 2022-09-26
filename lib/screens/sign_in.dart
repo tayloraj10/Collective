@@ -39,9 +39,6 @@ class SignIn extends StatelessWidget {
                     .catchError((error) => print("Failed to add user: $error"));
               }),
               AuthStateChangeAction<SignedIn>((context, state) {
-                // Provider.of<AppData>(context, listen: false)
-                //     .updateFirebaseAuth(auth);
-
                 if (newUser) {
                   Navigator.push(
                     context,

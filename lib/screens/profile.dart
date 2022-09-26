@@ -17,23 +17,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
-    // getUserData();
-  }
-
-  void getUserData(user) async {
-    if (user != null) {
-      var userID = await FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: user.uid)
-          .get();
-      var docId = userID.docs.first.id;
-      var userData =
-          await FirebaseFirestore.instance.collection('users').doc(docId).get();
-      Provider.of<AppData>(context, listen: false)
-          .updateUserData(userData.data());
-    } else {
-      Provider.of<AppData>(context, listen: false).updateUserData({});
-    }
   }
 
   @override
@@ -41,7 +24,8 @@ class _ProfileState extends State<Profile> {
     var user = Provider.of<User>(context);
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    var userData = Provider.of<AppData>(context, listen: true).getUserData();
+    var userData = Provider.of<AppData>(context).getUserData();
+
     TextEditingController phoneController = new TextEditingController();
 
     userData['phone'] == null
@@ -61,12 +45,13 @@ class _ProfileState extends State<Profile> {
                 ],
                 actions: [
                   SignedOutAction((context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(),
-                      ),
-                    );
+                    print('signed out');
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => Home(),
+                    //   ),
+                    // );
                   }),
                 ],
                 avatarSize: 0,
@@ -82,12 +67,11 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        print(phoneController.text);
-                        var user = await FirebaseFirestore.instance
+                        var userID = await FirebaseFirestore.instance
                             .collection('users')
                             .where('uid', isEqualTo: auth.currentUser.uid)
                             .get();
-                        var docId = user.docs.first.id;
+                        var docId = userID.docs.first.id;
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(docId)
@@ -97,16 +81,16 @@ class _ProfileState extends State<Profile> {
                               : "",
                           'phone': phoneController.text
                         }).then((documentSnapshot) => {
-                                  getUserData(user),
+                                  Provider.of<AppData>(context, listen: false)
+                                      .fetchUserData(user.uid),
                                   Fluttertoast.showToast(
                                       msg: "Profile Updated",
                                       toastLength: Toast.LENGTH_LONG,
                                       fontSize: 16.0,
                                       webBgColor: '#55aaff',
                                       webPosition: 'center',
-                                      timeInSecForIosWeb: 3)
+                                      timeInSecForIosWeb: 3),
                                 });
-                        getUserData(user);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange),
@@ -122,10 +106,8 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        getUserData(user);
                         if (auth.currentUser.displayName == "" ||
                             auth.currentUser.displayName == null ||
-                            userData['phone'] == "" ||
                             phoneController.text == "") {
                           Fluttertoast.showToast(
                               msg: "Missing Name or Phone Number",

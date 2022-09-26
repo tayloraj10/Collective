@@ -6,13 +6,14 @@ BUG PRIORITIES:
 1. Authentication
     a. hide stuff for non-authenticated users like topic adding
 2. calendar enhancements
-    a. 
+    a. make sure times are lining up with google calendar
+    b. show location on calendar
+    c. show notes on calendar
 3. open chat tab where anyone can leave a message
 4. project details and project adding
 5. user page with user contact info
 6. groups that people can join and host projects through
-7. domain name
-8. contact info
+7. DONE - domain name
 9. POI map
 10. admin tools
 11. firebase rules
