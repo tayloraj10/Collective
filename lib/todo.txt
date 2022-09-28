@@ -12,7 +12,7 @@ BUG PRIORITIES:
 3. open chat tab where anyone can leave a message
 4. project details and project adding
 5. user page with user contact info and authentication tasks like password reset
-6. check why passoword reset and email verify emails aren't sending
+6. check why password reset and email verify emails aren't sending
 7. groups that people can join and host projects through
 8. DONE - domain name
 9. POI map

@@ -9,7 +9,9 @@ _AppointmentDataSource getCalendarDataSource(List events) {
     bool recur = false;
     int recurrence = 0;
     int recurrenceLimit = 12;
-    // print(e);
+    // print(e['location']);
+    // print(e['start']['dateTime']);
+    // print(e['start']['date']);
     if (e.containsKey('recurrence')) {
       if (e['recurrence'][0].contains('UNTIL')) {
         recurrenceLimit = ((DateUtils.dateOnly(DateTime.parse(e['recurrence'][0]
@@ -37,14 +39,17 @@ _AppointmentDataSource getCalendarDataSource(List events) {
             .add(Duration(days: 7 * (recur ? recurrence : 0)));
 
         appointments.add(Appointment(
-            startTime: startTime,
-            endTime: endTime,
-            subject: e['summary'],
+            startTime: startTime.add(const Duration(hours: 1)),
+            endTime: endTime.add(const Duration(hours: 1)),
+            subject: e['summary'] +
+                " - " +
+                (e['location'] != null ? e['location'] : ""),
             color: Colors.blue,
             startTimeZone: '',
             endTimeZone: '',
             notes: e['description'],
-            isAllDay: false));
+            isAllDay: false,
+            location: e['location']));
 
         recurrence += 1;
       }
@@ -61,15 +66,21 @@ _AppointmentDataSource getCalendarDataSource(List events) {
               : DateTime.parse(e['end']['date'])
                   .subtract(const Duration(minutes: 1)));
 
-      appointments.add(Appointment(
-          startTime: startTime,
-          endTime: endTime,
-          subject: e['summary'],
+      appointments.add(
+        Appointment(
+          startTime: startTime.add(const Duration(hours: 1)),
+          endTime: endTime.add(const Duration(hours: 1)),
+          subject: e['summary'] +
+              " - " +
+              (e['location'] != null ? e['location'] : ""),
           color: Colors.blue,
           startTimeZone: '',
           endTimeZone: '',
           notes: e['description'],
-          isAllDay: false));
+          isAllDay: false,
+          location: e['location'],
+        ),
+      );
     }
   }
 
