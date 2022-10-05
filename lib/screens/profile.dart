@@ -24,7 +24,7 @@ class _ProfileState extends State<Profile> {
     var user = Provider.of<User>(context);
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    var userData = Provider.of<AppData>(context).getUserData();
+    var userData = Provider.of<AppData>(context).userData;
 
     TextEditingController phoneController = new TextEditingController();
 
@@ -56,6 +56,13 @@ class _ProfileState extends State<Profile> {
                 ],
                 avatarSize: 0,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 0),
+                    child: Text(
+                      'Phone Number',
+                      style: TextStyle(),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: TextFormField(

@@ -1,6 +1,7 @@
 import 'package:collective/components/resource_link.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:collective/models/calendar_event.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,75 @@ class _CalendarState extends State<Calendar> {
     var data = getCalendarDataSource(events['items']);
     // print(data);
     return data;
+  }
+
+  calendarTap(details) {
+    print(details.targetElement);
+    if (details.targetElement == CalendarElement.appointment) {
+      var eventDetails = details.appointments[0];
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Container(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Event",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      SelectableText(
+                        "${eventDetails.subject.split(' - ')[0].trim()}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Location",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      SelectableText(
+                        "${eventDetails.subject.split(' - ')[1].trim()}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Time",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      SelectableText(
+                        "${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.startTime)}  -  ${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.endTime)}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      if (eventDetails.notes != '' &&
+                          eventDetails.notes != null)
+                        Text(
+                          "Description",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                      if (eventDetails.notes != '' &&
+                          eventDetails.notes != null)
+                        SelectableText(
+                          "${eventDetails.notes}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                    ]),
+              ),
+            );
+          });
+    }
   }
 
   @override
@@ -49,6 +119,7 @@ class _CalendarState extends State<Calendar> {
                       appointmentDisplayMode:
                           MonthAppointmentDisplayMode.appointment),
                   dataSource: getCalendarEvents(),
+                  onTap: calendarTap,
                   // dataSource: CalendarDataSource,
                 ),
               ),

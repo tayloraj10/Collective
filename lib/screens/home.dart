@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
-    var userData = Provider.of<AppData>(context, listen: true).getUserData();
+    var userData = Provider.of<AppData>(context, listen: true).userData;
 
     FirebaseAuth auth = FirebaseAuth.instance;
 
