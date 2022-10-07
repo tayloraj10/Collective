@@ -21,9 +21,11 @@ class GroupCard extends StatelessWidget {
     final groupRef =
         FirebaseFirestore.instance.collection("groups").doc(groupData['id']);
 
-    groupRef.update({
-      "users": groupData['users'] == null ? [uid] : groupData['users'].add(uid)
-    }).then((value) => print("DocumentSnapshot successfully updated!"),
+    var users = groupData['users'];
+    users.add(uid);
+
+    groupRef.update({"users": users}).then(
+        (value) => print("DocumentSnapshot successfully updated!"),
         onError: (e) => print("Error updating document $e"));
   }
 
@@ -31,9 +33,11 @@ class GroupCard extends StatelessWidget {
     final groupRef =
         FirebaseFirestore.instance.collection("groups").doc(groupData['id']);
 
-    groupRef.update({
-      "users": groupData['users'].removeWhere((id) => id == uid)
-    }).then((value) => print("DocumentSnapshot successfully updated!"),
+    var users = groupData['users'];
+    users.removeWhere((id) => id == uid);
+
+    groupRef.update({"users": users}).then(
+        (value) => print("DocumentSnapshot successfully updated!"),
         onError: (e) => print("Error updating document $e"));
   }
 
@@ -93,10 +97,7 @@ class GroupCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        (data['users'] == null
-                                ? '0'
-                                : data['users'].length.toString()) +
-                            "\nMembers",
+                        ((data['users'].length - 1).toString()) + "\nMembers",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 22),
                         textAlign: TextAlign.center,
