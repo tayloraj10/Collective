@@ -25,7 +25,7 @@ class _ResourcesState extends State<Resources> {
                 child: Column(
                   children: [
                     Text(
-                      "Collective is simple\n\nIt's a platform to do interesting things with interesting people\n\nCurrently only operating in Philadelphia",
+                      "Collective is simple\n\nIt's a platform to do interesting things with interesting people\n\nCurrently only operating in New York City",
                       style: pageTextStyle,
                       textAlign: TextAlign.center,
                     ),
