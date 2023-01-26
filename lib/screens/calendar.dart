@@ -1,4 +1,5 @@
 import 'package:collective/components/resource_link.dart';
+import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,8 @@ class _CalendarState extends State<Calendar> {
       showDialog(
           context: context,
           builder: (BuildContext context) {
+            String url;
+            String locationUrl = 'https://www.google.com/maps/search/';
             return AlertDialog(
               content: Container(
                 child: Column(
@@ -49,9 +52,15 @@ class _CalendarState extends State<Calendar> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      SelectableText(
-                        "${eventDetails.subject.split(' - ')[1].trim()}",
-                        style: TextStyle(fontSize: 18),
+                      InkWell(
+                        child: SelectableText(
+                          "${eventDetails.subject.split(' - ')[1].trim()}",
+                          style: TextStyle(fontSize: 18),
+                          onTap: () => {
+                            launchURL(locationUrl +
+                                "${eventDetails.subject.split(' - ')[1].trim()}")
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -77,9 +86,16 @@ class _CalendarState extends State<Calendar> {
                         ),
                       if (eventDetails.notes != '' &&
                           eventDetails.notes != null)
-                        SelectableText(
-                          "${eventDetails.notes}",
-                          style: TextStyle(fontSize: 18),
+                        InkWell(
+                          child: SelectableText("${eventDetails.notes}",
+                              style: TextStyle(fontSize: 18),
+                              onTap: () => {
+                                    url = 'http' +
+                                        eventDetails.notes
+                                            .split('http')[1]
+                                            .split(' ')[0],
+                                    launchURL(url)
+                                  }),
                         ),
                     ]),
               ),
