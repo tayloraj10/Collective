@@ -40,9 +40,11 @@ class _CalendarState extends State<Calendar> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      SelectableText(
-                        "${eventDetails.subject.split(' - ')[0].trim()}",
-                        style: TextStyle(fontSize: 18),
+                      Center(
+                        child: SelectableText(
+                          "${eventDetails.subject.split(' - ')[0].trim()}",
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -53,13 +55,15 @@ class _CalendarState extends State<Calendar> {
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                       InkWell(
-                        child: SelectableText(
-                          "${eventDetails.subject.split(' - ')[1].trim()}",
-                          style: TextStyle(fontSize: 18),
-                          onTap: () => {
-                            launchURL(locationUrl +
-                                "${eventDetails.subject.split(' - ')[1].trim()}")
-                          },
+                        child: Center(
+                          child: SelectableText(
+                            "${eventDetails.subject.split(' - ')[1].trim()}",
+                            style: TextStyle(fontSize: 18),
+                            onTap: () => {
+                              launchURL(locationUrl +
+                                  "${eventDetails.subject.split(' - ')[1].trim()}")
+                            },
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -70,9 +74,11 @@ class _CalendarState extends State<Calendar> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      SelectableText(
-                        "${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.startTime)}  -  ${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.endTime)}",
-                        style: TextStyle(fontSize: 18),
+                      Center(
+                        child: SelectableText(
+                          "${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.startTime)}  -  ${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.endTime)}",
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -87,15 +93,19 @@ class _CalendarState extends State<Calendar> {
                       if (eventDetails.notes != '' &&
                           eventDetails.notes != null)
                         InkWell(
-                          child: SelectableText("${eventDetails.notes}",
-                              style: TextStyle(fontSize: 18),
-                              onTap: () => {
-                                    url = 'http' +
-                                        eventDetails.notes
-                                            .split('http')[1]
-                                            .split(' ')[0],
-                                    launchURL(url)
-                                  }),
+                          child: Center(
+                            child: SelectableText("${eventDetails.notes}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                                onTap: () => {
+                                      url = 'http' +
+                                          eventDetails.notes
+                                              .split('http')[1]
+                                              .split(' ')[0],
+                                      launchURL(url)
+                                    }),
+                          ),
                         ),
                     ]),
               ),
