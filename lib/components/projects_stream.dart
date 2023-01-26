@@ -3,6 +3,9 @@ import 'package:collective/components/project_card.dart';
 import 'package:flutter/material.dart';
 
 class ProjectsStream extends StatefulWidget {
+  final Function showDetails;
+  ProjectsStream(this.showDetails);
+
   @override
   _ProjectsStreamState createState() => _ProjectsStreamState();
 }
@@ -19,6 +22,7 @@ class _ProjectsStreamState extends State<ProjectsStream> {
       Colors.green,
       Colors.yellow,
       Colors.grey,
+      Colors.purple,
     ];
     int colorIndex = 0;
     Map<String, Color> colorMapping = {};
@@ -49,9 +53,12 @@ class _ProjectsStreamState extends State<ProjectsStream> {
                 colorIndex = 0;
               }
             }
-            return ProjectCard(
-              data: document.data(),
-              color: color,
+            return GestureDetector(
+              onTap: () => {widget.showDetails(data)},
+              child: ProjectCard(
+                data: document.data(),
+                color: color,
+              ),
             );
           }).toList(),
         );
