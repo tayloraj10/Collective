@@ -179,9 +179,12 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               .map((DocumentSnapshot<Object> document) {
                             Map docData = document.data();
                             docData['id'] = document.id;
-                            return CircleAvatar(
-                              child: Text(docData['name'].split(' ')[0][0] +
-                                  docData['name'].split(' ')[1][0]),
+                            return Tooltip(
+                              message: docData['name'],
+                              child: CircleAvatar(
+                                child: Text(docData['name'].split(' ')[0][0] +
+                                    docData['name'].split(' ')[1][0]),
+                              ),
                             );
                           }).toList(),
                         ),
