@@ -43,6 +43,7 @@ class _ProjectsStreamState extends State<ProjectsStream> {
             // print(document.data());
             Color color;
             Map data = document.data() as Map;
+            data['id'] = document.id;
             if (colorMapping.containsKey(data['topic'])) {
               color = colorMapping[data['topic']];
             } else {
