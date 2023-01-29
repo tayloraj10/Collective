@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/models/app_data.dart';
+import 'package:collective/screens/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -181,9 +182,20 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             docData['id'] = document.id;
                             return Tooltip(
                               message: docData['name'],
-                              child: CircleAvatar(
-                                child: Text(docData['name'].split(' ')[0][0] +
-                                    docData['name'].split(' ')[1][0]),
+                              child: GestureDetector(
+                                onTap: (() => {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              UserDetails(docData['uid']),
+                                        ),
+                                      )
+                                    }),
+                                child: CircleAvatar(
+                                  child: Text(docData['name'].split(' ')[0][0] +
+                                      docData['name'].split(' ')[1][0]),
+                                ),
                               ),
                             );
                           }).toList(),

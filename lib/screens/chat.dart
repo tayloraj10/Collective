@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/constants.dart';
+import 'package:collective/screens/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -164,9 +165,21 @@ class _ChatState extends State<Chat> {
                                                     data['timestamp'].toDate()),
                                             style:
                                                 TextStyle(color: Colors.black)),
-                                        trailing: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Text(data['initials']),
+                                        trailing: GestureDetector(
+                                          onTap: (() => {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UserDetails(
+                                                            data['user_id']),
+                                                  ),
+                                                )
+                                              }),
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            child: Text(data['initials']),
+                                          ),
                                         ),
                                       ),
                                     ),
