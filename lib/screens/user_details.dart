@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/rendering.dart';
 
 class UserDetails extends StatelessWidget {
   final String userId;
@@ -105,105 +106,111 @@ class UserDetails extends StatelessWidget {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Groups: ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28)),
-                    StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('groups')
-                          .where('users', arrayContains: userId)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print('Something went wrong');
-                        }
+                padding: const EdgeInsets.only(top: 60, left: 40, right: 40),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Groups: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 28)),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('groups')
+                            .where('users', arrayContains: userId)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print('Something went wrong');
+                          }
 
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
 
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data.docs.mapIndexed(
-                                (index, DocumentSnapshot<Object> document) {
-                              Map docData = document.data();
-                              docData['id'] = document.id;
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    index == snapshot.data.docs.length - 1
-                                        ? docData['name']
-                                        : docData['name'] + ', ',
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: snapshot.data.docs.mapIndexed(
+                                  (index, DocumentSnapshot<Object> document) {
+                                Map docData = document.data();
+                                docData['id'] = document.id;
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      index == snapshot.data.docs.length - 1
+                                          ? docData['name']
+                                          : docData['name'] + ', ',
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Projects: ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28)),
-                    StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('projects')
-                          .where('users', arrayContains: userId)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print('Something went wrong');
-                        }
+                padding: const EdgeInsets.only(top: 16, left: 40, right: 40),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Projects: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 28)),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('projects')
+                            .where('users', arrayContains: userId)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print('Something went wrong');
+                          }
 
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
 
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data.docs.mapIndexed(
-                                (index, DocumentSnapshot<Object> document) {
-                              Map docData = document.data();
-                              docData['id'] = document.id;
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    index == snapshot.data.docs.length - 1
-                                        ? docData['title']
-                                        : docData['title'] + ', ',
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: snapshot.data.docs.mapIndexed(
+                                  (index, DocumentSnapshot<Object> document) {
+                                Map docData = document.data();
+                                docData['id'] = document.id;
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      index == snapshot.data.docs.length - 1
+                                          ? docData['title']
+                                          : docData['title'] + ', ',
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
