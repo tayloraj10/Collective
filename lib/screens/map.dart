@@ -63,13 +63,20 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                       width: 500,
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            runAlignment: WrapAlignment.spaceEvenly,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 10,
                             children: [
-                              SelectableText(
-                                loc['name'],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 28),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: SelectableText(
+                                  loc['name'],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
@@ -134,6 +141,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                               onTap: (() => {launchURL(loc['website'])}),
                               child: Text(
                                 loc['website'],
+                                textAlign: TextAlign.center,
                                 style:
                                     TextStyle(fontSize: 20, color: Colors.blue),
                               ),
@@ -141,6 +149,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                           if (loc['website'] == null)
                             SelectableText(
                               loc['website'],
+                              textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 20),
                             ),
                         ],
