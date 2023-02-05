@@ -13,7 +13,22 @@ class UserDetails extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey[200],
         body: Container(
-          width: MediaQuery.of(context).size.width,
+          // Place as the child widget of a scaffold
+          width: double.infinity,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: <Color>[
+              Color.fromARGB(255, 8, 51, 86),
+              Color.fromARGB(255, 28, 109, 174),
+              Color.fromARGB(255, 93, 150, 197),
+              Color.fromARGB(255, 147, 197, 238),
+              Color.fromARGB(255, 93, 150, 197),
+              Color.fromARGB(255, 28, 109, 174),
+              Color.fromARGB(255, 8, 51, 86),
+            ],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+          )),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
