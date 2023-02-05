@@ -1,5 +1,6 @@
 import 'package:collective/components/topics_stream.dart';
 import 'package:collective/constants.dart';
+import 'package:collective/screens/map.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,6 +56,39 @@ class _IdeasState extends State<Ideas> {
                 padding: EdgeInsets.all(40),
                 child: Column(
                   children: [
+                    ElevatedButton(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Icon(Icons.pin_drop),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Text(
+                              'View Interesting Locations',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      onPressed: (() => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InterestingLocations(),
+                              ),
+                            )
+                          }),
+                    ),
+                    if (user != null)
+                      SizedBox(
+                        height: 32,
+                      ),
                     if (user != null)
                       ElevatedButton(
                         onPressed: () async {
@@ -262,209 +296,6 @@ class _IdeasState extends State<Ideas> {
                                   },
                                 );
                               });
-                          // showModalBottomSheet<void>(
-                          //   context: context,
-                          //   shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(5),
-                          //       topRight: Radius.circular(5),
-                          //     ),
-                          //   ),
-                          //   builder: (BuildContext builderContext) {
-                          //     return StatefulBuilder(
-                          //       builder: (BuildContext statefulBuilderContext,
-                          //           StateSetter setState) {
-                          //         return Container(
-                          //           height:
-                          //               MediaQuery.of(context).size.height * .5,
-                          //           child: Center(
-                          //             child: Column(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.center,
-                          //               mainAxisSize: MainAxisSize.min,
-                          //               children: [
-                          //                 Container(
-                          //                   width: 150,
-                          //                   child: DropdownSearch<String>(
-                          //                     mode: Mode.MENU,
-                          //                     showSelectedItem: true,
-                          //                     items: topicList,
-                          //                     hint: "Choose a Topic",
-                          //                     onChanged: (value) {
-                          //                       setState(() {
-                          //                         topic = value;
-                          //                         value == 'New Topic'
-                          //                             ? newTopic = true
-                          //                             : newTopic = false;
-                          //                       });
-                          //                     },
-                          //                   ),
-                          //                 ),
-                          //                 // DropdownButton<String>(
-                          //                 //   value: topic,
-                          //                 //   hint: Text("Choose a Topic"),
-                          //                 //   items: topicList.map((String value) {
-                          //                 //     return DropdownMenuItem<String>(
-                          //                 //       value: value,
-                          //                 //       child: Text(value),
-                          //                 //     );
-                          //                 //   }).toList(),
-                          //                 //   onChanged: (v) {
-                          //                 //     setState(() {
-                          //                 //       topic = v;
-                          //                 //     });
-                          //                 //     // print(topic);
-                          //                 //   },
-                          //                 // ),
-                          //                 SizedBox(
-                          //                   height: 10,
-                          //                 ),
-                          //                 if (newTopic)
-                          //                   Container(
-                          //                     width: 150,
-                          //                     child: TextField(
-                          //                       controller: topicCont,
-                          //                       decoration: InputDecoration(
-                          //                         labelText: 'Topic',
-                          //                       ),
-                          //                     ),
-                          //                   ),
-                          //                 SizedBox(
-                          //                   height: 10,
-                          //                 ),
-                          //                 Container(
-                          //                   width: 150,
-                          //                   child: TextField(
-                          //                     controller: titleCont,
-                          //                     decoration: InputDecoration(
-                          //                       labelText: 'Idea Name',
-                          //                     ),
-                          //                   ),
-                          //                 ),
-                          //                 SizedBox(
-                          //                   height: 10,
-                          //                 ),
-                          //                 Container(
-                          //                   width: 150,
-                          //                   child: TextField(
-                          //                     controller: descriptionCont,
-                          //                     decoration: InputDecoration(
-                          //                         labelText:
-                          //                             'Idea Description'),
-                          //                   ),
-                          //                 ),
-                          //                 SizedBox(
-                          //                   height: 20,
-                          //                 ),
-                          //                 Row(
-                          //                   mainAxisAlignment:
-                          //                       MainAxisAlignment.center,
-                          //                   children: [
-                          //                     ElevatedButton(
-                          //                         child: Text('Submit'),
-                          //                         onPressed: () {
-                          //                           if (topic == null) {
-                          //                             AlertDialog alert =
-                          //                                 AlertDialog(
-                          //                               title: Text("Error"),
-                          //                               content: Text(
-                          //                                   "Please pick a topic option"),
-                          //                               actions: [],
-                          //                             );
-                          //                             showDialog(
-                          //                               context: context,
-                          //                               builder: (BuildContext
-                          //                                   context) {
-                          //                                 return alert;
-                          //                               },
-                          //                             );
-                          //                           } else if (newTopic ||
-                          //                               topic == null) {
-                          //                             if (topicCont.text.isEmpty ||
-                          //                                 titleCont
-                          //                                     .text.isEmpty ||
-                          //                                 descriptionCont
-                          //                                     .text.isEmpty ||
-                          //                                 topicList.contains(
-                          //                                     topicCont.text)) {
-                          //                               AlertDialog alert =
-                          //                                   AlertDialog(
-                          //                                 title: Text("Error"),
-                          //                                 content: Text(
-                          //                                     "Topic cannot be empty or already exist"),
-                          //                                 actions: [],
-                          //                               );
-                          //                               showDialog(
-                          //                                 context: context,
-                          //                                 builder: (BuildContext
-                          //                                     context) {
-                          //                                   return alert;
-                          //                                 },
-                          //                               );
-                          //                             } else {
-                          //                               ideas.doc().set({
-                          //                                 'topic':
-                          //                                     topicCont.text,
-                          //                                 'subtopics': [
-                          //                                   {
-                          //                                     'title': titleCont
-                          //                                         .text,
-                          //                                     'description':
-                          //                                         descriptionCont
-                          //                                             .text
-                          //                                   }
-                          //                                 ]
-                          //                               });
-                          //                             }
-                          //                           } else {
-                          //                             String id;
-                          //                             Map data;
-                          //                             ideas
-                          //                                 .where('topic',
-                          //                                     isEqualTo: topic)
-                          //                                 .get()
-                          //                                 .then((value) {
-                          //                               id =
-                          //                                   value.docs.first.id;
-                          //                               data = value.docs.first
-                          //                                   .data();
-                          //                               data['subtopics'].add({
-                          //                                 'description':
-                          //                                     descriptionCont
-                          //                                         .text,
-                          //                                 'title':
-                          //                                     titleCont.text
-                          //                               });
-                          //                               ideas.doc(id).set(data);
-                          //                             });
-                          //                           }
-                          //                           Navigator.pop(context);
-                          //                         }),
-                          //                     SizedBox(
-                          //                       width: 10,
-                          //                     ),
-                          //                     ElevatedButton(
-                          //                       style: ElevatedButton.styleFrom(
-                          //                           primary: Colors.red),
-                          //                       child: Text('Cancel'),
-                          //                       onPressed: () =>
-                          //                           Navigator.pop(context),
-                          //                     )
-                          //                   ],
-                          //                 ),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //         );
-                          //       },
-                          //     );
-                          //   },
-                          // );
-                          // topics.add({
-                          //   'description': 'test', // John Doe
-                          //   'title': 'test', // Stokes and Sons
-                          //   'topic': 'test'
-                          // });
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
