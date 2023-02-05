@@ -47,7 +47,10 @@ class _HomeState extends State<Home> {
                 ),
                 Tab(
                   icon: Icon(Icons.handyman),
-                  text: 'Projects',
+                  child: Text(
+                    'Projects',
+                    style: TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
                 ),
                 Tab(
                   icon: Icon(Icons.chat_bubble),

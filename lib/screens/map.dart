@@ -73,6 +73,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                                 padding: const EdgeInsets.only(top: 10),
                                 child: SelectableText(
                                   loc['name'],
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 28),
@@ -93,6 +94,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                                         loc['visited'].contains(userData['uid'])
                                             ? 'I have visited'
                                             : "I haven't visited",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 22,
@@ -116,6 +118,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                               onTap: (() => {launchURL(loc['glink'])}),
                               child: Text(
                                 loc['address'],
+                                textAlign: TextAlign.center,
                                 style:
                                     TextStyle(fontSize: 24, color: Colors.blue),
                               ),
@@ -123,6 +126,7 @@ class _InterestingLocationsState extends State<InterestingLocations> {
                           if (loc['glink'] == null)
                             SelectableText(
                               loc['address'],
+                              textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 24),
                             ),
                           SizedBox(
