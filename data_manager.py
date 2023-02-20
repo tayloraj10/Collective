@@ -28,12 +28,12 @@ def create_new_location(name, address, description, glink, website, lat, lon):
 
 
 create_new_location(
-    "Prospect Park Dog Beach",
-    "95 Prospect Park West, Brooklyn, NY 11215",
-    "Fenced area for dogs to swim & splash at a lakeside beach, with off-leash sessions at certain times.",
-    "https://goo.gl/maps/dvg8uZ2ff76Nrp3DA",
-    "https://www.prospectpark.org/news-events/news/dog-beach-reopens-after-renovation/",
-    40.66253452472573, -73.97190731055537
+    "City Climb",
+    "30 Hudson Yards, New York, NY 10001",
+    "Scale the outside of a skyscraper more than 1,200 feet above the ground, then lean out and look down from the highest outdoor platform in New York City",
+    "https://goo.gl/maps/nbh1EJ1s3Xorp2QL7",
+    "https://www.edgenyc.com/cityclimb",
+    40.75400105083589, -74.00031133226625
 )
 
 

@@ -68,8 +68,8 @@ _AppointmentDataSource getCalendarDataSource(List events) {
 
       appointments.add(
         Appointment(
-          startTime: startTime.add(const Duration(hours: 1)),
-          endTime: endTime.add(const Duration(hours: 1)),
+          startTime: startTime,
+          endTime: endTime,
           subject: e['summary'] +
               " - " +
               (e['location'] != null ? e['location'] : ""),
