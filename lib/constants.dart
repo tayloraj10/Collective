@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -22,10 +23,19 @@ const String calendarID =
     '494eudb3n3rsqib0id77cjklco@group.calendar.google.com';
 // String calendarAPI =
 //     'https://www.googleapis.com/calendar/v3/calendars/$calendarID?key=$calendarAPIkey';
-const String calendarAPI =
-    "https://www.googleapis.com/calendar/v3/calendars/494eudb3n3rsqib0id77cjklco@group.calendar.google.com/events?key=AIzaSyDE7bbnSB-EbLI2wsn3P01uqVgf4UoaqTQ";
+var cutoffDate = DateFormat('yyyy-MM-dd')
+    .format(DateTime.now().subtract(Duration(days: 60)));
+String calendarAPI =
+    "https://www.googleapis.com/calendar/v3/calendars/494eudb3n3rsqib0id77cjklco@group.calendar.google.com/events?key=AIzaSyDE7bbnSB-EbLI2wsn3P01uqVgf4UoaqTQ" +
+        "&timeMin=" +
+        cutoffDate +
+        "T00:00:00-05:00";
 
 void launchURL(String url) async {
+  print(url);
+  if (url.contains('">')) {
+    url = url.replaceAll('">', "");
+  }
   await launchUrl(Uri.parse(url));
 }
 

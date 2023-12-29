@@ -141,13 +141,21 @@ class _HomeState extends State<Home> {
               )
             ],
             centerTitle: true,
-            title: Text(
-              'Collective',
-              style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: titleColor,
-                  fontSize: 40,
-                  fontStyle: FontStyle.italic),
+            title: GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Profile(),
+                ),
+              ),
+              child: Text(
+                'Collective',
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: titleColor,
+                    fontSize: 40,
+                    fontStyle: FontStyle.italic),
+              ),
             ),
           ),
           body: TabBarView(
