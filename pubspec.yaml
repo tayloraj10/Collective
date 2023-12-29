@@ -27,9 +27,11 @@ dependencies:
   dropdown_search: ^0.6.3
   firebase_auth: ^3.7.0
   firebase_core: ^1.21.1
+  firebase_storage: ^10.3.1
   flutter:
     sdk: flutter
   flutterfire_ui: ^0.4.3+7
+  # firebase_ui_auth: ^1.1.17
   fluttertoast: ^8.0.9
   google_maps_flutter: ^2.2.3
   google_maps_flutter_web: ^0.4.0+5
@@ -39,6 +41,8 @@ dependencies:
   provider: ^4.3.2+3
   syncfusion_flutter_calendar: ^18.4.44
   url_launcher: ^6.1.5
+  image_picker_web: ^3.0.0
+  google_maps_webservice: ^0.0.19
 
 dev_dependencies:
   flutter_test:
