@@ -142,12 +142,14 @@ class _HomeState extends State<Home> {
             ],
             centerTitle: true,
             title: GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Profile(),
-                ),
-              ),
+              onTap: () => {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => Profile(),
+                //   ),
+                // )
+              },
               child: Text(
                 'Collective',
                 style: TextStyle(

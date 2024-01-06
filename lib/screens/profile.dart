@@ -37,8 +37,8 @@ class _ProfileState extends State<Profile> {
     const String PLACES_API_KEY = placesAPIkey;
     String type = '(cities)';
     String request =
-        'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$PLACES_API_KEY&types=$type';
-    // print(request);
+        'https://corsproxy.io?https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$PLACES_API_KEY&types=$type';
+    print(request);
     var response = await http.get(Uri.parse(request), headers: {
       "content-type": "application/json",
       "x-requested-with": "XMLHttpRequest"
