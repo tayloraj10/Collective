@@ -225,7 +225,14 @@ class _ProfileState extends State<Profile> {
                                         fontSize: 22,
                                       ),
                                     )),
-                                onPressed: (() => {Navigator.pop(context)}),
+                                onPressed: (() => {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Home(),
+                                        ),
+                                      )
+                                    }),
                               ),
                             ),
                             Padding(

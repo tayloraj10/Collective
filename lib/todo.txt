@@ -1,7 +1,11 @@
+build commands:
+flutter build web
+firebase deploy
+
+
 FEATURE PRIORITIES: User Profile, Groups, POI Locations Map
 
 BUG PRIORITIES: 
-
 
 1. Authentication
     a. hide stuff for non-authenticated users like topic adding
@@ -9,6 +13,7 @@ BUG PRIORITIES:
     a. make sure times are lining up with google calendar
     b. show location on calendar
     c. show notes on calendar
+    d. recurring events
 3. open chat tab where anyone can leave a message
 4. project details and project adding
 5. user page with user contact info and authentication tasks like password reset

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/models/app_data.dart';
-import 'package:collective/screens/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../components/profile_dialog.dart';
 
 class ProjectDetail extends StatefulWidget {
   final Map data;
@@ -181,23 +182,34 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             Map docData = document.data();
                             docData['id'] = document.id;
                             return Tooltip(
-                              message: docData['name'],
-                              child: GestureDetector(
-                                onTap: (() => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              UserDetails(docData['uid']),
-                                        ),
-                                      )
-                                    }),
-                                child: CircleAvatar(
-                                  child: Text(docData['name'].split(' ')[0][0] +
-                                      docData['name'].split(' ')[1][0]),
-                                ),
-                              ),
-                            );
+                                message: docData['name'],
+                                child: GestureDetector(
+                                  onTap: (() => {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => ProfileDialog(
+                                                docData['user_id']))
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         UserDetails(docData['uid']),
+                                        //   ),
+                                        // )
+                                      }),
+                                  child: CircleAvatar(
+                                    child: docData['profilePicture'] != null
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Image.network(
+                                                docData['profilePicture']))
+                                        : Text(docData['name'].split(' ')[0]
+                                                [0] +
+                                            docData['name'].split(' ')[1][0]),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                ));
                           }).toList(),
                         ),
                       ),

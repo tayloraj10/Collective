@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/constants.dart';
-import 'package:collective/screens/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../components/profile_dialog.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key key}) : super(key: key);
@@ -167,14 +168,19 @@ class _ChatState extends State<Chat> {
                                                 TextStyle(color: Colors.black)),
                                         trailing: GestureDetector(
                                           onTap: (() => {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
+                                                showDialog(
+                                                    context: context,
                                                     builder: (context) =>
-                                                        UserDetails(
-                                                            data['user_id']),
-                                                  ),
-                                                )
+                                                        ProfileDialog(
+                                                            data['user_id']))
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                //         UserDetails(
+                                                //             data['user_id']),
+                                                //   ),
+                                                // )
                                               }),
                                           child: CircleAvatar(
                                             backgroundColor: Colors.white,
