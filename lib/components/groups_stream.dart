@@ -75,7 +75,7 @@ class _GroupsStreamState extends State<GroupsStream> {
                         }
 
                         return Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 50),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
