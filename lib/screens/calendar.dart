@@ -39,21 +39,21 @@ class _CalendarState extends State<Calendar> {
                         "Event",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
+                        textAlign: TextAlign.center,
                       ),
                       Center(
                         child: SelectableText(
-                          "${eventDetails.subject.split(' - ')[0].trim()}",
-                          style: TextStyle(fontSize: 18),
-                        ),
+                            "${eventDetails.subject.split(' - ')[0].trim()}",
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center),
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        "Location",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
+                      Text("Location",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                          textAlign: TextAlign.center),
                       InkWell(
                         child: Center(
                           child: SelectableText(
@@ -63,6 +63,7 @@ class _CalendarState extends State<Calendar> {
                               launchURL(locationUrl +
                                   "${eventDetails.subject.split(' - ')[1].trim()}")
                             },
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -73,11 +74,13 @@ class _CalendarState extends State<Calendar> {
                         "Time",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
+                        textAlign: TextAlign.center,
                       ),
                       Center(
                         child: SelectableText(
                           "${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.startTime)}  -  ${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.endTime)}",
                           style: TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(
@@ -89,22 +92,26 @@ class _CalendarState extends State<Calendar> {
                           "Description",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24),
+                          textAlign: TextAlign.center,
                         ),
                       if (eventDetails.notes != '' &&
                           eventDetails.notes != null)
                         InkWell(
                           child: Center(
-                            child: SelectableText("${eventDetails.notes}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                                onTap: () => {
-                                      url = 'http' +
-                                          eventDetails.notes
-                                              .split('http')[1]
-                                              .split(' ')[0],
-                                      launchURL(url)
-                                    }),
+                            child: SelectableText(
+                              "${eventDetails.notes}",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                              onTap: () => {
+                                url = 'http' +
+                                    eventDetails.notes
+                                        .split('http')[1]
+                                        .split(' ')[0],
+                                launchURL(url)
+                              },
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                     ]),
