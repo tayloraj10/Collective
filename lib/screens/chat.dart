@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/profile_dialog.dart';
 import 'package:collective/constants.dart';
+import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../components/profile_dialog.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key key}) : super(key: key);
@@ -27,6 +27,7 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+    var userData = Provider.of<AppData>(context).userData;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -84,10 +85,16 @@ class _ChatState extends State<Chat> {
                                                     'timestamp':
                                                         Timestamp.now(),
                                                     'user_id': user.uid,
-                                                    'initials': user.displayName
-                                                            .split(" ")[0][0] +
-                                                        user.displayName
-                                                            .split(" ")[1][0]
+                                                    'name': userData
+                                                            .containsKey('name')
+                                                        ? userData['name']
+                                                        : "",
+                                                    'profilePicture': userData
+                                                            .containsKey(
+                                                                'profilePicture')
+                                                        ? userData[
+                                                            'profilePicture']
+                                                        : null
                                                   };
                                                   FirebaseFirestore.instance
                                                       .collection('chat')
@@ -166,25 +173,38 @@ class _ChatState extends State<Chat> {
                                                     data['timestamp'].toDate()),
                                             style:
                                                 TextStyle(color: Colors.black)),
-                                        trailing: GestureDetector(
-                                          onTap: (() => {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        ProfileDialog(
-                                                            data['user_id']))
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //     builder: (context) =>
-                                                //         UserDetails(
-                                                //             data['user_id']),
-                                                //   ),
-                                                // )
-                                              }),
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            child: Text(data['initials']),
+                                        trailing: Tooltip(
+                                          message: data['name'],
+                                          child: GestureDetector(
+                                            onTap: (() => {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          ProfileDialog(
+                                                              data['user_id']))
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) =>
+                                                  //         UserDetails(
+                                                  //             data['user_id']),
+                                                  //   ),
+                                                  // )
+                                                }),
+                                            child: data['profilePicture'] !=
+                                                    null
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    child: Image.network(
+                                                        data['profilePicture']))
+                                                : CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    child: Text(getInitials(
+                                                        data['name'])),
+                                                  ),
                                           ),
                                         ),
                                       ),

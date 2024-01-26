@@ -10,6 +10,7 @@ _AppointmentDataSource getCalendarDataSource(List events) {
     int recurrence = 0;
     int recurrenceLimit = 12;
     // print(e['location']);
+    // print(e['description']);
     // print(e['start']['dateTime']);
     // print(e['start']['date']);
     if (e.containsKey('recurrence')) {
