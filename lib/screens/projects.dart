@@ -4,7 +4,6 @@ import 'package:collective/screens/groups.dart';
 import 'package:collective/screens/project_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class Projects extends StatefulWidget {
@@ -13,7 +12,7 @@ class Projects extends StatefulWidget {
 }
 
 class _ProjectsState extends State<Projects> {
-  var projects = FirebaseFirestore.instance.collection('projects');
+  // var projects = FirebaseFirestore.instance.collection('projects');
 
   bool showGroups = false;
   bool showProject = false;

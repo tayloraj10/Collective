@@ -1,7 +1,7 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/calendar.dart';
-import 'package:collective/screens/chat.dart';
+import 'package:collective/screens/initiatives.dart';
 import 'package:collective/screens/profile.dart';
 import 'package:collective/screens/projects.dart';
 import 'package:collective/screens/resources.dart';
@@ -38,8 +38,8 @@ class _HomeState extends State<Home> {
             bottom: TabBar(
               tabs: [
                 Tab(
-                  icon: Icon(Icons.calendar_today),
-                  text: 'Events',
+                  icon: Icon(Icons.trending_up),
+                  text: 'Initiatives',
                 ),
                 Tab(
                   icon: Icon(Icons.lightbulb),
@@ -53,8 +53,8 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Tab(
-                  icon: Icon(Icons.chat_bubble),
-                  text: 'Chat',
+                  icon: Icon(Icons.calendar_today),
+                  text: 'Events',
                 ),
                 Tab(
                   icon: Icon(Icons.file_copy),
@@ -162,10 +162,11 @@ class _HomeState extends State<Home> {
           ),
           body: TabBarView(
             children: [
-              Calendar(),
+              Initiatives(),
               Ideas(),
               Projects(),
-              Chat(),
+              Calendar(),
+              // Chat(),
               Resources(),
             ],
           ),

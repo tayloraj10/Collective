@@ -47,6 +47,7 @@ class GroupCard extends StatelessWidget {
     var userData = Provider.of<AppData>(context, listen: true).userData;
 
     return Container(
+      // width: MediaQuery.of(context).size.width * 0.6,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(10),
