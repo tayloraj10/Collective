@@ -13,6 +13,7 @@ class InitiativesStream extends StatefulWidget {
 class _InitiativesStreamState extends State<InitiativesStream> {
   var projects = FirebaseFirestore.instance
       .collection('initiatives')
+      .where('active', isEqualTo: true)
       .orderBy('complete', descending: true);
 
   @override
@@ -33,6 +34,7 @@ class _InitiativesStreamState extends State<InitiativesStream> {
       stream: projects.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // if (snapshot.hasError) {
+        //   print(snapshot.error);
         //   return Text('Something went wrong');
         // }
 

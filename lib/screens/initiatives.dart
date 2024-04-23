@@ -26,8 +26,16 @@ class _InitiativesState extends State<Initiatives> {
                   padding: EdgeInsets.all(40),
                   child: Column(
                     children: [
+                      // Text(
+                      //   'Main Initiatives: Trash Cleanups, Animal Welfare, Fitness',
+                      //   style: pageTextStyle,
+                      //   textAlign: TextAlign.center,
+                      // ),
+                      // SizedBox(
+                      //   height: 30,
+                      // ),
                       Text(
-                        'These are the currently ongoing initiatives',
+                        'These are the currently ongoing initiatives (click to contribute)',
                         style: pageTextStyle,
                         textAlign: TextAlign.center,
                       ),

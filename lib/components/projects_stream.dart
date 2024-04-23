@@ -11,7 +11,9 @@ class ProjectsStream extends StatefulWidget {
 }
 
 class _ProjectsStreamState extends State<ProjectsStream> {
-  var projects = FirebaseFirestore.instance.collection('projects');
+  var projects = FirebaseFirestore.instance
+      .collection('projects')
+      .where('active', isEqualTo: true);
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,10 @@ class _ProjectsStreamState extends State<ProjectsStream> {
     return StreamBuilder<QuerySnapshot>(
       stream: projects.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        // if (snapshot.hasError) {
-        //   return Text('Something went wrong');
-        // }
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          return Text('Something went wrong');
+        }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
