@@ -1,3 +1,4 @@
+import 'package:collective/components/footer.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/calendar.dart';
@@ -34,6 +35,7 @@ class _HomeState extends State<Home> {
         initialIndex: 0,
         length: 5,
         child: Scaffold(
+          bottomSheet: Footer(),
           appBar: AppBar(
             bottom: TabBar(
               tabs: [
@@ -56,10 +58,10 @@ class _HomeState extends State<Home> {
                   icon: Icon(Icons.calendar_today),
                   text: 'Events',
                 ),
-                Tab(
-                  icon: Icon(Icons.file_copy),
-                  text: 'Info',
-                ),
+                // Tab(
+                //   icon: Icon(Icons.file_copy),
+                //   text: 'Info',
+                // ),
               ],
             ),
             actions: [

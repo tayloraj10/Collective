@@ -25,7 +25,7 @@ class _ResourcesState extends State<Resources> {
                 child: Column(
                   children: [
                     Text(
-                      "Collective is simple\n\nIt's a platform to do interesting things with interesting people\n\nCurrently operating in New York City",
+                      "Collective is a platform to do interesting things with interesting people",
                       style: pageTextStyle,
                       textAlign: TextAlign.center,
                     ),
@@ -34,9 +34,14 @@ class _ResourcesState extends State<Resources> {
                     ),
                     Text(
                       'Resources',
-                      style: pageTextStyle.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
+                      style: pageTextStyle,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ResourceLink(
+                      text: 'Discord',
+                      url: 'https://discord.gg/NqGXmvqCNx',
                     ),
                     SizedBox(
                       height: 20,
@@ -45,14 +50,6 @@ class _ResourcesState extends State<Resources> {
                       text: 'Google Drive Folder',
                       url:
                           'https://drive.google.com/drive/folders/1LBd6QIozQl0n2ajPlcDb9exHBlZw4gr7',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ResourceLink(
-                      text: 'Volunteer Opportunities',
-                      url:
-                          'https://docs.google.com/spreadsheets/d/1tjOrcGyvZ9yVKB8QLvHV-ZrNb0wtwedlDJgpEneL5hc/edit?usp=sharing',
                     ),
                     SizedBox(
                       height: 100,
