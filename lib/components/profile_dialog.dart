@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
@@ -131,56 +132,72 @@ class _MyWidgetState extends State<ProfileDialog> {
                               ),
                             ),
                           if (docData['tiktok'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon: Image.asset('images/' + 'tiktok.png'),
-                                    onPressed: () => {},
-                                  ),
-                                  Text(
-                                    docData['tiktok'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () => launchURL(
+                                  'https://www.tiktok.com/@' +
+                                      docData['tiktok']),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon:
+                                          Image.asset('images/' + 'tiktok.png'),
+                                      onPressed: () => {},
+                                    ),
+                                    Text(
+                                      docData['tiktok'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           if (docData['instagram'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon: Image.asset(
-                                        'images/' + 'instagram.png'),
-                                    onPressed: () => {},
-                                  ),
-                                  Text(
-                                    docData['instagram'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () => launchURL(
+                                  'https://www.instagram.com/' +
+                                      docData['instagram']),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Image.asset(
+                                          'images/' + 'instagram.png'),
+                                      onPressed: () => {},
+                                    ),
+                                    Text(
+                                      docData['instagram'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           if (docData['youtube'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon:
-                                        Image.asset('images/' + 'youtube.png'),
-                                    onPressed: () => {},
-                                  ),
-                                  Text(
-                                    docData['youtube'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () => launchURL(
+                                  'https://www.youtube.com/@' +
+                                      docData['youtube']),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Image.asset(
+                                          'images/' + 'youtube.png'),
+                                      onPressed: () => {},
+                                    ),
+                                    Text(
+                                      docData['youtube'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                         ],

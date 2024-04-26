@@ -1,11 +1,13 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
+import 'package:collective/screens/home.dart';
 import 'package:collective/screens/loading_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'package:flutter_web_plugins/url_strategy.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -22,6 +24,7 @@ Future main() async {
           messagingSenderId: "1097949131260",
           appId: "1:1097949131260:web:68bc0051c431e72cbe0279",
           measurementId: "G-JPHHPCC2XP"));
+  // usePathUrlStrategy();
   runApp(MyApp());
 }
 
@@ -38,6 +41,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        routes: {
+          '/home': (_) => Home(),
+        },
         scrollBehavior: MyCustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
         title: 'Collective',

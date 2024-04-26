@@ -23,9 +23,9 @@ class _InitiativesStreamState extends State<InitiativesStream> {
       Colors.red,
       Colors.orange,
       Colors.green,
-      Colors.yellow,
-      Colors.grey,
       Colors.purple,
+      Colors.yellow[600],
+      Colors.grey,
     ];
     int colorIndex = 0;
     Map<String, Color> colorMapping = {};

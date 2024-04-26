@@ -29,6 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
     Provider.of<AppData>(context, listen: false).fetchUserData(userID);
 
+    // Navigator.pushNamed(context, '/home');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -42,6 +43,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     var data = await fetch.getData(calendarAPI);
     Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
 
+    // Navigator.pushNamed(context, '/home');
     Navigator.push(
       context,
       MaterialPageRoute(

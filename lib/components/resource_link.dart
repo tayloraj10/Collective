@@ -10,7 +10,7 @@ class ResourceLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Text(this.text,
-          textAlign: TextAlign.center,
+          // textAlign: TextAlign.center,
           style: pageTextStyle.copyWith(
               color: Colors.lightBlueAccent,
               decoration: TextDecoration.underline)),

@@ -108,8 +108,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
+                          Wrap(
+                            // mainAxisSize: MainAxisSize.min,
+                            spacing: 20,
                             children: [
                               Text(
                                 widget.data['title'],
@@ -117,15 +118,12 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                     fontWeight: FontWeight.bold, fontSize: 28),
                               ),
                               if (widget.data['status'] != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: Text(
-                                    widget.data['status'],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 28,
-                                        color: getColor(widget.data['status'])),
-                                  ),
+                                Text(
+                                  widget.data['status'],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28,
+                                      color: getColor(widget.data['status'])),
                                 )
                             ],
                           ),
@@ -183,79 +181,83 @@ class _ProjectDetailState extends State<ProjectDetail> {
             ),
           ),
           if (isInGroup(widget.data, userData))
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Members',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Members',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('users')
-                      .where('uid', whereIn: widget.data['users'].sublist(1))
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      print('Something went wrong');
-                    }
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .where('uid', whereIn: widget.data['users'].sublist(1))
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        print('Something went wrong');
+                      }
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
 
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: snapshot.data.docs
-                              .map((DocumentSnapshot<Object> document) {
-                            Map docData = document.data();
-                            docData['id'] = document.id;
-                            return Tooltip(
-                                message: docData['name'],
-                                child: GestureDetector(
-                                  onTap: (() => {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) => ProfileDialog(
-                                                docData['user_id']))
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         UserDetails(docData['uid']),
-                                        //   ),
-                                        // )
-                                      }),
-                                  child: CircleAvatar(
-                                    child: docData['profilePicture'] != null
-                                        ? ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: Image.network(
-                                                docData['profilePicture']))
-                                        : Text(docData['name'].split(' ')[0]
-                                                [0] +
-                                            docData['name'].split(' ')[1][0]),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                ));
-                          }).toList(),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: snapshot.data.docs
+                                .map((DocumentSnapshot<Object> document) {
+                              Map docData = document.data();
+                              docData['id'] = document.id;
+                              return Tooltip(
+                                  message: docData['name'],
+                                  child: GestureDetector(
+                                    onTap: (() => {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ProfileDialog(
+                                                      docData['user_id']))
+                                          // Navigator.push(
+                                          //   context,
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) =>
+                                          //         UserDetails(docData['uid']),
+                                          //   ),
+                                          // )
+                                        }),
+                                    child: CircleAvatar(
+                                      child: docData['profilePicture'] != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              child: Image.network(
+                                                  docData['profilePicture']))
+                                          : Text(docData['name'].split(' ')[0]
+                                                  [0] +
+                                              docData['name'].split(' ')[1][0]),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ));
+                            }).toList(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             )
         ],
       ),
