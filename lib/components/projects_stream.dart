@@ -13,7 +13,8 @@ class ProjectsStream extends StatefulWidget {
 class _ProjectsStreamState extends State<ProjectsStream> {
   var projects = FirebaseFirestore.instance
       .collection('projects')
-      .where('active', isEqualTo: true);
+      .where('active', isEqualTo: true)
+      .orderBy('topic');
 
   @override
   Widget build(BuildContext context) {

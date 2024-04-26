@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/resource_link.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,12 @@ class _ProjectDetailState extends State<ProjectDetail> {
     var user = Provider.of<User>(context);
     var userData = Provider.of<AppData>(context, listen: true).userData;
 
+    getColor(status) {
+      if (status == 'Active')
+        return Colors.green;
+      else if (status == 'Inactive') return Colors.red;
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -83,8 +90,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       child: Container(
                         child: ElevatedButton(
                           child: Text(isInGroup(widget.data, userData)
-                              ? 'Leave Group'
-                              : 'Join Group'),
+                              ? 'Leave Project'
+                              : 'Join Project'),
                           onPressed: () {
                             if (isInGroup(widget.data, userData)) {
                               leaveGroup(user.uid, widget.data);
@@ -101,10 +108,26 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.data['title'],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 28),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.data['title'],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 28),
+                              ),
+                              if (widget.data['status'] != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    widget.data['status'],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28,
+                                        color: getColor(widget.data['status'])),
+                                  ),
+                                )
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
@@ -113,6 +136,22 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               style: TextStyle(fontSize: 22),
                             ),
                           ),
+                          if (widget.data['projectUrl'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: ResourceLink(
+                                text: widget.data['projectUrl'],
+                                url: widget.data['projectUrl'],
+                              ),
+                            ),
+                          if (widget.data['documentationUrl'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: ResourceLink(
+                                text: widget.data['documentationUrl'],
+                                url: widget.data['documentationUrl'],
+                              ),
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
