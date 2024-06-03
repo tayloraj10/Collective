@@ -5,7 +5,6 @@ import 'package:collective/screens/calendar.dart';
 import 'package:collective/screens/initiatives.dart';
 import 'package:collective/screens/profile.dart';
 import 'package:collective/screens/projects.dart';
-import 'package:collective/screens/resources.dart';
 import 'package:collective/screens/sign_in.dart';
 import 'package:collective/screens/ideas.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +32,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       home: DefaultTabController(
         initialIndex: 0,
-        length: 5,
+        length: 4,
         child: Scaffold(
           bottomSheet: Footer(),
           appBar: AppBar(
@@ -169,7 +168,7 @@ class _HomeState extends State<Home> {
               Projects(),
               Calendar(),
               // Chat(),
-              Resources(),
+              // Resources(),
             ],
           ),
         ),
