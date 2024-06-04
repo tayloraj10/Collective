@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/resource_link.dart';
+import 'package:collective/components/user_list.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -150,6 +151,40 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                 url: widget.data['documentationUrl'],
                               ),
                             ),
+                          if (widget.data['roles'] != null)
+                            if (widget.data['roles']['leaders'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Project Leaders',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    UserList(widget.data['roles']['leaders']),
+                                  ],
+                                ),
+                              ),
+                          if (widget.data['roles'] != null)
+                            if (widget.data['roles']['devs'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Developers',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    UserList(widget.data['roles']['devs']),
+                                  ],
+                                ),
+                              ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
