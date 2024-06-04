@@ -33,9 +33,8 @@ class _MyWidgetState extends State<ProfileDialog> {
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                  snapshot.data.docs.map((DocumentSnapshot<Object> document) {
-                Map docData = document.data();
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map docData = document.data() as Map<String, dynamic>;
                 docData['id'] = document.id;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -73,9 +72,9 @@ class _MyWidgetState extends State<ProfileDialog> {
                   scrollDirection: Axis.vertical,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: snapshot.data.docs
-                        .map((DocumentSnapshot<Object> document) {
-                      Map docData = document.data();
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map docData = document.data() as Map<String, dynamic>;
                       docData['id'] = document.id;
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -240,15 +239,16 @@ class _MyWidgetState extends State<ProfileDialog> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data.docs.mapIndexed(
-                                (index, DocumentSnapshot<Object> document) {
-                              Map docData = document.data();
+                            children: snapshot.data!.docs
+                                .mapIndexed((index, DocumentSnapshot document) {
+                              Map docData =
+                                  document.data() as Map<String, dynamic>;
                               docData['id'] = document.id;
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    index == snapshot.data.docs.length - 1
+                                    index == snapshot.data!.docs.length - 1
                                         ? docData['name']
                                         : docData['name'] + ', ',
                                     style: TextStyle(fontSize: 16),
@@ -297,15 +297,16 @@ class _MyWidgetState extends State<ProfileDialog> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data.docs.mapIndexed(
-                                (index, DocumentSnapshot<Object> document) {
-                              Map docData = document.data();
+                            children: snapshot.data!.docs
+                                .mapIndexed((index, DocumentSnapshot document) {
+                              Map docData =
+                                  document.data() as Map<String, dynamic>;
                               docData['id'] = document.id;
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    index == snapshot.data.docs.length - 1
+                                    index == snapshot.data!.docs.length - 1
                                         ? docData['title']
                                         : docData['title'] + ', ',
                                     style: TextStyle(fontSize: 16),

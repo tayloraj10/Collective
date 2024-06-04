@@ -4,7 +4,6 @@ import 'package:collective/screens/groups.dart';
 import 'package:collective/screens/project_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Projects extends StatefulWidget {
   @override
@@ -16,7 +15,7 @@ class _ProjectsState extends State<Projects> {
 
   bool showGroups = false;
   bool showProject = false;
-  Map projectData;
+  late Map projectData;
 
   void showProjectDetails(data) {
     setState(() {
@@ -34,7 +33,7 @@ class _ProjectsState extends State<Projects> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {

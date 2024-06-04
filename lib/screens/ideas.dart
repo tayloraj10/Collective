@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:provider/provider.dart';
 
 class Ideas extends StatefulWidget {
   @override
@@ -16,7 +15,9 @@ class _IdeasState extends State<Ideas> {
   var ideas = FirebaseFirestore.instance.collection('topics');
   List<String> topicList = [];
   bool newTopic = false;
-  String topic;
+  String? topic = null;
+  bool topicError = false;
+  String topicErrorText = '';
   TextEditingController topicCont = TextEditingController();
   TextEditingController titleCont = TextEditingController();
   TextEditingController descriptionCont = TextEditingController();
@@ -40,7 +41,7 @@ class _IdeasState extends State<Ideas> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -109,16 +110,27 @@ class _IdeasState extends State<Ideas> {
                                               MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
+                                            if (topicError)
+                                              Text(
+                                                topicErrorText,
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
                                             Container(
                                               width: 150,
                                               child: DropdownSearch<String>(
-                                                mode: Mode.MENU,
-                                                showSelectedItem: true,
+                                                // mode: Mode.MENU,
+                                                // showSelectedItem: true,
                                                 items: topicList,
-                                                hint: "Choose a Topic",
+                                                // hint: "Choose a Topic",
                                                 onChanged: (value) {
                                                   setState(() {
-                                                    topic = value;
+                                                    topic = value!;
                                                     value == 'New Topic'
                                                         ? newTopic = true
                                                         : newTopic = false;
@@ -190,18 +202,12 @@ class _IdeasState extends State<Ideas> {
                                                     child: Text('Submit'),
                                                     onPressed: () {
                                                       if (topic == null) {
-                                                        AlertDialog alert =
-                                                            AlertDialog(
-                                                          title: Text("Error"),
-                                                          content: Text(
-                                                              "Please pick a topic option"),
-                                                          actions: [],
-                                                        );
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return alert;
+                                                        setState(
+                                                          () {
+                                                            topicErrorText =
+                                                                "Please pick a topic option";
+                                                            ;
+                                                            topicError = true;
                                                           },
                                                         );
                                                       } else if (newTopic ||
@@ -214,23 +220,24 @@ class _IdeasState extends State<Ideas> {
                                                             topicList.contains(
                                                                 topicCont
                                                                     .text)) {
-                                                          AlertDialog alert =
-                                                              AlertDialog(
-                                                            title:
-                                                                Text("Error"),
-                                                            content: Text(
-                                                                "Topic cannot be empty or already exist"),
-                                                            actions: [],
-                                                          );
-                                                          showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return alert;
+                                                          setState(
+                                                            () {
+                                                              topicErrorText =
+                                                                  "Topic cannot be empty or already exist";
+                                                              ;
+                                                              topicError = true;
                                                             },
                                                           );
                                                         } else {
+                                                          setState(
+                                                            () {
+                                                              topicErrorText =
+                                                                  "";
+                                                              ;
+                                                              topicError =
+                                                                  false;
+                                                            },
+                                                          );
                                                           ideas.doc().set({
                                                             'topic':
                                                                 topicCont.text,
@@ -268,12 +275,12 @@ class _IdeasState extends State<Ideas> {
                                                             'title':
                                                                 titleCont.text
                                                           });
-                                                          ideas
-                                                              .doc(id)
-                                                              .set(data);
+                                                          ideas.doc(id).set(data
+                                                              as Map<String,
+                                                                  dynamic>);
                                                         });
+                                                        Navigator.pop(context);
                                                       }
-                                                      Navigator.pop(context);
                                                     }),
                                                 SizedBox(
                                                   width: 10,

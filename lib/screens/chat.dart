@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key key}) : super(key: key);
+  const Chat({required Key key}) : super(key: key);
 
   @override
   State<Chat> createState() => _ChatState();
@@ -26,7 +26,7 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
     var userData = Provider.of<AppData>(context).userData;
 
     return LayoutBuilder(
@@ -150,7 +150,7 @@ class _ChatState extends State<Chat> {
                           }
 
                           return ListView(
-                            children: snapshot.data.docs
+                            children: snapshot.data!.docs
                                 .map((DocumentSnapshot document) {
                                   Map<String, dynamic> data =
                                       document.data() as Map<String, dynamic>;

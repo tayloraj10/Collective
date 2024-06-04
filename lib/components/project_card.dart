@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ProjectCard extends StatelessWidget {
   final Map data;
   final Color color;
-  ProjectCard({this.data, this.color});
+  ProjectCard({required this.data, required this.color});
 
   @override
   Widget build(BuildContext context) {

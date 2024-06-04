@@ -36,8 +36,8 @@ class _GroupsStreamState extends State<GroupsStream> {
         }
 
         return Column(
-          children: snapshot.data.docs.map((DocumentSnapshot<Object> document) {
-            Map docData = document.data();
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map docData = document.data() as Map<String, dynamic>;
             docData['id'] = document.id;
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,

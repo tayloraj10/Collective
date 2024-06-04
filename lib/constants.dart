@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const Color PrimaryColor = Color(0xff000814);
+const Color PrimaryColor = Colors.blue;
 const Color SecondaryColor = Color(0xff003566);
 const Color SecondaryColorDark = Color(0xff001d3d);
 const Color AccentColor = Color(0xfff5cc00);
@@ -16,7 +16,7 @@ const TextStyle pageTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 22);
 
-Color titleColor = Colors.grey[200];
+Color? titleColor = Colors.grey[200];
 
 const String calendarAPIkey = 'AIzaSyBykyx3g2Vf986Vsd4MZ2zKvNoh7XG5zLE';
 const String placesAPIkey = 'AIzaSyCHPOORlE77Hm6KyZU6fjCgIZ-Epr-Dzdo';

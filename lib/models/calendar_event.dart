@@ -6,7 +6,7 @@ _AppointmentDataSource getCalendarDataSource(List events) {
   List<Appointment> appointments = <Appointment>[];
 
   for (var e in events) {
-    bool recur = false;
+    // bool recur = false;
     int recurrence = 0;
     int recurrenceLimit = 12;
     // print(e['location']);
@@ -29,15 +29,17 @@ _AppointmentDataSource getCalendarDataSource(List events) {
       }
 
       recurrence = 1;
-      recur = true;
+      // recur = true;
 
       while (recurrence < recurrenceLimit) {
         DateTime startTime = DateTime.parse(e['start']['dateTime'])
             .subtract(Duration(hours: 4))
-            .add(Duration(days: 7 * (recur ? recurrence : 0)));
+            .add(Duration(days: 7 * (recurrence)));
+        // .add(Duration(days: 7 * (recur ? recurrence : 0)));
         DateTime endTime = DateTime.parse(e['end']['dateTime'])
             .subtract(Duration(hours: 4))
-            .add(Duration(days: 7 * (recur ? recurrence : 0)));
+            .add(Duration(days: 7 * (recurrence)));
+        // .add(Duration(days: 7 * (recur ? recurrence : 0)));
 
         appointments.add(Appointment(
             startTime: startTime.add(const Duration(hours: 1)),
@@ -94,7 +96,7 @@ class _AppointmentDataSource extends CalendarDataSource {
   }
 }
 
-List<Meeting> getDataSource() {
+List getDataSource() {
   List meetings = <Meeting>[];
   final DateTime today = DateTime.now();
   final DateTime startTime =
@@ -112,27 +114,27 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments[index].from;
+    return appointments![index].from;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments[index].to;
+    return appointments![index].to;
   }
 
   @override
   String getSubject(int index) {
-    return appointments[index].eventName;
+    return appointments![index].eventName;
   }
 
   @override
   Color getColor(int index) {
-    return appointments[index].background;
+    return appointments![index].background;
   }
 
   @override
   bool isAllDay(int index) {
-    return appointments[index].isAllDay;
+    return appointments![index].isAllDay;
   }
 }
 

@@ -40,7 +40,11 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('flutter-first-frame', function () {
           navigator.serviceWorker.register('flutter_service_worker.js');
+        }).then(function(engineInitializer) {
+        return engineInitializer.initializeEngine({
+          useColorEmoji: true,
         });
+      });
       }
     </script>
 

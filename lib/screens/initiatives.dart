@@ -3,8 +3,6 @@ import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
 
 class Initiatives extends StatefulWidget {
-  const Initiatives({Key key}) : super(key: key);
-
   @override
   State<Initiatives> createState() => _InitiativesState();
 }

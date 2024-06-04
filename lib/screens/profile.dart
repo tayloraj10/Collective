@@ -16,8 +16,6 @@ import 'dart:convert';
 import 'package:crop_your_image/crop_your_image.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key key}) : super(key: key);
-
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -27,7 +25,7 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
-  Uint8List bytesFromPicker;
+  late Uint8List bytesFromPicker;
   bool showCrop = false;
 
   var placeController = TextEditingController();
@@ -54,7 +52,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
     FirebaseAuth auth = FirebaseAuth.instance;
     // print(auth.currentUser);
 
@@ -87,9 +85,9 @@ class _ProfileState extends State<Profile> {
         ? instagramController.text = ""
         : instagramController.text = userData['instagram'];
 
-    auth.currentUser.displayName == null
+    auth.currentUser!.displayName == null
         ? nameController.text = ""
-        : nameController.text = auth.currentUser.displayName;
+        : nameController.text = auth.currentUser!.displayName!;
 
     final cropController = CropController();
 
@@ -125,10 +123,10 @@ class _ProfileState extends State<Profile> {
 
       // Now you can use the download URL as needed (e.g., store in a database)
       print('Image uploaded. Download URL: $downloadURL');
-      auth.currentUser.updatePhotoURL(downloadURL);
+      auth.currentUser!.updatePhotoURL(downloadURL);
       var userID = await FirebaseFirestore.instance
           .collection('users')
-          .where('uid', isEqualTo: auth.currentUser.uid)
+          .where('uid', isEqualTo: auth.currentUser!.uid)
           .get();
       var docId = userID.docs.first.id;
       FirebaseFirestore.instance
@@ -137,7 +135,7 @@ class _ProfileState extends State<Profile> {
           .update({'profilePicture': downloadURL});
       // auth = null;
       // auth = FirebaseAuth.instance;
-      Provider.of<AppData>(context, listen: false).fetchUserData(user.uid);
+      Provider.of<AppData>(context, listen: false).fetchUserData(user!.uid);
       setState(() {});
       // html.window.location.reload();
     }
@@ -150,7 +148,7 @@ class _ProfileState extends State<Profile> {
     }
 
     Future<void> pickImage(auth) async {
-      bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+      bytesFromPicker = (await ImagePickerWeb.getImageAsBytes())!;
       if (bytesFromPicker.isNotEmpty) {
         showCrop = true;
         setState(() {});
@@ -385,16 +383,17 @@ class _ProfileState extends State<Profile> {
                                   var userID = await FirebaseFirestore.instance
                                       .collection('users')
                                       .where('uid',
-                                          isEqualTo: auth.currentUser.uid)
+                                          isEqualTo: auth.currentUser!.uid)
                                       .get();
                                   var docId = userID.docs.first.id;
                                   FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(docId)
                                       .update({
-                                    'name': auth.currentUser.displayName != null
-                                        ? auth.currentUser.displayName
-                                        : "",
+                                    'name':
+                                        auth.currentUser!.displayName != null
+                                            ? auth.currentUser!.displayName
+                                            : "",
                                     'phone': phoneController.text,
                                     'city': placeController.text,
                                     'tiktok': tiktokController.text,
@@ -403,7 +402,7 @@ class _ProfileState extends State<Profile> {
                                   }).then((documentSnapshot) => {
                                             Provider.of<AppData>(context,
                                                     listen: false)
-                                                .fetchUserData(user.uid),
+                                                .fetchUserData(user!.uid),
                                             Fluttertoast.showToast(
                                                 msg: "Profile Updated",
                                                 toastLength: Toast.LENGTH_LONG,
@@ -429,8 +428,8 @@ class _ProfileState extends State<Profile> {
                               padding: const EdgeInsets.only(top: 12),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  if (auth.currentUser.displayName == "" ||
-                                      auth.currentUser.displayName == null) {
+                                  if (auth.currentUser!.displayName == "" ||
+                                      auth.currentUser!.displayName == null) {
                                     Fluttertoast.showToast(
                                         msg: "Missing Name",
                                         toastLength: Toast.LENGTH_LONG,
@@ -481,7 +480,7 @@ class _ProfileState extends State<Profile> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   Navigator.pop(context);
-                                  await FirebaseAuth.instance.currentUser
+                                  await FirebaseAuth.instance.currentUser!
                                       .delete();
                                 },
                                 style: ElevatedButton.styleFrom(

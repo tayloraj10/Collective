@@ -54,8 +54,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (Provider.of<User>(context) != null) {
-      getDataLoggedIn(Provider.of<User>(context, listen: false).uid);
+    // if (Provider.of<User>(context) != null) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      // getDataLoggedIn(Provider.of<User>(context, listen: false).uid);
+      getDataLoggedIn(FirebaseAuth.instance.currentUser!.uid);
       return Container();
     } else {
       getDataLoggedOut();

@@ -143,6 +143,7 @@ class _CalendarState extends State<Calendar> {
                 height: MediaQuery.of(context).size.height * 2,
                 // color: SecondaryColor,
                 child: SfCalendar(
+                  backgroundColor: Colors.white,
                   view: CalendarView.month,
                   showNavigationArrow: true,
                   showDatePickerButton: true,

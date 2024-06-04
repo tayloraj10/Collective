@@ -4,7 +4,7 @@ class AccordionContent extends StatelessWidget {
   final String title;
   final List subtopics;
 
-  AccordionContent({this.title, this.subtopics});
+  AccordionContent({required this.title, required this.subtopics});
 
   @override
   Widget build(BuildContext context) {

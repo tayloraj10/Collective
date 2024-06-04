@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collective/screens/home.dart';
+import 'package:collective/screens/loading_screen.dart';
 import 'package:collective/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:flutterfire_ui/auth.dart';
 class SignIn extends StatelessWidget {
   final FirebaseAuth auth;
 
-  SignIn({this.auth});
+  SignIn({required this.auth});
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class SignIn extends StatelessWidget {
                     .add({
                       'name': "",
                       'phone': "",
-                      'email': auth.currentUser.email,
-                      'uid': auth.currentUser.uid
+                      'email': auth.currentUser!.email,
+                      'uid': auth.currentUser!.uid
                     })
                     .then((value) => print("User Added"))
                     .catchError((error) => print("Failed to add user: $error"));
@@ -50,7 +50,7 @@ class SignIn extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Home(),
+                      builder: (context) => LoadingScreen(),
                     ),
                   );
                 }

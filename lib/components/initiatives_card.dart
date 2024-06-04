@@ -9,7 +9,7 @@ import '../models/app_data.dart';
 class InitiativeCard extends StatelessWidget {
   final Map data;
   final Color color;
-  InitiativeCard({this.data, this.color});
+  InitiativeCard({required this.data, required this.color});
 
   final TextEditingController contributionController = TextEditingController();
 

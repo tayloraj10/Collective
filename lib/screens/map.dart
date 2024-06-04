@@ -6,20 +6,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class InterestingLocations extends StatefulWidget {
-  const InterestingLocations({Key key}) : super(key: key);
-
   @override
   State<InterestingLocations> createState() => _InterestingLocationsState();
 }
 
 class _InterestingLocationsState extends State<InterestingLocations> {
-  GoogleMapController mapController;
+  late GoogleMapController mapController;
 
   final LatLng _center = const LatLng(40.70415271515901, -73.93137539489814);
   Map<String, Marker> markers = {};
 
-  BitmapDescriptor unvisitedIcon;
-  BitmapDescriptor visitedIcon;
+  late BitmapDescriptor unvisitedIcon;
+  late BitmapDescriptor visitedIcon;
 
   void _onMapCreated(GoogleMapController controller) {
     BitmapDescriptor.fromAssetImage(

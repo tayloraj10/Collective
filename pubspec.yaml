@@ -18,33 +18,33 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 # Flutter 3.3.0
 
 dependencies:
   accordion: ^2.1.0
-  cloud_firestore: ^3.4.6
+  cloud_firestore: ^4.17.5
   cupertino_icons: ^1.0.1
-  dropdown_search: ^0.6.3
-  firebase_auth: ^3.7.0
-  firebase_core: ^1.21.1
-  firebase_storage: ^10.3.1
+  dropdown_search: ^5.0.6
+  firebase_auth: ^4.20.0
+  firebase_core: ^2.32.0
+  firebase_storage: ^11.7.7
   flutter:
     sdk: flutter
   flutterfire_ui: ^0.4.3+7
   # firebase_ui_auth: ^1.1.17
   fluttertoast: ^8.0.9
   google_maps_flutter: ^2.2.3
-  google_maps_flutter_web: ^0.4.0+5
-  http: ^0.13.5
-  instant: ^0.4.1
-  intl: ^0.17.0
-  provider: ^4.3.2+3
-  syncfusion_flutter_calendar: ^18.4.44
+  google_maps_flutter_web: ^0.5.7
+  http: ^1.2.1
+  instant: ^0.5.1
+  intl: ^0.18.1
+  provider: ^6.1.2
+  syncfusion_flutter_calendar: ^24.2.9
   url_launcher: ^6.1.5
-  image_picker_web: ^3.0.0
+  image_picker_web: ^4.0.0
   # google_maps_webservice: ^0.0.19
-  crop_your_image: ^0.7.4
+  crop_your_image: ^1.1.0
   percent_indicator: ^4.2.3
 
 dev_dependencies:

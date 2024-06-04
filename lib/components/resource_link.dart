@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ResourceLink extends StatelessWidget {
   final String text;
   final String url;
-  ResourceLink({this.text, this.url});
+  ResourceLink({required this.text, required this.url});
 
   @override
   Widget build(BuildContext context) {

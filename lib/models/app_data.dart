@@ -33,7 +33,7 @@ class AppData extends ChangeNotifier {
     var docId = user.docs.first.id;
     var userDataFetch =
         await FirebaseFirestore.instance.collection('users').doc(docId).get();
-    updateUserData(userDataFetch.data());
+    updateUserData(userDataFetch.data() as Map<String, dynamic>);
     // notifyListeners();
   }
 }

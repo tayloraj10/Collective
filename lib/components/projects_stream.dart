@@ -24,7 +24,7 @@ class _ProjectsStreamState extends State<ProjectsStream> {
       Colors.orange,
       Colors.green,
       Colors.purple,
-      Colors.yellow[600],
+      Colors.yellow.shade600,
       Colors.grey,
     ];
     int colorIndex = 0;
@@ -43,13 +43,13 @@ class _ProjectsStreamState extends State<ProjectsStream> {
         }
 
         return Column(
-          children: snapshot.data.docs.map((DocumentSnapshot<Object> document) {
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
             // print(document.data());
             Color color;
-            Map data = document.data() as Map;
+            Map data = document.data() as Map<String, dynamic>;
             data['id'] = document.id;
             if (colorMapping.containsKey(data['topic'])) {
-              color = colorMapping[data['topic']];
+              color = colorMapping[data['topic']]!;
             } else {
               colorMapping[data['topic']] = colors[colorIndex];
               color = colors[colorIndex];
@@ -61,7 +61,7 @@ class _ProjectsStreamState extends State<ProjectsStream> {
             return GestureDetector(
               onTap: () => {widget.showDetails(data)},
               child: ProjectCard(
-                data: document.data(),
+                data: document.data() as Map<String, dynamic>,
                 color: color,
               ),
             );

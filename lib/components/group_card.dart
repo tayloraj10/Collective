@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class GroupCard extends StatelessWidget {
   final Map data;
-  GroupCard({this.data});
+  GroupCard({required this.data});
 
   bool isInGroup(groupData, userData) {
     if (groupData['users'] == null)
@@ -43,7 +43,7 @@ class GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
     var userData = Provider.of<AppData>(context, listen: true).userData;
 
     return Container(
@@ -64,9 +64,9 @@ class GroupCard extends StatelessWidget {
                         : 'Join Group'),
                     onPressed: () {
                       if (isInGroup(data, userData)) {
-                        leaveGroup(user.uid, data);
+                        leaveGroup(user!.uid, data);
                       } else {
-                        joinGroup(user.uid, data);
+                        joinGroup(user!.uid, data);
                       }
                     },
                   ),

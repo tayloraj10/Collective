@@ -30,7 +30,7 @@ class _TopicsStreamState extends State<TopicsStream> {
           height: MediaQuery.of(context).size.height,
           child: Accordion(
             maxOpenSections: 1,
-            children: snapshot.data.docs.map((DocumentSnapshot document) {
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
               // print(document.data());
               Map data = document.data() as Map;
 

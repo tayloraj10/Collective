@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TopicCard extends StatelessWidget {
   final String title;
   final List subtopics;
-  TopicCard({this.title, this.subtopics});
+  TopicCard({required this.title, required this.subtopics});
 
   @override
   Widget build(BuildContext context) {

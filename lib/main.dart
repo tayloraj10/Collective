@@ -1,8 +1,6 @@
-import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
 import 'package:collective/screens/loading_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +34,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AppData>(
           create: (_) => AppData(),
         ),
-        StreamProvider<User>.value(
-          value: FirebaseAuth.instance.authStateChanges(),
-        ),
+        // StreamProvider<User>.value(
+        //   value: FirebaseAuth.instance.authStateChanges(),
+        // ),
       ],
       child: MaterialApp(
         routes: {
@@ -48,10 +46,31 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Collective',
         theme: ThemeData(
+          useMaterial3: false,
           fontFamily: 'Oxygen',
-          primaryColor: PrimaryColor,
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: AccentColor),
+          // dialogTheme: const DialogTheme(
+          //     surfaceTintColor: Colors.white, backgroundColor: Colors.white),
+          // cardTheme: const CardTheme(
+          //   surfaceTintColor: Colors.white,
+          // ),
+          // appBarTheme: const AppBarTheme(
+          //     color: Colors.blue, foregroundColor: Colors.white),
+          // tabBarTheme: TabBarTheme(
+          //   labelColor: Colors.white,
+          //   dividerColor: Colors.white,
+          //   indicatorColor: Colors.white,
+          //   unselectedLabelColor: Colors.white,
+          // ),
+          // buttonTheme: ButtonThemeData(
+          //   buttonColor: Colors.blue,
+          // ),
+          // primaryColor: Colors.blue,
+          // primaryColorDark: Colors.blue,
+          // colorScheme: ColorScheme.light(
+          //     primary: PrimaryColor,
+          //     background: Colors.blue,
+          //     surface: Colors.white,
+          //     surfaceTint: Colors.white),
         ),
         home: Scaffold(
           body: SafeArea(

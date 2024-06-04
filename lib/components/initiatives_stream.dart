@@ -24,7 +24,7 @@ class _InitiativesStreamState extends State<InitiativesStream> {
       Colors.orange,
       Colors.green,
       Colors.purple,
-      Colors.yellow[600],
+      Colors.yellow.shade600,
       Colors.grey,
     ];
     int colorIndex = 0;
@@ -43,13 +43,13 @@ class _InitiativesStreamState extends State<InitiativesStream> {
         }
 
         return Column(
-          children: snapshot.data.docs.map((DocumentSnapshot<Object> document) {
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
             // print(document.data());
             Color color;
-            Map data = document.data() as Map;
+            Map data = document.data() as Map<String, dynamic>;
             data['id'] = document.id;
             if (colorMapping.containsKey(data['title'])) {
-              color = colorMapping[data['title']];
+              color = colorMapping[data['title']]!;
             } else {
               colorMapping[data['title']] = colors[colorIndex];
               color = colors[colorIndex];

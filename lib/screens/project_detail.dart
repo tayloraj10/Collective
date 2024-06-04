@@ -53,7 +53,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    var user = FirebaseAuth.instance.currentUser;
     var userData = Provider.of<AppData>(context, listen: true).userData;
 
     getColor(status) {
@@ -94,9 +94,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               : 'Join Project'),
                           onPressed: () {
                             if (isInGroup(widget.data, userData)) {
-                              leaveGroup(user.uid, widget.data);
+                              leaveGroup(user!.uid, widget.data);
                             } else {
-                              joinGroup(user.uid, widget.data);
+                              joinGroup(user!.uid, widget.data);
                             }
                           },
                         ),
@@ -216,9 +216,11 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data.docs
-                                .map((DocumentSnapshot<Object> document) {
-                              Map docData = document.data();
+                            children: snapshot.data!.docs
+                                .map((DocumentSnapshot document) {
+                              Map docData =
+                                  document.data() as Map<String, dynamic>;
+                              print(docData);
                               docData['id'] = document.id;
                               return Tooltip(
                                   message: docData['name'],
@@ -227,8 +229,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                           showDialog(
                                               context: context,
                                               builder: (context) =>
-                                                  ProfileDialog(
-                                                      docData['user_id']))
+                                                  ProfileDialog(docData['uid']))
                                           // Navigator.push(
                                           //   context,
                                           //   MaterialPageRoute(
