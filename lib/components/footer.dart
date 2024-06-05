@@ -18,7 +18,7 @@ class Footer extends StatelessWidget {
             FittedBox(
               fit: BoxFit.fitWidth,
               child: Text(
-                "Collective is a platform to do interesting things with interesting people",
+                "Build A Better World Through Action",
                 style: pageTextStyle,
                 textAlign: TextAlign.center,
               ),
