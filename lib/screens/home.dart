@@ -151,13 +151,17 @@ class _HomeState extends State<Home> {
               //   ),
               // )
             },
-            child: Text(
-              'Collective',
-              style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: titleColor,
-                  fontSize: 40,
-                  fontStyle: FontStyle.italic),
+            child: Tooltip(
+              message:
+                  "Collective action refers to action taken together by a group of people whose goal is to enhance their condition and achieve a common objective",
+              child: Text(
+                'Collective',
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: titleColor,
+                    fontSize: 40,
+                    fontStyle: FontStyle.italic),
+              ),
             ),
           ),
         ),
