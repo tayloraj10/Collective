@@ -152,6 +152,7 @@ class _HomeState extends State<Home> {
               // )
             },
             child: Tooltip(
+              triggerMode: TooltipTriggerMode.tap,
               message:
                   "Collective action refers to action taken together by a group of people whose goal is to enhance their condition and achieve a common objective",
               child: Text(
