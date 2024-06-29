@@ -1,32 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/models/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../models/app_data.dart';
-
-class InitiativeCard extends StatelessWidget {
+class InitiativeCard extends StatefulWidget {
   final Map data;
   final Color color;
   InitiativeCard({required this.data, required this.color});
 
+  @override
+  State<InitiativeCard> createState() => _InitiativeCardState();
+}
+
+class _InitiativeCardState extends State<InitiativeCard> {
   final TextEditingController contributionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var userData = Provider.of<AppData>(context).userData;
-    print(userData);
-    print(this.data);
 
     void addContribution() {
       var ref = FirebaseFirestore.instance
           .collection("initiatives")
-          .doc(this.data['id']);
+          .doc(this.widget.data['id']);
 
       ref.update({
-        "complete":
-            this.data['complete'] + int.tryParse(contributionController.text)
+        "complete": this.widget.data['complete'] +
+            int.tryParse(contributionController.text)
       }).then(
           (value) => {
                 print("DocumentSnapshot successfully updated!"),
@@ -39,11 +41,20 @@ class InitiativeCard extends StatelessWidget {
       ref.add({
         'userName': userData['name'],
         'userID': userData['uid'],
-        'initiative': this.data['title'],
-        'initiativeID': this.data['id'],
+        'initiative': this.widget.data['title'],
+        'initiativeID': this.widget.data['id'],
         'amount': int.tryParse(contributionController.text),
         'date': DateTime.now()
       });
+    }
+
+    bool checkInputError() {
+      if (contributionController.text.length > 0 &&
+          int.tryParse(contributionController.text)! > 10) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     return Container(
@@ -54,49 +65,58 @@ class InitiativeCard extends StatelessWidget {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                    content: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Make a Contribution",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      TextField(
-                        controller: contributionController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          labelText: 'Amount',
+                return StatefulBuilder(builder: (context, setState) {
+                  return AlertDialog(
+                      content: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Make a Contribution",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 22)),
+                        TextField(
+                          controller: contributionController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                              labelText: 'Amount',
+                              errorText: checkInputError()
+                                  ? "Please enter a value that is 10 or less"
+                                  : null),
+                          textAlign: TextAlign.center,
+                          onChanged: (_) => setState(() {}),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                          onPressed: () => {
-                                addContribution(),
-                                addContributionData(),
-                                Navigator.pop(context)
-                              },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ))
-                    ],
-                  ),
-                ));
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                            onPressed: () => {
+                                  if (!checkInputError())
+                                    {
+                                      addContribution(),
+                                      addContributionData(),
+                                      Navigator.pop(context)
+                                    }
+                                },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Submit",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ));
+                });
               })
         },
         child: Card(
-          color: color,
+          color: widget.color,
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
@@ -105,7 +125,7 @@ class InitiativeCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    data['title'],
+                    widget.data['title'],
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -121,9 +141,10 @@ class InitiativeCard extends StatelessWidget {
                     animation: true,
                     lineHeight: 20.0,
                     animationDuration: 2000,
-                    percent: data['complete'] / data['goal'],
+                    percent: widget.data['complete'] / widget.data['goal'],
                     center: Text(
-                        ((data['complete'] / data['goal']) * 100).toString() +
+                        ((widget.data['complete'] / widget.data['goal']) * 100)
+                                .toString() +
                             "%"),
                     progressColor: Colors.white,
                   ),
