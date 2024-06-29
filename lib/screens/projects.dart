@@ -81,7 +81,7 @@ class _ProjectsState extends State<Projects> {
                               : Column(
                                   children: [
                                     Text(
-                                      'These are the currently ongoing projects',
+                                      'These are the currently ongoing projects (click for more info)',
                                       style: pageTextStyle,
                                       textAlign: TextAlign.center,
                                     ),

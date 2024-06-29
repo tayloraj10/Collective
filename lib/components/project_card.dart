@@ -9,6 +9,8 @@ class ProjectCard extends StatelessWidget {
   getColor(status) {
     if (status == 'Active')
       return Colors.green;
+    else if (status == 'Inactive' && color == Colors.red)
+      return Colors.orange;
     else if (status == 'Inactive') return Colors.red;
   }
 
@@ -35,9 +37,10 @@ class ProjectCard extends StatelessWidget {
                         fontSize: 18),
                   ),
                   Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        color: getColor(data['status'])),
+                    // decoration: BoxDecoration(
+                    //     border: Border.all(color: Colors.white),
+                    //     color: getColor(data['status'])),
+                    color: getColor(data['status']),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(

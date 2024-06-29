@@ -43,10 +43,7 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.trending_up),
                 text: 'Initiatives',
               ),
-              Tab(
-                icon: Icon(Icons.lightbulb),
-                text: 'Ideas',
-              ),
+
               Tab(
                 icon: Icon(Icons.handyman),
                 child: Text(
@@ -57,6 +54,10 @@ class _HomeState extends State<Home> {
               Tab(
                 icon: Icon(Icons.calendar_today),
                 text: 'Events',
+              ),
+              Tab(
+                icon: Icon(Icons.lightbulb),
+                text: 'Ideas',
               ),
               // Tab(
               //   icon: Icon(Icons.file_copy),
@@ -169,9 +170,9 @@ class _HomeState extends State<Home> {
         body: TabBarView(
           children: [
             Initiatives(),
-            Ideas(),
             Projects(),
             Calendar(),
+            Ideas(),
             // Chat(),
             // Resources(),
           ],

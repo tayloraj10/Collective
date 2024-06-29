@@ -208,64 +208,6 @@ class _MyWidgetState extends State<ProfileDialog> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('Groups: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('groups')
-                        .where('users', arrayContains: widget.userId)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        print('Something went wrong');
-                      }
-
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      }
-
-                      return Container(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width > 1000
-                                ? MediaQuery.of(context).size.width * .2
-                                : MediaQuery.of(context).size.width * .4),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: snapshot.data!.docs
-                                .mapIndexed((index, DocumentSnapshot document) {
-                              Map docData =
-                                  document.data() as Map<String, dynamic>;
-                              docData['id'] = document.id;
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    index == snapshot.data!.docs.length - 1
-                                        ? docData['name']
-                                        : docData['name'] + ', ',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -303,9 +245,10 @@ class _MyWidgetState extends State<ProfileDialog> {
                               Map docData =
                                   document.data() as Map<String, dynamic>;
                               docData['id'] = document.id;
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [TopicChip(docData['title'])],
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: TopicChip(docData['title']),
                               );
                             }).toList(),
                           ),
@@ -315,7 +258,59 @@ class _MyWidgetState extends State<ProfileDialog> {
                   ),
                 ],
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('Groups: ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('groups')
+                        .where('users', arrayContains: widget.userId)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        print('Something went wrong');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+
+                      return Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width > 1000
+                                ? MediaQuery.of(context).size.width * .2
+                                : MediaQuery.of(context).size.width * .4),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: snapshot.data!.docs
+                                .mapIndexed((index, DocumentSnapshot document) {
+                              Map docData =
+                                  document.data() as Map<String, dynamic>;
+                              docData['id'] = document.id;
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: TopicChip(docData['name']),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/models/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +18,59 @@ class InitiativeCard extends StatefulWidget {
 
 class _InitiativeCardState extends State<InitiativeCard> {
   final TextEditingController contributionController = TextEditingController();
+
+  num calculateCompleted() {
+    num total = 0;
+    if (this.widget.data['submissions'] != null) {
+      this.widget.data['submissions'].forEach((x) => {total += x['amount']});
+      return total;
+    } else
+      return 0;
+  }
+
+  List<DateTime> getUserSubmissionDates() {
+    List<DateTime> userSubmissions = [];
+    if (FirebaseAuth.instance.currentUser != null &&
+        this.widget.data['submissions'] != null) {
+      String user = FirebaseAuth.instance.currentUser!.uid;
+      this.widget.data['submissions'].forEach((x) => {
+            if (x['userID'] == user)
+              {
+                userSubmissions.add(DateTime.fromMillisecondsSinceEpoch(
+                    x['date'].seconds * 1000))
+              }
+          });
+    }
+    return userSubmissions;
+  }
+
+  int getUserStreak() {
+    int streak = 0;
+    List<DateTime> dates = getUserSubmissionDates();
+    DateTime currentDateTime = DateTime.now();
+    List days = [];
+
+    if (dates.length > 0) {
+      dates.sort((a, b) {
+        return b.compareTo(a);
+      });
+
+      for (var x in dates) {
+        if (currentDateTime.difference(x).inHours <= 24) {
+          if (days.contains(DateFormat.yMd().format(x))) {
+            currentDateTime = x;
+          } else {
+            days.add(DateFormat.yMd().format(x));
+            streak += 1;
+            currentDateTime = x;
+          }
+        } else
+          break;
+      }
+      return streak;
+    }
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +89,34 @@ class _InitiativeCardState extends State<InitiativeCard> {
                 print("DocumentSnapshot successfully updated!"),
               },
           onError: (e) => print("Error updating document $e"));
+
+      ref.update({
+        'submissions': FieldValue.arrayUnion([
+          {
+            'userName': userData['name'],
+            'userID': userData['uid'],
+            'amount': int.tryParse(contributionController.text),
+            'date': DateTime.now()
+          }
+        ])
+      }).then(
+          (value) => {
+                print("Submissions successfully updated!"),
+              },
+          onError: (e) => print("Error updating document $e"));
     }
 
-    void addContributionData() {
-      var ref = FirebaseFirestore.instance.collection("goal_submissions");
-      ref.add({
-        'userName': userData['name'],
-        'userID': userData['uid'],
-        'initiative': this.widget.data['title'],
-        'initiativeID': this.widget.data['id'],
-        'amount': int.tryParse(contributionController.text),
-        'date': DateTime.now()
-      });
-    }
+    // void addContributionData() {
+    //   var ref = FirebaseFirestore.instance.collection("goal_submissions");
+    //   ref.add({
+    //     'userName': userData['name'],
+    //     'userID': userData['uid'],
+    //     'initiative': this.widget.data['title'],
+    //     'initiativeID': this.widget.data['id'],
+    //     'amount': int.tryParse(contributionController.text),
+    //     'date': DateTime.now()
+    //   });
+    // }
 
     bool checkInputError() {
       if (contributionController.text.length > 0 &&
@@ -97,7 +167,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
                                   if (!checkInputError())
                                     {
                                       addContribution(),
-                                      addContributionData(),
+                                      // addContributionData(),
                                       Navigator.pop(context)
                                     }
                                 },
@@ -133,7 +203,32 @@ class _InitiativeCardState extends State<InitiativeCard> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 2,
+                ),
+                if (FirebaseAuth.instance.currentUser != null &&
+                    getUserStreak() > 0)
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      children: [
+                        Text(
+                          'You are on a ${getUserStreak()} day Streak',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 18),
+                        ),
+                        Icon(
+                          Icons.local_fire_department,
+                          color: widget.color == Colors.orange
+                              ? Colors.red
+                              : Colors.orange,
+                        ),
+                      ],
+                    ),
+                  ),
+                SizedBox(
+                  height: 8,
                 ),
                 Padding(
                   padding: EdgeInsets.all(15.0),
@@ -141,10 +236,10 @@ class _InitiativeCardState extends State<InitiativeCard> {
                     animation: true,
                     lineHeight: 20.0,
                     animationDuration: 2000,
-                    percent: widget.data['complete'] / widget.data['goal'],
+                    percent: calculateCompleted() / widget.data['goal'],
                     center: Text(
-                        ((widget.data['complete'] / widget.data['goal']) * 100)
-                                .toString() +
+                        ((calculateCompleted() / widget.data['goal']) * 100)
+                                .toStringAsFixed(2) +
                             "%"),
                     progressColor: Colors.white,
                   ),

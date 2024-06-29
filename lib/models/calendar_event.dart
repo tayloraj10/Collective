@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:instant/instant.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+String removeHrefText(String input) {
+  RegExp regex = RegExp(r'(<a href=")([^"]*)(">)');
+
+  String result = input.replaceAll(regex, '');
+  result = result.replaceAll("</a>", '');
+
+  return result;
+}
+
 _AppointmentDataSource getCalendarDataSource(List events) {
   List<Appointment> appointments = <Appointment>[];
 
   for (var e in events) {
+    // print(e);
     // bool recur = false;
     int recurrence = 0;
     int recurrenceLimit = 12;
@@ -50,7 +60,7 @@ _AppointmentDataSource getCalendarDataSource(List events) {
             color: Colors.blue,
             startTimeZone: '',
             endTimeZone: '',
-            notes: e['description'],
+            notes: removeHrefText(e['description']),
             isAllDay: false,
             location: e['location']));
 
@@ -61,12 +71,16 @@ _AppointmentDataSource getCalendarDataSource(List events) {
           zone: "EST",
           datetime: e['start'].containsKey("dateTime")
               ? DateTime.parse(e['start']['dateTime'])
-              : DateTime.parse(e['start']['date']));
+                  .add(const Duration(hours: 1))
+              : DateTime.parse(e['start']['date'])
+                  .add(const Duration(hours: 1)));
       DateTime endTime = dateTimeToZone(
           zone: "EST",
           datetime: e['end'].containsKey("dateTime")
               ? DateTime.parse(e['end']['dateTime'])
+                  .add(const Duration(hours: 1))
               : DateTime.parse(e['end']['date'])
+                  .add(const Duration(hours: 1))
                   .subtract(const Duration(minutes: 1)));
 
       appointments.add(
@@ -79,7 +93,7 @@ _AppointmentDataSource getCalendarDataSource(List events) {
           color: Colors.blue,
           startTimeZone: '',
           endTimeZone: '',
-          notes: e['description'],
+          notes: removeHrefText(e['description']),
           isAllDay: false,
           location: e['location'],
         ),
