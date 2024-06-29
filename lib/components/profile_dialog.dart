@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/topic_chip.dart';
 import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -304,14 +305,7 @@ class _MyWidgetState extends State<ProfileDialog> {
                               docData['id'] = document.id;
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    index == snapshot.data!.docs.length - 1
-                                        ? docData['title']
-                                        : docData['title'] + ', ',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                                children: [TopicChip(docData['title'])],
                               );
                             }).toList(),
                           ),

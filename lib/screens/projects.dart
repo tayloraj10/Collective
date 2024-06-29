@@ -109,7 +109,7 @@ class _ProjectsState extends State<Projects> {
                                 ),
                               )),
                           SizedBox(
-                            height: 40,
+                            height: 10,
                           ),
                           ProjectDetail(this.projectData),
                         ],
