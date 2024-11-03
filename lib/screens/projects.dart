@@ -33,7 +33,7 @@ class _ProjectsState extends State<Projects> {
 
   @override
   Widget build(BuildContext context) {
-    var user = FirebaseAuth.instance.currentUser;
+    // var user = FirebaseAuth.instance.currentUser;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -46,36 +46,36 @@ class _ProjectsState extends State<Projects> {
             child: Container(
               color: SecondaryColor,
               child: Padding(
-                padding: EdgeInsets.all(40),
+                padding: EdgeInsets.only(top: 15, bottom: 75),
                 child: !showProject
                     ? Column(
                         children: [
-                          if (user != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      showGroups = !showGroups;
-                                    });
-                                  },
-                                  child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 16),
-                                      child: Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          Text(
-                                            'View ${showGroups ? 'Projects' : 'Groups'}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 22,
-                                            ),
-                                          )
-                                        ],
-                                      ))),
-                            ),
+                          // if (user != null)
+                          //   Padding(
+                          //     padding: const EdgeInsets.only(bottom: 20),
+                          //     child: ElevatedButton(
+                          //         onPressed: () {
+                          //           setState(() {
+                          //             showGroups = !showGroups;
+                          //           });
+                          //         },
+                          //         child: Padding(
+                          //             padding:
+                          //                 EdgeInsets.symmetric(vertical: 16),
+                          //             child: Wrap(
+                          //               crossAxisAlignment:
+                          //                   WrapCrossAlignment.center,
+                          //               children: [
+                          //                 Text(
+                          //                   'View ${showGroups ? 'Projects' : 'Groups'}',
+                          //                   style: TextStyle(
+                          //                     fontWeight: FontWeight.bold,
+                          //                     fontSize: 22,
+                          //                   ),
+                          //                 )
+                          //               ],
+                          //             ))),
+                          //   ),
                           showGroups && !showProject
                               ? Groups()
                               : Column(
@@ -86,7 +86,7 @@ class _ProjectsState extends State<Projects> {
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
-                                      height: 25,
+                                      height: 15,
                                     ),
                                     ProjectsStream(this.showProjectDetails)
                                   ],

@@ -54,42 +54,46 @@ class _IdeasState extends State<Ideas> {
             child: Container(
               color: SecondaryColor,
               child: Padding(
-                padding: EdgeInsets.all(40),
+                padding: EdgeInsets.only(top: 15, bottom: 75),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(Icons.pin_drop),
-                            SizedBox(
-                              width: 6,
-                            ),
-                            Text(
-                              'View Interesting Locations',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      onPressed: (() => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => InterestingLocations(),
-                              ),
-                            )
-                          }),
+                    // ElevatedButton(
+                    //   child: Padding(
+                    //     padding: EdgeInsets.symmetric(vertical: 8),
+                    //     child: Wrap(
+                    //       crossAxisAlignment: WrapCrossAlignment.center,
+                    //       children: [
+                    //         Icon(Icons.pin_drop),
+                    //         SizedBox(
+                    //           width: 6,
+                    //         ),
+                    //         Text(
+                    //           'View Interesting Locations',
+                    //           style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             fontSize: 18,
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   onPressed: (() => {
+                    //         Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => InterestingLocations(),
+                    //           ),
+                    //         )
+                    //       }),
+                    // ),
+                    Text(
+                      'These are potential topics for new projects or events',
+                      style: pageTextStyle,
+                      textAlign: TextAlign.center,
                     ),
-                    if (user != null)
-                      SizedBox(
-                        height: 32,
-                      ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     if (user != null)
                       ElevatedButton(
                         onPressed: () async {
@@ -324,17 +328,6 @@ class _IdeasState extends State<Ideas> {
                           ),
                         ),
                       ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Text(
-                      'These are potential topics for new projects or events',
-                      style: pageTextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
                     TopicsStream(),
                   ],
                 ),

@@ -1,18 +1,11 @@
 import 'package:collective/components/topic_chip.dart';
+import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProjectCard extends StatelessWidget {
   final Map data;
   final Color color;
   ProjectCard({required this.data, required this.color});
-
-  getColor(status) {
-    if (status == 'Active')
-      return Colors.green;
-    else if (status == 'Inactive' && color == Colors.red)
-      return Colors.orange;
-    else if (status == 'Inactive') return Colors.red;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +33,7 @@ class ProjectCard extends StatelessWidget {
                     // decoration: BoxDecoration(
                     //     border: Border.all(color: Colors.white),
                     //     color: getColor(data['status'])),
-                    color: getColor(data['status']),
+                    color: getProjectColor(data['status'], color),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(

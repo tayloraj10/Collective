@@ -55,14 +55,15 @@ class _CalendarState extends State<Calendar> {
                               fontWeight: FontWeight.bold, fontSize: 24),
                           textAlign: TextAlign.center),
                       InkWell(
+                        mouseCursor: SystemMouseCursors.click,
+                        onTap: () => {
+                          launchURL(locationUrl +
+                              "${eventDetails.subject.split(' - ')[1].trim()}")
+                        },
                         child: Center(
-                          child: SelectableText(
+                          child: Text(
                             "${eventDetails.subject.split(' - ')[1].trim()}",
                             style: TextStyle(fontSize: 18),
-                            onTap: () => {
-                              launchURL(locationUrl +
-                                  "${eventDetails.subject.split(' - ')[1].trim()}")
-                            },
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -97,19 +98,20 @@ class _CalendarState extends State<Calendar> {
                       if (eventDetails.notes != '' &&
                           eventDetails.notes != null)
                         InkWell(
+                          mouseCursor: SystemMouseCursors.click,
+                          onTap: () => {
+                            url = 'http' +
+                                eventDetails.notes
+                                    .split('http')[1]
+                                    .split(' ')[0],
+                            launchURL(url)
+                          },
                           child: Center(
-                            child: SelectableText(
+                            child: Text(
                               "${eventDetails.notes}",
                               style: TextStyle(
                                 fontSize: 18,
                               ),
-                              onTap: () => {
-                                url = 'http' +
-                                    eventDetails.notes
-                                        .split('http')[1]
-                                        .split(' ')[0],
-                                launchURL(url)
-                              },
                               textAlign: TextAlign.center,
                             ),
                           ),

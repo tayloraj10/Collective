@@ -21,7 +21,7 @@ class _InitiativesState extends State<Initiatives> {
             child: Container(
               color: SecondaryColor,
               child: Padding(
-                  padding: EdgeInsets.all(40),
+                  padding: EdgeInsets.only(top: 15, bottom: 75),
                   child: Column(
                     children: [
                       // Text(
@@ -38,7 +38,7 @@ class _InitiativesState extends State<Initiatives> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       InitiativesStream()
                     ],

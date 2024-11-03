@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/resource_link.dart';
 import 'package:collective/components/topic_chip.dart';
 import 'package:collective/components/user_list.dart';
+import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,12 +56,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
   Widget build(BuildContext context) {
     var user = FirebaseAuth.instance.currentUser;
     var userData = Provider.of<AppData>(context, listen: true).userData;
-
-    getColor(status) {
-      if (status == 'Active')
-        return Colors.green;
-      else if (status == 'Inactive') return Colors.red;
-    }
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -123,13 +118,25 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                           fontSize: 28),
                                     ),
                                     if (widget.data['status'] != null)
-                                      Text(
-                                        widget.data['status'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 28,
-                                            color: getColor(
-                                                widget.data['status'])),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: getProjectColor(
+                                            widget.data['status'],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Text(
+                                            widget.data['status'],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       )
                                   ],
                                 ),

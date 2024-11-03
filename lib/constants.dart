@@ -4,6 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+const double smallTextSize = 14;
+const double mediumTextSize = 24;
+const double largeTextSize = 30;
+
 const Color PrimaryColor = Colors.blue;
 const Color SecondaryColor = Color(0xff003566);
 const Color SecondaryColorDark = Color(0xff001d3d);
@@ -53,4 +57,14 @@ class FetchURL {
 
 String getInitials(String name) {
   return name.split(" ")[0][0] + name.split(" ")[1][0];
+}
+
+getProjectColor(String status, [Color? color]) {
+  if (status == 'Active')
+    return Colors.green;
+  else if (status == 'In Development')
+    return Colors.black;
+  else if (status == 'Inactive' && color == Colors.red)
+    return Colors.orange;
+  else if (status == 'Inactive') return Colors.red;
 }
