@@ -2,11 +2,11 @@ import 'package:collective/components/footer.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/calendar.dart';
+import 'package:collective/screens/directory.dart';
 import 'package:collective/screens/initiatives.dart';
 import 'package:collective/screens/profile.dart';
 import 'package:collective/screens/projects.dart';
 import 'package:collective/screens/sign_in.dart';
-import 'package:collective/screens/ideas.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,8 +56,8 @@ class _HomeState extends State<Home> {
                 text: 'Events',
               ),
               Tab(
-                icon: Icon(Icons.lightbulb),
-                text: 'Ideas',
+                icon: Icon(Icons.import_contacts),
+                text: 'Directory',
               ),
               // Tab(
               //   icon: Icon(Icons.file_copy),
@@ -172,7 +172,8 @@ class _HomeState extends State<Home> {
             Initiatives(),
             Projects(),
             Calendar(),
-            Ideas(),
+            Directory()
+            // Ideas(),
             // Chat(),
             // Resources(),
           ],

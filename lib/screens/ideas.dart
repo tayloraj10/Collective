@@ -1,12 +1,14 @@
 import 'package:collective/components/topics_stream.dart';
 import 'package:collective/constants.dart';
-import 'package:collective/screens/map.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 class Ideas extends StatefulWidget {
+  final Function exitFunction;
+
+  const Ideas({Key? key, required this.exitFunction}) : super(key: key);
   @override
   _IdeasState createState() => _IdeasState();
 }
@@ -86,10 +88,29 @@ class _IdeasState extends State<Ideas> {
                     //         )
                     //       }),
                     // ),
-                    Text(
-                      'These are potential topics for new projects or events',
-                      style: pageTextStyle,
-                      textAlign: TextAlign.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      runSpacing: 10,
+                      spacing: 10,
+                      children: [
+                        Text(
+                          'These are potential topics for new projects or events',
+                          style: pageTextStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () => {
+                            widget.exitFunction(),
+                          },
+                          icon: Icon(Icons.handyman),
+                          label: Text(
+                            "Projects",
+                            style: TextStyle(
+                                fontSize: mediumTextSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 15,
