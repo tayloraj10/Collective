@@ -12,6 +12,50 @@ class Directory extends StatefulWidget {
 }
 
 class _DirectoryState extends State<Directory> {
+  final List<String> categories = [
+    'Reset',
+    'Environment',
+    'Trash',
+    'Tech',
+    'Water'
+  ];
+  final List<String> locations = ['Reset', 'NYC', 'Philadelphia', 'Florida'];
+  String categoryFilter = '';
+  String locationFilter = '';
+
+  getStream() {
+    if (categoryFilter.isNotEmpty && locationFilter.isNotEmpty) {
+      return FirebaseFirestore.instance
+          .collection('directory')
+          .where('active', isEqualTo: true)
+          .where('topics', arrayContains: categoryFilter)
+          .where('location', isEqualTo: locationFilter)
+          .orderBy("date_added", descending: true)
+          .snapshots();
+    }
+    if (categoryFilter.isNotEmpty) {
+      return FirebaseFirestore.instance
+          .collection('directory')
+          .where('active', isEqualTo: true)
+          .where('topics', arrayContains: categoryFilter)
+          .orderBy("date_added", descending: true)
+          .snapshots();
+    }
+    if (locationFilter.isNotEmpty) {
+      return FirebaseFirestore.instance
+          .collection('directory')
+          .where('active', isEqualTo: true)
+          .where('location', isEqualTo: locationFilter)
+          .orderBy("date_added", descending: true)
+          .snapshots();
+    }
+    return FirebaseFirestore.instance
+        .collection('directory')
+        .where('active', isEqualTo: true)
+        .orderBy("date_added", descending: true)
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -33,15 +77,83 @@ class _DirectoryState extends State<Directory> {
                       style: pageTextStyle,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
-                      height: 15,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            children: [
+                              DropdownButton<String>(
+                                style: TextStyle(color: Colors.white),
+                                dropdownColor: Colors.grey[800],
+                                hint: Text('Select Category',
+                                    style: TextStyle(color: Colors.white)),
+                                items: categories.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                    ),
+                                  );
+                                }).toList(),
+                                value: categoryFilter.isEmpty
+                                    ? null
+                                    : categoryFilter,
+                                onChanged: (String? newValue) {
+                                  if (newValue == 'Reset') {
+                                    setState(() {
+                                      categoryFilter = '';
+                                    });
+                                    return;
+                                  }
+                                  setState(() {
+                                    categoryFilter = newValue!;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            children: [
+                              DropdownButton<String>(
+                                style: TextStyle(color: Colors.white),
+                                dropdownColor: Colors.grey[800],
+                                hint: Text('Select Location',
+                                    style: TextStyle(color: Colors.white)),
+                                items: locations.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                    ),
+                                  );
+                                }).toList(),
+                                value: locationFilter.isEmpty
+                                    ? null
+                                    : locationFilter,
+                                onChanged: (String? newValue) {
+                                  if (newValue == 'Reset') {
+                                    setState(() {
+                                      locationFilter = '';
+                                    });
+                                    return;
+                                  }
+                                  setState(() {
+                                    locationFilter = newValue!;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('directory')
-                          .where('active', isEqualTo: true)
-                          .orderBy("date_added", descending: true)
-                          .snapshots(),
+                      stream: getStream(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
