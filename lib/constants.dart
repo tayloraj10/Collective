@@ -4,6 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+isMobile(context) {
+  return MediaQuery.of(context).size.width < 1300;
+}
+
 const double smallTextSize = 14;
 const double mediumTextSize = 24;
 const double largeTextSize = 30;

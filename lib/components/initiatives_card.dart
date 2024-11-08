@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,35 +19,86 @@ class InitiativeCard extends StatefulWidget {
 
 class _InitiativeCardState extends State<InitiativeCard> {
   final TextEditingController contributionController = TextEditingController();
+  int streak = 0;
 
-  num calculateCompleted() {
-    num total = 0;
-    if (this.widget.data['submissions'] != null) {
-      this.widget.data['submissions'].forEach((x) => {total += x['amount']});
-      return total;
-    } else
-      return 0;
+  @override
+  void initState() {
+    super.initState();
+    runUpdates();
   }
 
-  List<DateTime> getUserSubmissionDates() {
+  runUpdates() {
+    calculateCompleted();
+    getUserStreak();
+  }
+
+  // num calculateCompleted() {
+  //   num total = 0;
+  //   if (this.widget.data['submissions'] != null) {
+  //     this.widget.data['submissions'].forEach((x) => {total += x['amount']});
+  //     return total;
+  //   } else
+  //     return 0;
+  // }
+
+  Future<void> calculateCompleted() async {
+    num total = 0;
+    await FirebaseFirestore.instance
+        .collection('goal_submissions')
+        .where('initiativeID', isEqualTo: this.widget.data['id'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        total += doc['amount'];
+      });
+    });
+    FirebaseFirestore.instance
+        .collection('initiatives')
+        .doc(this.widget.data['id'])
+        .update({'complete': total}).then(
+      (value) => print("Initiative successfully updated!"),
+      onError: (e) => print("Error updating initiative: $e"),
+    );
+  }
+
+  // List<DateTime> getUserSubmissionDates() {
+  //   List<DateTime> userSubmissions = [];
+  //   if (FirebaseAuth.instance.currentUser != null &&
+  //       this.widget.data['submissions'] != null) {
+  //     String user = FirebaseAuth.instance.currentUser!.uid;
+  //     this.widget.data['submissions'].forEach((x) => {
+  //           if (x['userID'] == user)
+  //             {
+  //               userSubmissions.add(DateTime.fromMillisecondsSinceEpoch(
+  //                   x['date'].seconds * 1000))
+  //             }
+  //         });
+  //   }
+  //   return userSubmissions;
+  // }
+
+  Future<List<DateTime>> getUserSubmissionDates() async {
     List<DateTime> userSubmissions = [];
-    if (FirebaseAuth.instance.currentUser != null &&
-        this.widget.data['submissions'] != null) {
+    if (FirebaseAuth.instance.currentUser != null) {
       String user = FirebaseAuth.instance.currentUser!.uid;
-      this.widget.data['submissions'].forEach((x) => {
-            if (x['userID'] == user)
-              {
-                userSubmissions.add(DateTime.fromMillisecondsSinceEpoch(
-                    x['date'].seconds * 1000))
-              }
-          });
+      await FirebaseFirestore.instance
+          .collection('goal_submissions')
+          .where('userID', isEqualTo: user)
+          .where('initiativeID', isEqualTo: this.widget.data['id'])
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          userSubmissions.add(
+              DateTime.fromMillisecondsSinceEpoch(doc['date'].seconds * 1000));
+        });
+      });
     }
     return userSubmissions;
   }
 
-  int getUserStreak() {
-    int streak = 0;
-    List<DateTime> dates = getUserSubmissionDates();
+  Future<void> getUserStreak() async {
+    int userStreak = 0;
+    List<DateTime> dates = await getUserSubmissionDates();
     DateTime currentDateTime = DateTime.now();
     List days = [];
 
@@ -61,62 +113,66 @@ class _InitiativeCardState extends State<InitiativeCard> {
             currentDateTime = x;
           } else {
             days.add(DateFormat.yMd().format(x));
-            streak += 1;
+            userStreak += 1;
             currentDateTime = x;
           }
         } else
           break;
       }
-      return streak;
+      print(userStreak);
+      setState(() {
+        this.streak = userStreak;
+      });
     }
-    return 0;
+    // return 0;
+  }
+
+  // void addContribution(Map userData) {
+  //   var ref = FirebaseFirestore.instance
+  //       .collection("initiatives")
+  //       .doc(this.widget.data['id']);
+
+  //   ref.update({
+  //     "complete": this.widget.data['complete'] +
+  //         int.tryParse(contributionController.text)
+  //   }).then(
+  //       (value) => {
+  //             print("DocumentSnapshot successfully updated!"),
+  //           },
+  //       onError: (e) => print("Error updating document $e"));
+
+  //   ref.update({
+  //     'submissions': FieldValue.arrayUnion([
+  //       {
+  //         'userName': userData['name'],
+  //         'userID': userData['uid'],
+  //         'amount': int.tryParse(contributionController.text),
+  //         'date': DateTime.now()
+  //       }
+  //     ])
+  //   }).then(
+  //       (value) => {
+  //             print("Submissions successfully updated!"),
+  //           },
+  //       onError: (e) => print("Error updating document $e"));
+  // }
+
+  void addContribution(Map userData) {
+    var ref = FirebaseFirestore.instance.collection("goal_submissions");
+    ref.add({
+      'userName': userData['name'],
+      'userID': userData['uid'],
+      'initiative': this.widget.data['title'],
+      'initiativeID': this.widget.data['id'],
+      'amount': int.tryParse(contributionController.text),
+      'date': DateTime.now()
+    });
+    runUpdates();
   }
 
   @override
   Widget build(BuildContext context) {
     var userData = Provider.of<AppData>(context).userData;
-
-    void addContribution() {
-      var ref = FirebaseFirestore.instance
-          .collection("initiatives")
-          .doc(this.widget.data['id']);
-
-      ref.update({
-        "complete": this.widget.data['complete'] +
-            int.tryParse(contributionController.text)
-      }).then(
-          (value) => {
-                print("DocumentSnapshot successfully updated!"),
-              },
-          onError: (e) => print("Error updating document $e"));
-
-      ref.update({
-        'submissions': FieldValue.arrayUnion([
-          {
-            'userName': userData['name'],
-            'userID': userData['uid'],
-            'amount': int.tryParse(contributionController.text),
-            'date': DateTime.now()
-          }
-        ])
-      }).then(
-          (value) => {
-                print("Submissions successfully updated!"),
-              },
-          onError: (e) => print("Error updating document $e"));
-    }
-
-    // void addContributionData() {
-    //   var ref = FirebaseFirestore.instance.collection("goal_submissions");
-    //   ref.add({
-    //     'userName': userData['name'],
-    //     'userID': userData['uid'],
-    //     'initiative': this.widget.data['title'],
-    //     'initiativeID': this.widget.data['id'],
-    //     'amount': int.tryParse(contributionController.text),
-    //     'date': DateTime.now()
-    //   });
-    // }
 
     bool checkInputError() {
       if (contributionController.text.length > 0 &&
@@ -129,7 +185,9 @@ class _InitiativeCardState extends State<InitiativeCard> {
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: isMobile(context)
+          ? MediaQuery.of(context).size.width * 0.6
+          : MediaQuery.of(context).size.width * 0.75,
       child: GestureDetector(
         onTap: () => {
           showDialog(
@@ -166,7 +224,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
                             onPressed: () => {
                                   if (!checkInputError())
                                     {
-                                      addContribution(),
+                                      addContribution(userData),
                                       // addContributionData(),
                                       Navigator.pop(context)
                                     }
@@ -205,14 +263,13 @@ class _InitiativeCardState extends State<InitiativeCard> {
                 SizedBox(
                   height: 2,
                 ),
-                if (FirebaseAuth.instance.currentUser != null &&
-                    getUserStreak() > 0)
+                if (FirebaseAuth.instance.currentUser != null && streak > 0)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Row(
                       children: [
                         Text(
-                          'You are on a ${getUserStreak()} day Streak',
+                          'You are on a ${streak} day Streak',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -236,9 +293,9 @@ class _InitiativeCardState extends State<InitiativeCard> {
                     animation: true,
                     lineHeight: 20.0,
                     animationDuration: 2000,
-                    percent: calculateCompleted() / widget.data['goal'],
+                    percent: widget.data['complete'] / widget.data['goal'],
                     center: Text(
-                        ((calculateCompleted() / widget.data['goal']) * 100)
+                        ((widget.data['complete'] / widget.data['goal']) * 100)
                                 .toStringAsFixed(2) +
                             "%"),
                     progressColor: Colors.white,
