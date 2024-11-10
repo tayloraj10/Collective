@@ -1,7 +1,9 @@
 import 'package:collective/components/topic_chip.dart';
 import 'package:collective/constants.dart';
+import 'package:collective/models/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class Directory extends StatefulWidget {
   const Directory({
@@ -177,129 +179,139 @@ class _DirectoryState extends State<Directory> {
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  color: Colors.blue,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: ListTile(
-                                          title: Text(data['name'],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                  fontSize: largeTextSize)),
-                                          subtitle: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                data.containsKey('description')
-                                                    ? data['description']
-                                                    : '',
+                                child: GestureDetector(
+                                  onTap: (() => {
+                                        print(Provider.of<AppData>(context,
+                                                listen: false)
+                                            .userData)
+                                      }),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    color: Colors.blue,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: ListTile(
+                                            title: Text(data['name'],
                                                 style: TextStyle(
-                                                    color: Colors.grey[200],
-                                                    fontSize: smallTextSize),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8),
-                                                child: Wrap(
-                                                  spacing: 6.0,
-                                                  runSpacing: 6.0,
-                                                  children: data['topics']
-                                                      .map<Widget>(
-                                                          (topic) => TopicChip(
-                                                                topic,
-                                                              ))
-                                                      .toList(),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                    fontSize: largeTextSize)),
+                                            subtitle: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  data.containsKey(
+                                                          'description')
+                                                      ? data['description']
+                                                      : '',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[200],
+                                                      fontSize: smallTextSize),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          leading: data.containsKey('image')
-                                              ? GestureDetector(
-                                                  onTap: () => {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          elevation: 0,
-                                                          content: CircleAvatar(
-                                                            radius: 200,
-                                                            backgroundImage:
-                                                                NetworkImage(data[
-                                                                    'image']),
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
-                                                  },
-                                                  child: CircleAvatar(
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                            data['image']),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8),
+                                                  child: Wrap(
+                                                    spacing: 6.0,
+                                                    runSpacing: 6.0,
+                                                    children: data['topics']
+                                                        .map<Widget>((topic) =>
+                                                            TopicChip(
+                                                              topic,
+                                                            ))
+                                                        .toList(),
                                                   ),
                                                 )
-                                              : null,
+                                              ],
+                                            ),
+                                            leading: data.containsKey('image')
+                                                ? GestureDetector(
+                                                    onTap: () => {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            elevation: 0,
+                                                            content:
+                                                                CircleAvatar(
+                                                              radius: 200,
+                                                              backgroundImage:
+                                                                  NetworkImage(data[
+                                                                      'image']),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    },
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                              data['image']),
+                                                    ),
+                                                  )
+                                                : null,
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          if (data.containsKey('links') &&
-                                              data['links']
-                                                  .containsKey('website'))
-                                            Tooltip(
-                                              message: 'Website',
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  launchURL(
-                                                      data['links']['website']);
-                                                },
-                                                icon: Icon(Icons.language),
+                                        Column(
+                                          children: [
+                                            if (data.containsKey('links') &&
+                                                data['links']
+                                                    .containsKey('website'))
+                                              Tooltip(
+                                                message: 'Website',
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    launchURL(data['links']
+                                                        ['website']);
+                                                  },
+                                                  icon: Icon(Icons.language),
+                                                ),
                                               ),
-                                            ),
-                                          if (data.containsKey('links') &&
-                                              data['links']
-                                                  .containsKey('instagram'))
-                                            Tooltip(
-                                              message: 'Instagram',
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  launchURL(
-                                                      'https://www.instagram.com/' +
-                                                          data['links']
-                                                              ['instagram']);
-                                                },
-                                                icon: Image.asset('images/' +
-                                                    'instagram.png'),
+                                            if (data.containsKey('links') &&
+                                                data['links']
+                                                    .containsKey('instagram'))
+                                              Tooltip(
+                                                message: 'Instagram',
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    launchURL(
+                                                        'https://www.instagram.com/' +
+                                                            data['links']
+                                                                ['instagram']);
+                                                  },
+                                                  icon: Image.asset('images/' +
+                                                      'instagram.png'),
+                                                ),
                                               ),
-                                            ),
-                                          if (data.containsKey('links') &&
-                                              data['links']
-                                                  .containsKey('youtube'))
-                                            Tooltip(
-                                              message: 'Youtube',
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  launchURL(
-                                                      'https://www.youtube.com/@' +
-                                                          data['links']
-                                                              ['youtube']);
-                                                },
-                                                icon: Image.asset(
-                                                    'images/' + 'youtube.png'),
-                                              ),
-                                            )
-                                        ],
-                                      ),
-                                    ],
+                                            if (data.containsKey('links') &&
+                                                data['links']
+                                                    .containsKey('youtube'))
+                                              Tooltip(
+                                                message: 'Youtube',
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    launchURL(
+                                                        'https://www.youtube.com/@' +
+                                                            data['links']
+                                                                ['youtube']);
+                                                  },
+                                                  icon: Image.asset('images/' +
+                                                      'youtube.png'),
+                                                ),
+                                              )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

@@ -1,3 +1,4 @@
+import 'package:collective/components/activity_feed.dart';
 import 'package:collective/components/initiatives_stream.dart';
 import 'package:collective/constants.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _InitiativesState extends State<Initiatives> {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: viewportConstraints.maxHeight,
+            // maxHeight: MediaQuery.of(context).size.height,
           ),
           child: Scrollbar(
             child: Container(
@@ -40,7 +42,16 @@ class _InitiativesState extends State<Initiatives> {
                       SizedBox(
                         height: 15,
                       ),
-                      InitiativesStream()
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InitiativesStream(),
+                            ActivityFeed(),
+                          ],
+                        ),
+                      )
                     ],
                   )),
             ),

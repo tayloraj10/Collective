@@ -177,6 +177,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16),
                                           ),
+                                          SizedBox(
+                                            height: 4,
+                                          ),
                                           UserList(
                                             widget.data['roles']['leaders'],
                                           ),
@@ -196,6 +199,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            height: 4,
                                           ),
                                           UserList(
                                               widget.data['roles']['devs']),
@@ -217,6 +223,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold),
                                   ),
+                                ),
+                                SizedBox(
+                                  height: 4,
                                 ),
                                 UserList(widget.data['users'].sublist(1))
                               ])

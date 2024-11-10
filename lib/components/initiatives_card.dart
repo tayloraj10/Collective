@@ -203,7 +203,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
   uploadFile(PlatformFile file, String docId) async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child(
-        'initiatives/${DateTime.now().millisecondsSinceEpoch.toString() + "_" + file.name}');
+        'initiatives/${docId + "_" + DateTime.now().millisecondsSinceEpoch.toString() + "_" + file.name}');
     UploadTask uploadTask = ref.putData(file.bytes!);
 
     return await uploadTask.then((res) async {
@@ -251,7 +251,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       width: isMobile(context)
-          ? MediaQuery.of(context).size.width * 0.6
+          ? MediaQuery.of(context).size.width * 0.5
           : MediaQuery.of(context).size.width * 0.75,
       child: GestureDetector(
         onTap: () => {
