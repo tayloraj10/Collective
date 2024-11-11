@@ -124,13 +124,17 @@ class _ActivityFeedState extends State<ActivityFeed> {
                                               ),
                                             ),
                                       title: Text(
-                                        "${doc['amount'].toString()} Completed",
-                                        style: TextStyle(color: Colors.white),
+                                        "${doc['amount'].toString()} ${doc['action'].toString()}",
+                                        // "${doc['amount'].toString()} Completed",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      subtitle: Text(
-                                          doc['initiative'].toString(),
-                                          style: TextStyle(
-                                              color: Colors.grey.shade300)),
+                                      // subtitle: Text(
+                                      //     doc['initiative'].toString(),
+                                      //     style: TextStyle(
+                                      //         color: Colors.grey.shade300)),
                                       trailing: (doc.data()
                                                       as Map<String, dynamic>)
                                                   .containsKey('images') &&

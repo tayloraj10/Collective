@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
+import 'dart:html' as html;
 // import 'package:googleapis_auth/auth_browser.dart';
 // import 'package:collective/secrets.dart';
 // import 'package:googleapis/drive/v3.dart' as gdrive;
@@ -171,6 +172,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
       'userID': userData['uid'],
       'initiative': this.widget.data['title'],
       'initiativeID': this.widget.data['id'],
+      'action': this.widget.data['action'],
       'amount': int.tryParse(contributionController.text),
       'date': DateTime.now(),
     }).then(
@@ -189,15 +191,39 @@ class _InitiativeCardState extends State<InitiativeCard> {
 
   Future<void> addFile(Function setState) async {
     // authenticate();
-    final FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, allowMultiple: true);
-    if (result != null && result.files.isNotEmpty) {
-      // final file = File(result.files.single.path!);
+    // final FilePickerResult? result = await FilePicker.platform
+    //     .pickFiles(type: FileType.image, allowMultiple: true);
+    // if (result != null && result.files.isNotEmpty) {
+    //   // final file = File(result.files.single.path!);
 
-      setState(() {
-        uploadedImages = [...uploadedImages, ...result.files];
-      });
-    }
+    //   setState(() {
+    //     uploadedImages = [...uploadedImages, ...result.files];
+    //   });
+    // }
+    final uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = 'image/*';
+    uploadInput.multiple = true;
+    uploadInput.click();
+
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      if (files != null && files.isNotEmpty) {
+        for (var file in files) {
+          final reader = html.FileReader();
+          reader.onLoadEnd.listen((e) {
+            setState(() {
+              print(file.name);
+              uploadedImages.add(PlatformFile(
+                name: file.name,
+                size: file.size,
+                bytes: reader.result as Uint8List?,
+              ));
+            });
+          });
+          reader.readAsArrayBuffer(file);
+        }
+      }
+    });
   }
 
   uploadFile(PlatformFile file, String docId) async {

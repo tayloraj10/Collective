@@ -11,11 +11,14 @@ class TopicChip extends StatelessWidget {
       backgroundColor: Colors.black,
       label: Text(
         topic,
+        textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
       ),
     );
   }

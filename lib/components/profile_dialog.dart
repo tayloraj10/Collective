@@ -98,7 +98,7 @@ class _MyWidgetState extends State<ProfileDialog> {
                               child: SelectableText(
                                 docData['email'],
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                    fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                             ),
                           if (docData['phone'] != null)
@@ -107,7 +107,7 @@ class _MyWidgetState extends State<ProfileDialog> {
                               child: SelectableText(
                                 docData['phone'],
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                    fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                             ),
                           if (docData['city'] != null)
@@ -116,21 +116,21 @@ class _MyWidgetState extends State<ProfileDialog> {
                               child: SelectableText(
                                 docData['city'],
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                    fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                             ),
-                          if (docData['tiktok'] != null ||
-                              docData['instagram'] != null ||
-                              docData['youtube'] != null)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 12, top: 12),
-                              child: SelectableText(
-                                'Social Links',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                          // if (docData['tiktok'] != null ||
+                          //     docData['instagram'] != null ||
+                          //     docData['youtube'] != null)
+                          //   Padding(
+                          //     padding:
+                          //         const EdgeInsets.only(bottom: 12, top: 12),
+                          //     child: SelectableText(
+                          //       'Social Links',
+                          //       style: TextStyle(
+                          //           fontSize: 16, fontWeight: FontWeight.bold),
+                          //     ),
+                          //   ),
                           if (docData['tiktok'] != null)
                             GestureDetector(
                               onTap: () => launchURL(
@@ -148,7 +148,8 @@ class _MyWidgetState extends State<ProfileDialog> {
                                     Text(
                                       docData['tiktok'],
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -219,6 +220,7 @@ class _MyWidgetState extends State<ProfileDialog> {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('projects')
+                        .where('active', isEqualTo: true)
                         .where('users', arrayContains: widget.userId)
                         .snapshots(),
                     builder: (BuildContext context,
