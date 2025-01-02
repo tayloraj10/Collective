@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/social_link.dart';
 import 'package:collective/constants.dart';
@@ -11,8 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:crop_your_image/crop_your_image.dart';
 
 class Profile extends StatefulWidget {
@@ -21,8 +20,17 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  late Map userData;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   void initState() {
     super.initState();
+    // var user = FirebaseAuth.instance.currentUser;
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // // print(auth.currentUser);
+    userData = Provider.of<AppData>(context, listen: false).userData;
+
+    userData = getUserValues(userData);
   }
 
   late Uint8List bytesFromPicker;
@@ -37,33 +45,28 @@ class _ProfileState extends State<Profile> {
     String request =
         'https://corsproxy.io?https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$PLACES_API_KEY&types=$type';
     print(request);
-    var response = await http.get(Uri.parse(request), headers: {
-      "content-type": "application/json",
-      "x-requested-with": "XMLHttpRequest"
-    });
-    if (response.statusCode == 200) {
+    FetchURL fetch = new FetchURL();
+    var response = await fetch.getData(request);
+    // var response = await http.get(Uri.parse(request), headers: {
+    //   "content-type": "application/json",
+    //   "x-requested-with": "XMLHttpRequest"
+    // });
+    if (response['status'] == 'OK') {
       setState(() {
-        placeList = json.decode(response.body)['predictions'];
+        placeList = response['predictions'];
       });
     } else {
       throw Exception('Failed to load predictions');
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var user = FirebaseAuth.instance.currentUser;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    // print(auth.currentUser);
+  TextEditingController phoneController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController tiktokController = new TextEditingController();
+  TextEditingController instagramController = new TextEditingController();
+  TextEditingController youtubeController = new TextEditingController();
 
-    var userData = Provider.of<AppData>(context).userData;
-
-    TextEditingController phoneController = new TextEditingController();
-    TextEditingController nameController = new TextEditingController();
-    TextEditingController tiktokController = new TextEditingController();
-    TextEditingController instagramController = new TextEditingController();
-    TextEditingController youtubeController = new TextEditingController();
-
+  getUserValues(Map userData) {
     userData['phone'] == null
         ? phoneController.text = ""
         : phoneController.text = userData['phone'];
@@ -73,21 +76,30 @@ class _ProfileState extends State<Profile> {
     else if (userData['city'] != null && placeController.text == '')
       placeController.text = userData['city'];
 
-    userData['tiktok'] == null
+    userData['tiktok'] == null && tiktokController.text == ""
         ? tiktokController.text = ""
         : tiktokController.text = userData['tiktok'];
 
-    userData['youtube'] == null
+    userData['youtube'] == null && youtubeController.text == ""
         ? youtubeController.text = ""
         : youtubeController.text = userData['youtube'];
 
-    userData['instagram'] == null
+    userData['instagram'] == null && instagramController.text == ""
         ? instagramController.text = ""
         : instagramController.text = userData['instagram'];
 
-    auth.currentUser!.displayName == null
+    userData['name'] == null
         ? nameController.text = ""
-        : nameController.text = auth.currentUser!.displayName!;
+        : nameController.text = userData['name'];
+
+    return userData;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // auth.currentUser!.displayName == null
+    //     ? nameController.text = ""
+    //     : nameController.text = auth.currentUser!.displayName!;
 
     final cropController = CropController();
 
@@ -110,8 +122,8 @@ class _ProfileState extends State<Profile> {
       //delete old file
       // Create a reference to the file to delete
       try {
-        print("images/" +
-            userData['profilePicture'].split('?')[0].split('images%2F')[1]);
+        // print("images/" +
+        //     userData['profilePicture'].split('?')[0].split('images%2F')[1]);
         final deleteRef = FirebaseStorage.instance.ref().child("images/" +
             userData['profilePicture'].split('?')[0].split('images%2F')[1]);
         // Delete the file
@@ -135,8 +147,11 @@ class _ProfileState extends State<Profile> {
           .update({'profilePicture': downloadURL});
       // auth = null;
       // auth = FirebaseAuth.instance;
-      Provider.of<AppData>(context, listen: false).fetchUserData(user!.uid);
-      setState(() {});
+      Provider.of<AppData>(context, listen: false)
+          .fetchUserData(auth.currentUser!.uid);
+      setState(() {
+        userData = Provider.of<AppData>(context, listen: false).userData;
+      });
       // html.window.location.reload();
     }
 
@@ -223,14 +238,29 @@ class _ProfileState extends State<Profile> {
                                         fontSize: 22,
                                       ),
                                     )),
-                                onPressed: (() => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Home(),
-                                        ),
-                                      )
-                                    }),
+                                onPressed: () async {
+                                  if (userData['name'] == null ||
+                                      userData['name'] == '') {
+                                    // if (auth.currentUser!.displayName == "" ||
+                                    //     auth.currentUser!.displayName == null) {
+                                    Fluttertoast.showToast(
+                                        msg: "Missing Name",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        fontSize: 16.0,
+                                        webBgColor: '#FF0000',
+                                        webPosition: 'center',
+                                        timeInSecForIosWeb: 3);
+                                  } else {
+                                    Provider.of<AppData>(context, listen: false)
+                                        .fetchUserData(auth.currentUser!.uid);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Home(),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                             Padding(
@@ -239,13 +269,14 @@ class _ProfileState extends State<Profile> {
                                 decoration: InputDecoration(hintText: 'Name'),
                                 controller: nameController,
                                 textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[a-zA-Z]'))
-                                ],
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.allow(
+                                //       RegExp('[a-zA-Z]'))
+                                // ],
                               ),
                             ),
-                            if (userData['profilePicture'] != null)
+                            if (userData.containsKey('profilePicture') &&
+                                userData['profilePicture'] != null)
                               CircleAvatar(
                                 radius: 60.0,
                                 child: ClipRRect(
@@ -390,10 +421,10 @@ class _ProfileState extends State<Profile> {
                                       .collection('users')
                                       .doc(docId)
                                       .update({
-                                    'name':
-                                        auth.currentUser!.displayName != null
-                                            ? auth.currentUser!.displayName
-                                            : "",
+                                    'name': nameController.text,
+                                    // auth.currentUser!.displayName != null
+                                    //     ? auth.currentUser!.displayName
+                                    //     : "",
                                     'phone': phoneController.text,
                                     'city': placeController.text,
                                     'tiktok': tiktokController.text,
@@ -402,7 +433,12 @@ class _ProfileState extends State<Profile> {
                                   }).then((documentSnapshot) => {
                                             Provider.of<AppData>(context,
                                                     listen: false)
-                                                .fetchUserData(user!.uid),
+                                                .fetchUserData(
+                                                    auth.currentUser!.uid),
+                                            userData = Provider.of<AppData>(
+                                                    context,
+                                                    listen: false)
+                                                .userData,
                                             Fluttertoast.showToast(
                                                 msg: "Profile Updated",
                                                 toastLength: Toast.LENGTH_LONG,
@@ -428,8 +464,10 @@ class _ProfileState extends State<Profile> {
                               padding: const EdgeInsets.only(top: 12),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  if (auth.currentUser!.displayName == "" ||
-                                      auth.currentUser!.displayName == null) {
+                                  if (userData['name'] == null ||
+                                      userData['name'] == '') {
+                                    // if (auth.currentUser!.displayName == "" ||
+                                    //     auth.currentUser!.displayName == null) {
                                     Fluttertoast.showToast(
                                         msg: "Missing Name",
                                         toastLength: Toast.LENGTH_LONG,
@@ -438,6 +476,8 @@ class _ProfileState extends State<Profile> {
                                         webPosition: 'center',
                                         timeInSecForIosWeb: 3);
                                   } else {
+                                    Provider.of<AppData>(context, listen: false)
+                                        .fetchUserData(auth.currentUser!.uid);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -461,6 +501,8 @@ class _ProfileState extends State<Profile> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   Navigator.pop(context);
+                                  Provider.of<AppData>(context, listen: false)
+                                      .updateUserData({});
                                   await FirebaseAuth.instance.signOut();
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -480,8 +522,11 @@ class _ProfileState extends State<Profile> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   Navigator.pop(context);
+                                  Provider.of<AppData>(context, listen: false)
+                                      .updateUserData({});
                                   await FirebaseAuth.instance.currentUser!
                                       .delete();
+                                  window.location.reload();
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red),

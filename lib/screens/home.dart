@@ -117,17 +117,25 @@ class _HomeState extends State<Home> {
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Profile(),
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Cancel'),
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Profile(),
+                                      ),
                                     ),
-                                  ),
+                                  },
                                   child: const Text('View Profile'),
                                 ),
                                 TextButton(
                                   onPressed: () => {
                                     auth.signOut(),
+                                    Provider.of<AppData>(context, listen: false)
+                                        .updateUserData({}),
+                                    userData = Provider.of<AppData>(context,
+                                            listen: false)
+                                        .userData,
                                     setState(() {}),
                                     Navigator.pop(context)
                                   },

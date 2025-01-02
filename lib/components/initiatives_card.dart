@@ -274,170 +274,174 @@ class _InitiativeCardState extends State<InitiativeCard> {
       }
     }
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      width: isMobile(context)
-          ? MediaQuery.of(context).size.width * 0.5
-          : MediaQuery.of(context).size.width * 0.75,
-      child: GestureDetector(
-        onTap: () => {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                uploadedImages = [];
-                return AlertDialog(
-                  content: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("Make a Contribution",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22)),
-                          TextField(
-                            controller: contributionController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]')),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                                labelText: 'Amount',
-                                errorText: checkInputError()
-                                    ? "Please enter a value that is 10 or less"
-                                    : null),
-                            textAlign: TextAlign.center,
-                            onChanged: (_) => setState(() {}),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () => {
-                                        if (!checkInputError() &&
-                                            contributionController
-                                                    .text.length !=
-                                                0)
-                                          {
-                                            addContribution(userData),
-                                            Navigator.pop(context)
-                                          }
-                                      },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Submit",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  )),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              ElevatedButton(
-                                  onPressed: () => {
-                                        addFile(setState),
-                                      },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Add Image",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          if (uploadedImages.length > 0)
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Wrap(
-                                children: uploadedImages.map((file) {
-                                  return Image.memory(
-                                    Uint8List.fromList(file.bytes!),
-                                    height: 200,
-                                  );
-                                }).toList(),
-                              ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16),
+        width: isMobile(context)
+            ? MediaQuery.of(context).size.width * 0.5
+            : MediaQuery.of(context).size.width * 0.75,
+        child: GestureDetector(
+          onTap: () => {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  uploadedImages = [];
+                  return AlertDialog(
+                    content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Make a Contribution",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
+                            TextField(
+                              controller: contributionController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                  labelText: 'Amount',
+                                  errorText: checkInputError()
+                                      ? "Please enter a value that is 10 or less"
+                                      : null),
+                              textAlign: TextAlign.center,
+                              onChanged: (_) => setState(() {}),
                             ),
-                        ],
-                      );
-                    },
-                  ),
-                );
-              })
-        },
-        child: Card(
-          color: widget.color,
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    widget.data['title'],
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 18),
-                  ),
-                ),
-                SizedBox(
-                  height: 2,
-                ),
-                if (FirebaseAuth.instance.currentUser != null && streak > 0)
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () => {
+                                          if (!checkInputError() &&
+                                              contributionController
+                                                      .text.length !=
+                                                  0)
+                                            {
+                                              addContribution(userData),
+                                              Navigator.pop(context)
+                                            }
+                                        },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Submit",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () => {
+                                          addFile(setState),
+                                        },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Add Image",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            if (uploadedImages.length > 0)
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Wrap(
+                                  children: uploadedImages.map((file) {
+                                    return Image.memory(
+                                      Uint8List.fromList(file.bytes!),
+                                      height: 200,
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                })
+          },
+          child: Card(
+            color: widget.color,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Wrap(
-                      children: [
-                        Text(
-                          'You are on a ${streak} day Streak',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 18),
-                        ),
-                        Icon(
-                          Icons.local_fire_department,
-                          color: widget.color == Colors.orange
-                              ? Colors.red
-                              : Colors.orange,
-                        ),
-                      ],
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      widget.data['title'],
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 18),
                     ),
                   ),
-                SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: new LinearPercentIndicator(
-                    animation: true,
-                    lineHeight: 20.0,
-                    animationDuration: 2000,
-                    percent: widget.data['complete'] / widget.data['goal'],
-                    center: Text(
-                        ((widget.data['complete'] / widget.data['goal']) * 100)
-                                .toStringAsFixed(2) +
-                            "%"),
-                    progressColor: Colors.white,
+                  SizedBox(
+                    height: 2,
                   ),
-                )
-              ],
+                  if (FirebaseAuth.instance.currentUser != null && streak > 0)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Wrap(
+                        children: [
+                          Text(
+                            'You are on a ${streak} day Streak',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 18),
+                          ),
+                          Icon(
+                            Icons.local_fire_department,
+                            color: widget.color == Colors.orange
+                                ? Colors.red
+                                : Colors.orange,
+                          ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: new LinearPercentIndicator(
+                      animation: true,
+                      lineHeight: 20.0,
+                      animationDuration: 2000,
+                      percent: widget.data['complete'] / widget.data['goal'],
+                      center: Text(
+                          ((widget.data['complete'] / widget.data['goal']) *
+                                      100)
+                                  .toStringAsFixed(2) +
+                              "%"),
+                      progressColor: Colors.white,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

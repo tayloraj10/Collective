@@ -92,24 +92,24 @@ class _MyWidgetState extends State<ProfileDialog> {
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
-                          if (docData['email'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: SelectableText(
-                                docData['email'],
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          if (docData['phone'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: SelectableText(
-                                docData['phone'],
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w700),
-                              ),
-                            ),
+                          // if (docData['email'] != null)
+                          //   Padding(
+                          //     padding: const EdgeInsets.only(bottom: 12),
+                          //     child: SelectableText(
+                          //       docData['email'],
+                          //       style: TextStyle(
+                          //           fontSize: 16, fontWeight: FontWeight.w700),
+                          //     ),
+                          //   ),
+                          // if (docData['phone'] != null)
+                          //   Padding(
+                          //     padding: const EdgeInsets.only(bottom: 12),
+                          //     child: SelectableText(
+                          //       docData['phone'],
+                          //       style: TextStyle(
+                          //           fontSize: 16, fontWeight: FontWeight.w700),
+                          //     ),
+                          //   ),
                           if (docData['city'] != null)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 12),
@@ -131,7 +131,8 @@ class _MyWidgetState extends State<ProfileDialog> {
                           //           fontSize: 16, fontWeight: FontWeight.bold),
                           //     ),
                           //   ),
-                          if (docData['tiktok'] != null)
+                          if (docData['tiktok'] != null &&
+                              docData['tiktok'] != '')
                             GestureDetector(
                               onTap: () => launchURL(
                                   'https://www.tiktok.com/@' +
@@ -155,7 +156,8 @@ class _MyWidgetState extends State<ProfileDialog> {
                                 ),
                               ),
                             ),
-                          if (docData['instagram'] != null)
+                          if (docData['instagram'] != null &&
+                              docData['instagram'] != '')
                             GestureDetector(
                               onTap: () => launchURL(
                                   'https://www.instagram.com/' +
@@ -178,7 +180,8 @@ class _MyWidgetState extends State<ProfileDialog> {
                                 ),
                               ),
                             ),
-                          if (docData['youtube'] != null)
+                          if (docData['youtube'] != null &&
+                              docData['youtube'] != '')
                             GestureDetector(
                               onTap: () => launchURL(
                                   'https://www.youtube.com/@' +
@@ -231,6 +234,12 @@ class _MyWidgetState extends State<ProfileDialog> {
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Text('No projects joined yet',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14));
                       }
 
                       return Container(
