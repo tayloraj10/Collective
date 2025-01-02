@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/resource_link.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -398,6 +399,17 @@ class _InitiativeCardState extends State<InitiativeCard> {
                           fontSize: 18),
                     ),
                   ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  if (widget.data['link'] != null &&
+                      widget.data['link'].isNotEmpty)
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: ResourceLink(
+                          text: widget.data['link'],
+                          url: widget.data['link'],
+                        )),
                   SizedBox(
                     height: 2,
                   ),
