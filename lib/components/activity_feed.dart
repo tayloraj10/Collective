@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/user_list.dart';
 import 'package:collective/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instant/instant.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ActivityFeed extends StatefulWidget {
   const ActivityFeed({Key? key}) : super(key: key);
@@ -12,6 +14,21 @@ class ActivityFeed extends StatefulWidget {
 }
 
 class _ActivityFeedState extends State<ActivityFeed> {
+  formatActionString(completedNum, actionString) {
+    if (completedNum == 1) {
+      return actionString.replaceAll("(s)", "");
+    } else {
+      return actionString.replaceAll("(s)", "s");
+    }
+  }
+
+  deleteSubmission(String submissionId) async {
+    await FirebaseFirestore.instance
+        .collection('goal_submissions')
+        .doc(submissionId)
+        .delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -101,110 +118,201 @@ class _ActivityFeedState extends State<ActivityFeed> {
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.grey.shade700,
                                     ),
-                                    child: ListTile(
-                                      contentPadding: EdgeInsets.only(
-                                          left: 4, right: 1, top: 2, bottom: 2),
-                                      dense: true,
-                                      leading: doc['userID'] != null
-                                          ? UserList([doc['userID']])
-                                          : Tooltip(
-                                              message: 'Anonymous',
-                                              child: CircleAvatar(
-                                                child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    child: Icon(
-                                                      Icons.person,
-                                                      size: 40,
-                                                    )),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                foregroundColor: Colors.white,
-                                              ),
-                                            ),
-                                      title: Text(
-                                        "${doc['amount'].toString()} ${doc['action'].toString()}",
-                                        // "${doc['amount'].toString()} Completed",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      // subtitle: Text(
-                                      //     doc['initiative'].toString(),
-                                      //     style: TextStyle(
-                                      //         color: Colors.grey.shade300)),
-                                      trailing: (doc.data()
-                                                      as Map<String, dynamic>)
-                                                  .containsKey('images') &&
-                                              doc['images'] != null
-                                          ? Tooltip(
-                                              message: 'View Images',
-                                              child: IconButton(
-                                                padding: EdgeInsets.zero,
-                                                icon: Icon(Icons.image),
-                                                color: Colors.white,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        backgroundColor: Colors
-                                                            .grey.shade900,
-                                                        content: Container(
-                                                          width: double
-                                                              .minPositive,
-                                                          child:
-                                                              ListView.builder(
-                                                            shrinkWrap: true,
-                                                            itemCount:
-                                                                (doc['images']
-                                                                        as List)
-                                                                    .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        8.0),
-                                                                child: Image
-                                                                    .network(
-                                                                  doc['images']
-                                                                      [index],
-                                                                  fit: BoxFit
-                                                                      .scaleDown,
-                                                                  width: 200,
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          TextButton(
-                                                            child: Text(
-                                                              'Close',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            onPressed: () {
+                                    child: badges.Badge(
+                                      position: badges.BadgePosition.topStart(),
+                                      showBadge:
+                                          FirebaseAuth.instance.currentUser !=
+                                                  null &&
+                                              doc['userID'] ==
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.uid,
+                                      badgeContent: GestureDetector(
+                                        onTap: () => {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  insetPadding:
+                                                      EdgeInsets.all(16),
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        "Are you sure you want to delete this submission?",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          ElevatedButton(
+                                                            onPressed: () => {
+                                                              deleteSubmission(
+                                                                  doc.id),
                                                               Navigator.of(
                                                                       context)
-                                                                  .pop();
+                                                                  .pop()
                                                             },
+                                                            child: Text(
+                                                              "Yes",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
                                                           ),
+                                                          ElevatedButton(
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red),
+                                                            onPressed: () => {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop()
+                                                            },
+                                                            child: Text(
+                                                              "No",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          )
                                                         ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              })
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.only(
+                                            left: 4,
+                                            right: 1,
+                                            top: 2,
+                                            bottom: 2),
+                                        dense: false,
+                                        visualDensity: VisualDensity.compact,
+                                        leading: doc['userID'] != null
+                                            ? UserList([doc['userID']])
+                                            : Tooltip(
+                                                message: 'Anonymous',
+                                                child: CircleAvatar(
+                                                  child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      child: Icon(
+                                                        Icons.person,
+                                                        size: 40,
+                                                      )),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  foregroundColor: Colors.white,
+                                                ),
                                               ),
-                                            )
-                                          : null,
+                                        title: Text(
+                                          "${doc['amount'].toString()} ${formatActionString(doc['amount'], doc['action'].toString())}",
+                                          // "${doc['amount'].toString()} Completed",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: Text(
+                                            doc['initiative'].toString(),
+                                            style: TextStyle(
+                                                color: Colors.grey.shade300)),
+                                        trailing: (doc.data()
+                                                        as Map<String, dynamic>)
+                                                    .containsKey('images') &&
+                                                doc['images'] != null
+                                            ? Tooltip(
+                                                message: 'View Images',
+                                                child: IconButton(
+                                                  padding: EdgeInsets.zero,
+                                                  icon: Icon(Icons.image),
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          backgroundColor:
+                                                              Colors.grey
+                                                                  .shade900,
+                                                          content: Container(
+                                                            width: double
+                                                                .minPositive,
+                                                            child: ListView
+                                                                .builder(
+                                                              shrinkWrap: true,
+                                                              itemCount:
+                                                                  (doc['images']
+                                                                          as List)
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                return Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child: Image
+                                                                      .network(
+                                                                    doc['images']
+                                                                        [index],
+                                                                    fit: BoxFit
+                                                                        .scaleDown,
+                                                                    width: 200,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              child: Text(
+                                                                'Close',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : null,
+                                      ),
                                     ),
                                   ),
                                 );
