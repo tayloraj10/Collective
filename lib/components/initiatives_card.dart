@@ -29,6 +29,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
   final TextEditingController contributionController = TextEditingController();
   int streak = 0;
   List<PlatformFile> uploadedImages = [];
+  DateTime? selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -39,6 +40,20 @@ class _InitiativeCardState extends State<InitiativeCard> {
   runUpdates() {
     calculateCompleted();
     getUserStreak();
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   // num calculateCompleted() {
@@ -175,7 +190,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
       'initiativeID': this.widget.data['id'],
       'action': this.widget.data['action'],
       'amount': int.tryParse(contributionController.text),
-      'date': DateTime.now(),
+      'date': selectedDate,
     }).then(
         (value) => {
               if (uploadedImages.length > 0)
@@ -321,6 +336,22 @@ class _InitiativeCardState extends State<InitiativeCard> {
                               children: [
                                 ElevatedButton(
                                     onPressed: () => {
+                                          addFile(setState),
+                                        },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Add Image",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () => {
                                           if (!checkInputError() &&
                                               contributionController
                                                       .text.length !=
@@ -337,22 +368,6 @@ class _InitiativeCardState extends State<InitiativeCard> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         "Submit",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                ElevatedButton(
-                                    onPressed: () => {
-                                          addFile(setState),
-                                        },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Add Image",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
@@ -375,6 +390,21 @@ class _InitiativeCardState extends State<InitiativeCard> {
                                   }).toList(),
                                 ),
                               ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                                onPressed: () => {
+                                      selectDate(context).then((_) {
+                                        setState(() {});
+                                      })
+                                    },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                ),
+                                child: Text(
+                                  DateFormat('MM/dd/yy').format(selectedDate!),
+                                )),
                           ],
                         );
                       },
