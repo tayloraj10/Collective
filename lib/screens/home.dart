@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
               ),
             Padding(
               padding:
-                  const EdgeInsets.only(right: 30, left: 4, top: 6, bottom: 6),
+                  const EdgeInsets.only(right: 30, left: 4, top: 6, bottom: 4),
               child: ElevatedButton(
                   child: Text(
                     user == null
