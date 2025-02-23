@@ -522,6 +522,7 @@ class _ProfileState extends State<Profile> {
                                       .updateUserData({});
                                   await FirebaseAuth.instance.currentUser!
                                       .delete();
+                                  await FirebaseAuth.instance.signOut();
                                   window.location.reload();
                                 },
                                 style: ElevatedButton.styleFrom(
