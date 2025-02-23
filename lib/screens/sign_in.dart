@@ -4,11 +4,28 @@ import 'package:collective/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:collective/firebase_options.dart';
 
 class SignIn extends StatelessWidget {
   final FirebaseAuth auth;
 
   SignIn({required this.auth});
+
+  createUser(User user) async {
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    // Save user data in Firestore
+    await userRef
+        .set({
+          'name': "",
+          'phone': "",
+          'email': user.email,
+          'uid': user.uid,
+        })
+        .then((_) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,37 +39,56 @@ class SignIn extends StatelessWidget {
               child: Container(
                   child: SignInScreen(
             auth: auth,
-            providerConfigs: [EmailProviderConfiguration()],
+            providerConfigs: [
+              EmailProviderConfiguration(),
+              GoogleProviderConfiguration(
+                  clientId: DefaultFirebaseOptions.googleClientID)
+            ],
             actions: [
+              //email user create
               AuthStateChangeAction<UserCreated>((context, state) async {
+                final user = auth.currentUser;
                 newUser = true;
-                CollectionReference users =
-                    FirebaseFirestore.instance.collection('users');
-                await users
-                    .add({
-                      'name': "",
-                      'phone': "",
-                      'email': auth.currentUser!.email,
-                      'uid': auth.currentUser!.uid
-                    })
-                    .then((value) => print("User Added"))
-                    .catchError((error) => print("Failed to add user: $error"));
+                if (user != null) {
+                  createUser(user);
+                }
               }),
-              AuthStateChangeAction<SignedIn>((context, state) {
-                if (newUser) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Profile(),
-                    ),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoadingScreen(),
-                    ),
-                  );
+              AuthStateChangeAction<SignedIn>((context, state) async {
+                final user = auth.currentUser;
+                if (user != null) {
+                  final userRef = FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.uid);
+
+                  final userDoc = await userRef.get();
+                  if (!newUser &&
+                      userDoc.exists &&
+                      userDoc.data()!['name'] != '') {
+                    // Existing user → Navigate to LoadingScreen
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoadingScreen()),
+                    );
+                  } else if (!userDoc.exists) {
+                    // New user from google sign in → Navigate to Profile setup
+                    createUser(user);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profile()),
+                    );
+                  } else if (userDoc.data()!['name'] == '') {
+                    // New user missing name → Navigate to Profile setup
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profile()),
+                    );
+                  } else {
+                    // New user → Navigate to Profile setup
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profile()),
+                    );
+                  }
                 }
               }),
             ],

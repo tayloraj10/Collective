@@ -4,6 +4,7 @@ secrets.dart
 collective-photo-sa.json
 firebase.json
 firebase_options.dart
+.firebase/
 
 # Miscellaneous
 *.class
