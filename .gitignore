@@ -1,6 +1,9 @@
 creds.json
 collective-sa.json
 secrets.dart
+collective-photo-sa.json
+firebase.json
+firebase_options.dart
 
 # Miscellaneous
 *.class

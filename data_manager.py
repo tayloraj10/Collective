@@ -15,6 +15,15 @@ app = firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
+uid = 'b6TiWHHqTL8xgFZD3uVe'
+user_doc_ref = db.collection(u'users').document(uid)
+user_doc = user_doc_ref.get()
+print(user_doc.to_dict())
+if user_doc.exists:
+    db.collection(u'users').document(user_doc.to_dict()['uid']).set(
+        user_doc.to_dict(), merge=True)
+
+
 ### DATA
 def view_locations_data():
     for x in db.collection(u'locations').get():
