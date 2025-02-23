@@ -237,9 +237,12 @@ class _MyWidgetState extends State<ProfileDialog> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return Text('No projects joined yet',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14));
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text('No projects joined yet',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14)),
+                        );
                       }
 
                       return Container(
