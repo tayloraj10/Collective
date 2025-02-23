@@ -7,6 +7,14 @@ class UserList extends StatelessWidget {
 
   UserList(this.userList);
 
+  parseName(String name) {
+    List nameParts = name.split(' ');
+    if (nameParts.length == 1) {
+      return nameParts[0][0];
+    } else
+      return nameParts[0][0] + nameParts[1][0];
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -52,8 +60,7 @@ class UserList extends StatelessWidget {
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: Image.network(docData['profilePicture']))
-                          : Text(docData['name'].split(' ')[0][0] +
-                              docData['name'].split(' ')[1][0]),
+                          : Text(parseName(docData['name'])),
                       backgroundColor: Colors.transparent,
                     ),
                   ));
