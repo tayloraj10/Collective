@@ -38,7 +38,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
   }
 
   runUpdates() {
-    calculateCompleted();
+    // calculateCompleted(this.widget.data['id']);
     getUserStreak();
   }
 
@@ -65,11 +65,11 @@ class _InitiativeCardState extends State<InitiativeCard> {
   //     return 0;
   // }
 
-  Future<void> calculateCompleted() async {
+  Future<void> calculateCompleted(String initiativeID) async {
     num total = 0;
     await FirebaseFirestore.instance
         .collection('goal_submissions')
-        .where('initiativeID', isEqualTo: this.widget.data['id'])
+        .where('initiativeID', isEqualTo: initiativeID)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -78,7 +78,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
     });
     FirebaseFirestore.instance
         .collection('initiatives')
-        .doc(this.widget.data['id'])
+        .doc(initiativeID)
         .update({'complete': total}).then(
       (value) => print("Initiative successfully updated!"),
       onError: (e) => print("Error updating initiative: $e"),
@@ -183,6 +183,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
 
   void addContribution(Map userData) async {
     var ref = FirebaseFirestore.instance.collection("goal_submissions");
+    var goalRef = FirebaseFirestore.instance.collection("initiatives");
     ref.add({
       'userName': userData['name'],
       'userID': userData['uid'],
@@ -199,6 +200,14 @@ class _InitiativeCardState extends State<InitiativeCard> {
                     await uploadFile(element, value.id);
                   })
                 }
+            },
+        onError: (e) => print("Error updating document $e"));
+    goalRef.doc(this.widget.data['id']).update({
+      "complete": this.widget.data['complete'] +
+          int.tryParse(contributionController.text)
+    }).then(
+        (value) => {
+              print("DocumentSnapshot successfully updated!"),
             },
         onError: (e) => print("Error updating document $e"));
 

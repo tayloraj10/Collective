@@ -22,11 +22,39 @@ class _ActivityFeedState extends State<ActivityFeed> {
     }
   }
 
-  deleteSubmission(String submissionId) async {
+  deleteSubmission(String submissionID) async {
+    // Get the submission document
+    DocumentSnapshot submission = await FirebaseFirestore.instance
+        .collection('goal_submissions')
+        .doc(submissionID)
+        .get();
+
+    // Get the initiative ID and amount from the submission
+    Map data = submission.data() as Map<String, dynamic>;
+    String initiativeID = data['initiativeID'];
+    int amount = data['amount'];
+
+    // Delete the submission
     await FirebaseFirestore.instance
         .collection('goal_submissions')
-        .doc(submissionId)
+        .doc(submissionID)
         .delete();
+
+    // Update the total in the initiatives collection
+    DocumentSnapshot initiativeDoc = await FirebaseFirestore.instance
+        .collection('initiatives')
+        .doc(initiativeID)
+        .get();
+    int currentTotal =
+        (initiativeDoc.data() as Map<String, dynamic>)['complete'];
+
+    FirebaseFirestore.instance
+        .collection('initiatives')
+        .doc(initiativeID)
+        .update({'complete': currentTotal - amount}).then(
+      (value) => print("Initiative successfully updated!"),
+      onError: (e) => print("Error updating initiative: $e"),
+    );
   }
 
   @override
