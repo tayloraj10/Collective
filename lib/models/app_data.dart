@@ -25,15 +25,10 @@ class AppData extends ChangeNotifier {
     return userData;
   }
 
-  void fetchUserData(userID) async {
-    var user = await FirebaseFirestore.instance
-        .collection('users')
-        .where('uid', isEqualTo: userID)
-        .get();
-    var docId = user.docs.first.id;
-    var userDataFetch =
-        await FirebaseFirestore.instance.collection('users').doc(docId).get();
-    updateUserData(userDataFetch.data() as Map<String, dynamic>);
-    // notifyListeners();
+  fetchUserData(userID) async {
+    var user =
+        await FirebaseFirestore.instance.collection('users').doc(userID).get();
+    updateUserData(user.data() as Map<String, dynamic>);
+    return user.data();
   }
 }
