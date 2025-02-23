@@ -138,12 +138,11 @@ class _ProfileState extends State<Profile> {
       auth.currentUser!.updatePhotoURL(downloadURL);
       var userID = await FirebaseFirestore.instance
           .collection('users')
-          .where('uid', isEqualTo: auth.currentUser!.uid)
+          .doc(auth.currentUser!.uid)
           .get();
-      var docId = userID.docs.first.id;
       FirebaseFirestore.instance
           .collection('users')
-          .doc(docId)
+          .doc(userID.id)
           .update({'profilePicture': downloadURL});
       // auth = null;
       // auth = FirebaseAuth.instance;
@@ -168,6 +167,67 @@ class _ProfileState extends State<Profile> {
         showCrop = true;
         setState(() {});
       }
+    }
+
+    goHome() {
+      if (userData['name'] == null || userData['name'] == '') {
+        // if (auth.currentUser!.displayName == "" ||
+        //     auth.currentUser!.displayName == null) {
+        if (nameController.value.text.length > 0) {
+          Fluttertoast.showToast(
+              msg: "Please Save",
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 16.0,
+              webBgColor: '#FFA500',
+              webPosition: 'center',
+              timeInSecForIosWeb: 3);
+        } else {
+          Fluttertoast.showToast(
+              msg: "Missing Name",
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 16.0,
+              webBgColor: '#FF0000',
+              webPosition: 'center',
+              timeInSecForIosWeb: 3);
+        }
+      } else {
+        Provider.of<AppData>(context, listen: false)
+            .fetchUserData(auth.currentUser!.uid);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(),
+          ),
+        );
+      }
+    }
+
+    saveChanges() async {
+      var userID = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .get();
+      FirebaseFirestore.instance.collection('users').doc(userID.id).update({
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'city': placeController.text,
+        'tiktok': tiktokController.text,
+        'instagram': instagramController.text,
+        'youtube': youtubeController.text
+      }).then((documentSnapshot) async {
+        await Provider.of<AppData>(context, listen: false)
+            .fetchUserData(auth.currentUser!.uid);
+        setState(() {
+          userData = Provider.of<AppData>(context, listen: false).getUserData();
+        });
+        Fluttertoast.showToast(
+            msg: "Profile Updated",
+            toastLength: Toast.LENGTH_LONG,
+            fontSize: 16.0,
+            webBgColor: '#55aaff',
+            webPosition: 'center',
+            timeInSecForIosWeb: 3);
+      });
     }
 
     return SafeArea(
@@ -239,27 +299,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                     )),
                                 onPressed: () async {
-                                  if (userData['name'] == null ||
-                                      userData['name'] == '') {
-                                    // if (auth.currentUser!.displayName == "" ||
-                                    //     auth.currentUser!.displayName == null) {
-                                    Fluttertoast.showToast(
-                                        msg: "Missing Name",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        fontSize: 16.0,
-                                        webBgColor: '#FF0000',
-                                        webPosition: 'center',
-                                        timeInSecForIosWeb: 3);
-                                  } else {
-                                    Provider.of<AppData>(context, listen: false)
-                                        .fetchUserData(auth.currentUser!.uid);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Home(),
-                                      ),
-                                    );
-                                  }
+                                  goHome();
                                 },
                               ),
                             ),
@@ -411,42 +451,7 @@ class _ProfileState extends State<Profile> {
                               padding: const EdgeInsets.only(top: 20),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  var userID = await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .where('uid',
-                                          isEqualTo: auth.currentUser!.uid)
-                                      .get();
-                                  var docId = userID.docs.first.id;
-                                  FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(docId)
-                                      .update({
-                                    'name': nameController.text,
-                                    // auth.currentUser!.displayName != null
-                                    //     ? auth.currentUser!.displayName
-                                    //     : "",
-                                    'phone': phoneController.text,
-                                    'city': placeController.text,
-                                    'tiktok': tiktokController.text,
-                                    'instagram': instagramController.text,
-                                    'youtube': youtubeController.text
-                                  }).then((documentSnapshot) => {
-                                            Provider.of<AppData>(context,
-                                                    listen: false)
-                                                .fetchUserData(
-                                                    auth.currentUser!.uid),
-                                            userData = Provider.of<AppData>(
-                                                    context,
-                                                    listen: false)
-                                                .userData,
-                                            Fluttertoast.showToast(
-                                                msg: "Profile Updated",
-                                                toastLength: Toast.LENGTH_LONG,
-                                                fontSize: 16.0,
-                                                webBgColor: '#55aaff',
-                                                webPosition: 'center',
-                                                timeInSecForIosWeb: 3),
-                                          });
+                                  saveChanges();
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green),
@@ -464,27 +469,7 @@ class _ProfileState extends State<Profile> {
                               padding: const EdgeInsets.only(top: 12),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  if (userData['name'] == null ||
-                                      userData['name'] == '') {
-                                    // if (auth.currentUser!.displayName == "" ||
-                                    //     auth.currentUser!.displayName == null) {
-                                    Fluttertoast.showToast(
-                                        msg: "Missing Name",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        fontSize: 16.0,
-                                        webBgColor: '#FF0000',
-                                        webPosition: 'center',
-                                        timeInSecForIosWeb: 3);
-                                  } else {
-                                    Provider.of<AppData>(context, listen: false)
-                                        .fetchUserData(auth.currentUser!.uid);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Home(),
-                                      ),
-                                    );
-                                  }
+                                  goHome();
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
