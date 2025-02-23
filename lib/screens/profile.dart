@@ -203,31 +203,42 @@ class _ProfileState extends State<Profile> {
     }
 
     saveChanges() async {
-      var userID = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .get();
-      FirebaseFirestore.instance.collection('users').doc(userID.id).update({
-        'name': nameController.text,
-        'phone': phoneController.text,
-        'city': placeController.text,
-        'tiktok': tiktokController.text,
-        'instagram': instagramController.text,
-        'youtube': youtubeController.text
-      }).then((documentSnapshot) async {
-        await Provider.of<AppData>(context, listen: false)
-            .fetchUserData(auth.currentUser!.uid);
-        setState(() {
-          userData = Provider.of<AppData>(context, listen: false).getUserData();
+      if (nameController.text != '') {
+        var userID = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(auth.currentUser!.uid)
+            .get();
+        FirebaseFirestore.instance.collection('users').doc(userID.id).update({
+          'name': nameController.text,
+          'phone': phoneController.text,
+          'city': placeController.text,
+          'tiktok': tiktokController.text,
+          'instagram': instagramController.text,
+          'youtube': youtubeController.text
+        }).then((documentSnapshot) async {
+          await Provider.of<AppData>(context, listen: false)
+              .fetchUserData(auth.currentUser!.uid);
+          setState(() {
+            userData =
+                Provider.of<AppData>(context, listen: false).getUserData();
+          });
+          Fluttertoast.showToast(
+              msg: "Profile Updated",
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 16.0,
+              webBgColor: '#55aaff',
+              webPosition: 'center',
+              timeInSecForIosWeb: 3);
         });
+      } else {
         Fluttertoast.showToast(
-            msg: "Profile Updated",
+            msg: "Missing Name",
             toastLength: Toast.LENGTH_LONG,
             fontSize: 16.0,
-            webBgColor: '#55aaff',
+            webBgColor: '#FF0000',
             webPosition: 'center',
             timeInSecForIosWeb: 3);
-      });
+      }
     }
 
     return SafeArea(
