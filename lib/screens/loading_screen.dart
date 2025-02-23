@@ -1,6 +1,7 @@
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:collective/screens/home.dart';
+import 'package:collective/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,15 +28,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // print(data);
 
     Provider.of<AppData>(context, listen: false).updateCalendarEvents(data);
-    Provider.of<AppData>(context, listen: false).fetchUserData(userID);
+    await Provider.of<AppData>(context, listen: false).fetchUserData(userID);
 
     // Navigator.pushNamed(context, '/home');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Home(),
-      ),
-    );
+    if (Provider.of<AppData>(context, listen: false).getUserData()['name'] ==
+        '') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Profile()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+      );
+    }
   }
 
   Future<void> getDataLoggedOut() async {
