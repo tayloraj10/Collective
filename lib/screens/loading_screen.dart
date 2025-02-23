@@ -31,7 +31,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await Provider.of<AppData>(context, listen: false).fetchUserData(userID);
 
     // Navigator.pushNamed(context, '/home');
-    if (Provider.of<AppData>(context, listen: false).getUserData()['name'] ==
+    if (await Provider.of<AppData>(context, listen: false)
+            .getUserData()['name'] ==
         '') {
       Navigator.pushReplacement(
         context,

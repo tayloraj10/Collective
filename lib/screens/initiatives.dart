@@ -13,6 +13,24 @@ class Initiatives extends StatefulWidget {
 }
 
 class _InitiativesState extends State<Initiatives> {
+  bool isAdmin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkAdmin();
+  }
+
+  checkAdmin() {
+    final userData = Provider.of<AppData>(context, listen: false).userData;
+    if (userData['permissions'] != null &&
+        userData['permissions']['admin'] == true) {
+      setState(() {
+        isAdmin = true;
+      });
+    }
+  }
+
   updateTotals() {
     List updatedList = [];
     FirebaseFirestore.instance
@@ -76,15 +94,6 @@ class _InitiativesState extends State<Initiatives> {
     return false;
   }
 
-  bool checkAdmin() {
-    var userData = Provider.of<AppData>(context, listen: false).getUserData();
-    if (userData.containsKey('permissions') &&
-        userData['permissions']['admin'] == true) {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -110,15 +119,16 @@ class _InitiativesState extends State<Initiatives> {
                       // SizedBox(
                       //   height: 30,
                       // ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
                             'These are the currently ongoing initiatives (click to contribute)',
                             style: pageTextStyle,
                             textAlign: TextAlign.center,
                           ),
-                          if (checkAdmin())
+                          if (isAdmin)
                             Tooltip(
                               message: 'Sync Totals',
                               child: IconButton(

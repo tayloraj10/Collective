@@ -169,7 +169,7 @@ class _ProfileState extends State<Profile> {
       }
     }
 
-    goHome() {
+    goHome() async {
       if (userData['name'] == null || userData['name'] == '') {
         // if (auth.currentUser!.displayName == "" ||
         //     auth.currentUser!.displayName == null) {
@@ -191,7 +191,7 @@ class _ProfileState extends State<Profile> {
               timeInSecForIosWeb: 3);
         }
       } else {
-        Provider.of<AppData>(context, listen: false)
+        await Provider.of<AppData>(context, listen: false)
             .fetchUserData(auth.currentUser!.uid);
         Navigator.push(
           context,
