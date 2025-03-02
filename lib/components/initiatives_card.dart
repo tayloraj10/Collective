@@ -448,6 +448,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
                         child: ResourceLink(
                           text: widget.data['link'],
                           url: widget.data['link'],
+                          fontSize: 20,
                         )),
                   SizedBox(
                     height: 2,

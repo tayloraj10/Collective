@@ -22,7 +22,11 @@ class _InitiativesStreamState extends State<InitiativesStream> {
     Colors.orange,
     Colors.green,
     Colors.purple,
-    Colors.yellow.shade600,
+    Colors.cyan,
+    Colors.indigo,
+    Colors.teal,
+    Colors.pink,
+    Colors.yellow.shade700,
     Colors.grey,
   ];
   int colorIndex = 0;
