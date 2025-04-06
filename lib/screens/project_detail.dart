@@ -74,21 +74,154 @@ class _ProjectDetailState extends State<ProjectDetail> {
             ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: Container(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Container(
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 16,
+                          runSpacing: 8,
+                          children: [
+                            Text(
+                              widget.data['title'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                  color: Colors.black),
+                            ),
+                            if (widget.data['status'] != null)
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: getProjectColor(widget.data['status']),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 8),
+                                  child: Text(
+                                    widget.data['status'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: TopicChip(widget.data['topic']),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          widget.data['description'],
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        ),
+                        if (widget.data['projectUrl'] != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: ResourceLink(
+                              text: widget.data['projectUrl'],
+                              url: widget.data['projectUrl'],
+                            ),
+                          ),
+                        if (widget.data['documentationUrl'] != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: ResourceLink(
+                              text: widget.data['documentationUrl'],
+                              url: widget.data['documentationUrl'],
+                            ),
+                          ),
+                        if (widget.data['roles'] != null)
+                          if (widget.data['roles']['leaders'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Project Leaders',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(height: 4),
+                                  UserList(widget.data['roles']['leaders']),
+                                ],
+                              ),
+                            ),
+                        if (widget.data['roles'] != null)
+                          if (widget.data['roles']['devs'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Developers',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(height: 4),
+                                  UserList(widget.data['roles']['devs']),
+                                ],
+                              ),
+                            ),
+                        if (isInGroup(widget.data, userData))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Members',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(height: 8),
+                                UserList(widget.data['users'].sublist(1)),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 16),
+                        Center(
                           child: ElevatedButton(
-                            child: Text(isInGroup(widget.data, userData)
-                                ? 'Leave Project'
-                                : 'Join Project'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isInGroup(widget.data, userData)
+                                  ? Colors.red
+                                  : Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 24),
+                            ),
+                            child: Text(
+                              isInGroup(widget.data, userData)
+                                  ? 'Leave Project'
+                                  : 'Join Project',
+                              style: TextStyle(fontSize: 16),
+                            ),
                             onPressed: () {
                               if (isInGroup(widget.data, userData)) {
                                 leaveGroup(user!.uid, widget.data);
@@ -98,156 +231,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             },
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 40),
-                        child: Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Wrap(
-                                  // mainAxisSize: MainAxisSize.min,
-                                  spacing: 20,
-                                  children: [
-                                    Text(
-                                      widget.data['title'],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 28),
-                                    ),
-                                    if (widget.data['status'] != null)
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: getProjectColor(
-                                            widget.data['status'],
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4),
-                                          child: Text(
-                                            widget.data['status'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Text(
-                                    widget.data['description'],
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                ),
-                                if (widget.data['projectUrl'] != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: ResourceLink(
-                                      text: widget.data['projectUrl'],
-                                      url: widget.data['projectUrl'],
-                                    ),
-                                  ),
-                                if (widget.data['documentationUrl'] != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: ResourceLink(
-                                      text: widget.data['documentationUrl'],
-                                      url: widget.data['documentationUrl'],
-                                    ),
-                                  ),
-                                if (widget.data['roles'] != null)
-                                  if (widget.data['roles']['leaders'] != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Project Leaders',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                            height: 4,
-                                          ),
-                                          UserList(
-                                            widget.data['roles']['leaders'],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                if (widget.data['roles'] != null)
-                                  if (widget.data['roles']['devs'] != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Developers',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                            height: 4,
-                                          ),
-                                          UserList(
-                                              widget.data['roles']['devs']),
-                                        ],
-                                      ),
-                                    ),
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: TopicChip(widget.data['topic'])),
-                              ],
-                            ),
-                            if (isInGroup(widget.data, userData))
-                              Column(children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    'Members',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                UserList(widget.data['users'].sublist(1))
-                              ])
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              ((widget.data['users'].length - 1).toString()) +
-                                  "\nMembers",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

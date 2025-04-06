@@ -12,51 +12,67 @@ class ProjectCard extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         width: MediaQuery.of(context).size.width * 0.8,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           color: color,
+          elevation: 4,
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      data['title'],
-                      style: TextStyle(
+                    Expanded(
+                      child: Text(
+                        data['title'],
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
-                          fontSize: 18),
+                          fontSize: 20,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Container(
-                      color: getProjectColor(data['status'], color),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          data['status'],
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 18),
+                      decoration: BoxDecoration(
+                        color: getProjectColor(data['status'], color),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 8,
+                      ),
+                      child: Text(
+                        data['status'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 12),
                 Text(
                   data['description'],
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    height: 1.5,
+                  ),
                 ),
-                SizedBox(
-                  height: 10,
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TopicChip(data['topic']),
                 ),
-                TopicChip(data['topic'])
               ],
             ),
           ),

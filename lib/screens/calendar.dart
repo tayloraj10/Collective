@@ -30,94 +30,184 @@ class _CalendarState extends State<Calendar> {
             String url;
             String locationUrl = 'https://www.google.com/maps/search/';
             return AlertDialog(
-              content: Container(
+              content: SingleChildScrollView(
                 child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Event",
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        "Event Details",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                        textAlign: TextAlign.center,
-                      ),
-                      Center(
-                        child: SelectableText(
-                            "${eventDetails.subject.split(' - ')[0].trim()}",
-                            style: TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text("Location",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
-                          textAlign: TextAlign.center),
-                      InkWell(
-                        mouseCursor: SystemMouseCursors.click,
-                        onTap: () => {
-                          launchURL(locationUrl +
-                              "${eventDetails.subject.split(' - ')[1].trim()}")
-                        },
-                        child: Center(
-                          child: Text(
-                            "${eventDetails.subject.split(' - ')[1].trim()}",
-                            style: TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center,
-                          ),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Time",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                        textAlign: TextAlign.center,
-                      ),
-                      Center(
-                        child: SelectableText(
-                          "${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.startTime)}  -  ${DateFormat('EEEE MM-dd, h:mm a').format(eventDetails.endTime)}",
-                          style: TextStyle(fontSize: 18),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      if (eventDetails.notes != '' &&
-                          eventDetails.notes != null)
-                        Text(
-                          "Description",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
-                          textAlign: TextAlign.center,
-                        ),
-                      if (eventDetails.notes != '' &&
-                          eventDetails.notes != null)
-                        InkWell(
-                          mouseCursor: SystemMouseCursors.click,
-                          onTap: () => {
-                            url = 'http' +
-                                eventDetails.notes
-                                    .split('http')[1]
-                                    .split(' ')[0],
-                            launchURL(url)
-                          },
-                          child: Center(
-                            child: Text(
-                              "${eventDetails.notes}",
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                              textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20),
+                    if (eventDetails.subject != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Event:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
+                          SizedBox(height: 5),
+                          SelectableText(
+                            "${eventDetails.subject.split(' - ')[0].trim()}",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    SizedBox(height: 20),
+                    if (eventDetails.subject.contains(' - '))
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Location:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          InkWell(
+                            mouseCursor: SystemMouseCursors.click,
+                            onTap: () => launchURL(
+                              locationUrl +
+                                  "${eventDetails.subject.split(' - ')[1].trim()}",
+                            ),
+                            child: Text(
+                              "${eventDetails.subject.split(' - ')[1].trim()}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
+                    SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Time:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
-                    ]),
+                        SizedBox(height: 5),
+                        SelectableText(
+                          "${DateFormat('EEEE, MMM dd, h:mm a').format(eventDetails.startTime)} - ${DateFormat('EEEE, MMM dd, h:mm a').format(eventDetails.endTime)}",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    if (eventDetails.notes != null &&
+                        eventDetails.notes.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Description:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          if (eventDetails.notes.contains('http'))
+                            InkWell(
+                              mouseCursor: SystemMouseCursors.click,
+                              onTap: () {
+                                url = 'http' +
+                                    eventDetails.notes
+                                        .replaceAll(RegExp(r'<a[^>]*>'), '')
+                                        .split('http')[1]
+                                        .split(' ')[0];
+                                launchURL(url);
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: eventDetails.notes
+                                          .replaceAll(RegExp(r'<a[^>]*>'), '')
+                                          .replaceAll('</a>', '')
+                                          .split('http')[0],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: 'http' +
+                                          eventDetails.notes
+                                              .replaceAll(
+                                                  RegExp(r'<a[^>]*>'), '')
+                                              .split('http')[1]
+                                              .split(' ')[0],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: eventDetails.notes
+                                          .replaceAll(RegExp(r'<a[^>]*>'), '')
+                                          .replaceAll('</a>', '')
+                                          .split('http')
+                                          .skip(1)
+                                          .join(' ')
+                                          .split(' ')
+                                          .skip(1)
+                                          .join(' '),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          else
+                            Text(
+                              "${eventDetails.notes}",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    "Close",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
             );
           });
     }
