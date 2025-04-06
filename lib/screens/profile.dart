@@ -344,7 +344,7 @@ class _ProfileState extends State<Profile> {
                                   pickImage(auth);
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.yellow),
+                                    backgroundColor: Colors.amberAccent),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text('Change Profile Picture',

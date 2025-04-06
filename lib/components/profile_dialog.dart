@@ -17,6 +17,15 @@ class _MyWidgetState extends State<ProfileDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       elevation: 10,
+      backgroundColor: Colors.grey.shade900,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+      ),
+      contentTextStyle: TextStyle(
+        color: Colors.white70,
+      ),
       title: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
@@ -42,8 +51,11 @@ class _MyWidgetState extends State<ProfileDialog> {
                   children: [
                     Text(
                       docData['name'],
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 );
@@ -92,45 +104,18 @@ class _MyWidgetState extends State<ProfileDialog> {
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
-                          // if (docData['email'] != null)
-                          //   Padding(
-                          //     padding: const EdgeInsets.only(bottom: 12),
-                          //     child: SelectableText(
-                          //       docData['email'],
-                          //       style: TextStyle(
-                          //           fontSize: 16, fontWeight: FontWeight.w700),
-                          //     ),
-                          //   ),
-                          // if (docData['phone'] != null)
-                          //   Padding(
-                          //     padding: const EdgeInsets.only(bottom: 12),
-                          //     child: SelectableText(
-                          //       docData['phone'],
-                          //       style: TextStyle(
-                          //           fontSize: 16, fontWeight: FontWeight.w700),
-                          //     ),
-                          //   ),
                           if (docData['city'] != null)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: SelectableText(
                                 docData['city'],
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w700),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          // if (docData['tiktok'] != null ||
-                          //     docData['instagram'] != null ||
-                          //     docData['youtube'] != null)
-                          //   Padding(
-                          //     padding:
-                          //         const EdgeInsets.only(bottom: 12, top: 12),
-                          //     child: SelectableText(
-                          //       'Social Links',
-                          //       style: TextStyle(
-                          //           fontSize: 16, fontWeight: FontWeight.bold),
-                          //     ),
-                          //   ),
                           if (docData['tiktok'] != null &&
                               docData['tiktok'] != '')
                             GestureDetector(
@@ -149,7 +134,8 @@ class _MyWidgetState extends State<ProfileDialog> {
                                     Text(
                                       docData['tiktok'],
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
@@ -174,7 +160,9 @@ class _MyWidgetState extends State<ProfileDialog> {
                                     Text(
                                       docData['instagram'],
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -198,7 +186,9 @@ class _MyWidgetState extends State<ProfileDialog> {
                                     Text(
                                       docData['youtube'],
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -218,8 +208,11 @@ class _MyWidgetState extends State<ProfileDialog> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text('Projects: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white,
+                      )),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('projects')
@@ -241,7 +234,10 @@ class _MyWidgetState extends State<ProfileDialog> {
                           padding: const EdgeInsets.only(top: 4),
                           child: Text('No projects joined yet',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white,
+                              )),
                         );
                       }
 
@@ -271,62 +267,19 @@ class _MyWidgetState extends State<ProfileDialog> {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 20),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     children: [
-            //       Text('Groups: ',
-            //           style:
-            //               TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            //       StreamBuilder<QuerySnapshot>(
-            //         stream: FirebaseFirestore.instance
-            //             .collection('groups')
-            //             .where('users', arrayContains: widget.userId)
-            //             .snapshots(),
-            //         builder: (BuildContext context,
-            //             AsyncSnapshot<QuerySnapshot> snapshot) {
-            //           if (snapshot.hasError) {
-            //             print('Something went wrong');
-            //           }
-
-            //           if (snapshot.connectionState == ConnectionState.waiting) {
-            //             return CircularProgressIndicator();
-            //           }
-
-            //           return Container(
-            //             width: MediaQuery.of(context).size.width > 1000
-            //                 ? MediaQuery.of(context).size.width * .3
-            //                 : MediaQuery.of(context).size.width * .4,
-            //             child: Wrap(
-            //               alignment: WrapAlignment.center,
-            //               spacing: 4.0,
-            //               runSpacing: 4.0,
-            //               children: snapshot.data!.docs
-            //                   .mapIndexed((index, DocumentSnapshot document) {
-            //                 Map docData =
-            //                     document.data() as Map<String, dynamic>;
-            //                 docData['id'] = document.id;
-            //                 return Padding(
-            //                   padding:
-            //                       const EdgeInsets.symmetric(horizontal: 2),
-            //                   child: TopicChip(docData['name']),
-            //                 );
-            //               }).toList(),
-            //             ),
-            //           );
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context), child: Text('Close'))
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Close',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        )
       ],
     );
   }

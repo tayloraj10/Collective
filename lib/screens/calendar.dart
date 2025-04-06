@@ -53,14 +53,16 @@ class _CalendarState extends State<Calendar> {
                             "Event:",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 20,
                             ),
                           ),
                           SizedBox(height: 5),
                           SelectableText(
                             "${eventDetails.subject.split(' - ')[0].trim()}",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey.shade700),
                           ),
                         ],
                       ),
@@ -73,7 +75,7 @@ class _CalendarState extends State<Calendar> {
                             "Location:",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 20,
                             ),
                           ),
                           SizedBox(height: 5),
@@ -86,10 +88,11 @@ class _CalendarState extends State<Calendar> {
                             child: Text(
                               "${eventDetails.subject.split(' - ')[1].trim()}",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.w700),
+                                fontSize: 16,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
@@ -102,14 +105,16 @@ class _CalendarState extends State<Calendar> {
                           "Time:",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontSize: 20,
                           ),
                         ),
                         SizedBox(height: 5),
                         SelectableText(
                           "${DateFormat('EEEE, MMM dd, h:mm a').format(eventDetails.startTime)} - ${DateFormat('EEEE, MMM dd, h:mm a').format(eventDetails.endTime)}",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade700),
                         ),
                       ],
                     ),
@@ -123,7 +128,7 @@ class _CalendarState extends State<Calendar> {
                             "Description:",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 20,
                             ),
                           ),
                           SizedBox(height: 5),
@@ -147,10 +152,9 @@ class _CalendarState extends State<Calendar> {
                                           .replaceAll('</a>', '')
                                           .split('http')[0],
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade700),
                                     ),
                                     TextSpan(
                                       text: 'http' +
@@ -163,7 +167,7 @@ class _CalendarState extends State<Calendar> {
                                         fontSize: 16,
                                         color: Colors.blue,
                                         decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     TextSpan(
@@ -177,10 +181,9 @@ class _CalendarState extends State<Calendar> {
                                           .skip(1)
                                           .join(' '),
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade700),
                                     ),
                                   ],
                                 ),

@@ -180,137 +180,149 @@ class _DirectoryState extends State<Directory> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
                                 child: GestureDetector(
-                                  onTap: (() => {
-                                        print(Provider.of<AppData>(context,
-                                                listen: false)
-                                            .userData)
-                                      }),
+                                  onTap: () {
+                                    print(Provider.of<AppData>(context,
+                                            listen: false)
+                                        .userData);
+                                  },
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     color: Colors.blue,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: ListTile(
-                                            title: Text(data['name'],
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
-                                                    fontSize: largeTextSize)),
-                                            subtitle: Column(
+                                    elevation: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (data.containsKey('image'))
+                                            GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      elevation: 0,
+                                                      content: CircleAvatar(
+                                                        radius: 200,
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                                data['image']),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 30,
+                                                backgroundImage:
+                                                    NetworkImage(data['image']),
+                                              ),
+                                            ),
+                                          const SizedBox(width: 15),
+                                          Expanded(
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  data.containsKey(
-                                                          'description')
-                                                      ? data['description']
-                                                      : '',
+                                                  data['name'],
                                                   style: TextStyle(
-                                                      color: Colors.grey[200],
-                                                      fontSize: smallTextSize),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                    fontSize: largeTextSize,
+                                                  ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 8),
-                                                  child: Wrap(
+                                                const SizedBox(height: 5),
+                                                if (data
+                                                    .containsKey('description'))
+                                                  Text(
+                                                    data['description'],
+                                                    style: TextStyle(
+                                                      color: Colors.grey[200],
+                                                      fontSize: smallTextSize,
+                                                    ),
+                                                  ),
+                                                const SizedBox(height: 10),
+                                                if (data.containsKey('topics'))
+                                                  Wrap(
                                                     spacing: 6.0,
                                                     runSpacing: 6.0,
                                                     children: data['topics']
                                                         .map<Widget>((topic) =>
-                                                            TopicChip(
-                                                              topic,
-                                                            ))
+                                                            TopicChip(topic))
                                                         .toList(),
                                                   ),
-                                                )
                                               ],
                                             ),
-                                            leading: data.containsKey('image')
-                                                ? GestureDetector(
-                                                    onTap: () => {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            elevation: 0,
-                                                            content:
-                                                                CircleAvatar(
-                                                              radius: 200,
-                                                              backgroundImage:
-                                                                  NetworkImage(data[
-                                                                      'image']),
-                                                            ),
-                                                          );
-                                                        },
-                                                      )
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                              data['image']),
-                                                    ),
-                                                  )
-                                                : null,
                                           ),
-                                        ),
-                                        Column(
-                                          children: [
-                                            if (data.containsKey('links') &&
-                                                data['links']
-                                                    .containsKey('website'))
-                                              Tooltip(
-                                                message: 'Website',
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    launchURL(data['links']
-                                                        ['website']);
-                                                  },
-                                                  icon: Icon(Icons.language),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              if (data.containsKey('links') &&
+                                                  data['links']
+                                                      .containsKey('website'))
+                                                Tooltip(
+                                                  message: 'Website',
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      launchURL(data['links']
+                                                          ['website']);
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.language,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            if (data.containsKey('links') &&
-                                                data['links']
-                                                    .containsKey('instagram'))
-                                              Tooltip(
-                                                message: 'Instagram',
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    launchURL(
-                                                        'https://www.instagram.com/' +
-                                                            data['links']
-                                                                ['instagram']);
-                                                  },
-                                                  icon: Image.asset('images/' +
-                                                      'instagram.png'),
+                                              if (data.containsKey('links') &&
+                                                  data['links']
+                                                      .containsKey('instagram'))
+                                                Tooltip(
+                                                  message: 'Instagram',
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      launchURL(
+                                                          'https://www.instagram.com/' +
+                                                              data['links'][
+                                                                  'instagram']);
+                                                    },
+                                                    icon: Image.asset(
+                                                      'images/instagram.png',
+                                                      height: 24,
+                                                      width: 24,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            if (data.containsKey('links') &&
-                                                data['links']
-                                                    .containsKey('youtube'))
-                                              Tooltip(
-                                                message: 'Youtube',
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    launchURL(
-                                                        'https://www.youtube.com/@' +
-                                                            data['links']
-                                                                ['youtube']);
-                                                  },
-                                                  icon: Image.asset('images/' +
-                                                      'youtube.png'),
+                                              if (data.containsKey('links') &&
+                                                  data['links']
+                                                      .containsKey('youtube'))
+                                                Tooltip(
+                                                  message: 'YouTube',
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      launchURL(
+                                                          'https://www.youtube.com/@' +
+                                                              data['links']
+                                                                  ['youtube']);
+                                                    },
+                                                    icon: Image.asset(
+                                                      'images/youtube.png',
+                                                      height: 24,
+                                                      width: 24,
+                                                    ),
+                                                  ),
                                                 ),
-                                              )
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

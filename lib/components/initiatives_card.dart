@@ -302,196 +302,198 @@ class _InitiativeCardState extends State<InitiativeCard> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         width: isMobile(context)
             ? MediaQuery.of(context).size.width * 0.5
             : MediaQuery.of(context).size.width * 0.75,
         child: GestureDetector(
-          onTap: () => {
+          onTap: () {
+            uploadedImages = [];
             showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  uploadedImages = [];
-                  return AlertDialog(
-                    content: StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return Column(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.grey.shade900,
+                  content: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return SingleChildScrollView(
+                        child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("Make a Contribution",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 22)),
+                            Text(
+                              "Make a Contribution",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
                             TextField(
                               controller: contributionController,
                               keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
+                              inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp(r'[0-9]')),
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly,
                               ],
                               decoration: InputDecoration(
-                                  labelText: 'Amount',
-                                  errorText: checkInputError()
-                                      ? "Please enter a value that is 10 or less"
-                                      : null),
+                                labelText: 'Amount',
+                                labelStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorText: checkInputError()
+                                    ? "Please enter a value that is 10 or less"
+                                    : null,
+                                border: const OutlineInputBorder(),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                               onChanged: (_) => setState(() {}),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            const SizedBox(height: 20),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                    onPressed: () => {
-                                          addFile(setState),
-                                        },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Add Image",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  width: 20,
+                                ElevatedButton.icon(
+                                  onPressed: () => addFile(setState),
+                                  icon: const Icon(Icons.image),
+                                  label: const Text(
+                                    "Add Image",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: () => {
-                                          if (!checkInputError() &&
-                                              contributionController
-                                                      .text.length !=
-                                                  0)
-                                            {
-                                              addContribution(userData),
-                                              Navigator.pop(context)
-                                            }
-                                        },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Submit",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                    )),
+                                const SizedBox(
+                                  width: 14,
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    if (!checkInputError() &&
+                                        contributionController
+                                            .text.isNotEmpty) {
+                                      addContribution(userData);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                  ),
+                                  icon: const Icon(Icons.check),
+                                  label: const Text(
+                                    "Submit",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
                               ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            if (uploadedImages.length > 0)
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Wrap(
-                                  children: uploadedImages.map((file) {
-                                    return Image.memory(
+                            const SizedBox(height: 20),
+                            if (uploadedImages.isNotEmpty)
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: uploadedImages.map((file) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.memory(
                                       Uint8List.fromList(file.bytes!),
-                                      height: 200,
-                                    );
-                                  }).toList(),
-                                ),
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }).toList(),
                               ),
-                            SizedBox(
-                              height: 20,
+                            const SizedBox(height: 20),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                selectDate(context).then((_) {
+                                  setState(() {});
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                              ),
+                              icon: const Icon(Icons.calendar_today),
+                              label: Text(
+                                DateFormat('MM/dd/yy').format(selectedDate!),
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
-                            ElevatedButton(
-                                onPressed: () => {
-                                      selectDate(context).then((_) {
-                                        setState(() {});
-                                      })
-                                    },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
-                                ),
-                                child: Text(
-                                  DateFormat('MM/dd/yy').format(selectedDate!),
-                                )),
                           ],
-                        );
-                      },
-                    ),
-                  );
-                })
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
           },
           child: Card(
             color: widget.color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      widget.data['title'],
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 18),
+                  Text(
+                    widget.data['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
                   ),
-                  SizedBox(
-                    height: 2,
-                  ),
+                  const SizedBox(height: 8),
                   if (widget.data['link'] != null &&
                       widget.data['link'].isNotEmpty)
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: ResourceLink(
-                          text: widget.data['link'],
-                          url: widget.data['link'],
-                          fontSize: 20,
-                        )),
-                  SizedBox(
-                    height: 2,
-                  ),
+                    ResourceLink(
+                      text: widget.data['link'],
+                      url: widget.data['link'],
+                      fontSize: 16,
+                    ),
+                  const SizedBox(height: 8),
                   if (FirebaseAuth.instance.currentUser != null && streak > 0)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Wrap(
-                        children: [
-                          Text(
-                            'You are on a ${streak} day Streak',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 18),
+                    Row(
+                      children: [
+                        Text(
+                          'You are on a $streak day Streak',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 16,
                           ),
-                          Icon(
-                            Icons.local_fire_department,
-                            color: widget.color == Colors.orange
-                                ? Colors.red
-                                : Colors.orange,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.local_fire_department,
+                          color: widget.color == Colors.orange
+                              ? Colors.red
+                              : Colors.orange,
+                        ),
+                      ],
                     ),
-                  SizedBox(
-                    height: 8,
+                  const SizedBox(height: 16),
+                  LinearPercentIndicator(
+                    animation: true,
+                    lineHeight: 20.0,
+                    animationDuration: 2000,
+                    percent: widget.data['complete'] / widget.data['goal'],
+                    center: Text(
+                      '${((widget.data['complete'] / widget.data['goal']) * 100).toStringAsFixed(2)}%',
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    progressColor: Colors.white,
+                    backgroundColor: Colors.grey.shade300,
+                    barRadius: const Radius.circular(10),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2000,
-                      percent: widget.data['complete'] / widget.data['goal'],
-                      center: Text(
-                          ((widget.data['complete'] / widget.data['goal']) *
-                                      100)
-                                  .toStringAsFixed(2) +
-                              "%"),
-                      progressColor: Colors.white,
-                    ),
-                  )
                 ],
               ),
             ),
