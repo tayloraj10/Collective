@@ -60,7 +60,9 @@ _AppointmentDataSource getCalendarDataSource(List events) {
             color: Colors.blue,
             startTimeZone: '',
             endTimeZone: '',
-            notes: removeHrefText(e['description']),
+            notes: e['description'] != null
+                ? removeHrefText(e['description'])
+                : null,
             isAllDay: false,
             location: e['location']));
 
@@ -93,7 +95,9 @@ _AppointmentDataSource getCalendarDataSource(List events) {
           color: Colors.blue,
           startTimeZone: '',
           endTimeZone: '',
-          notes: removeHrefText(e['description']),
+          notes: e['description'] != null
+              ? removeHrefText(e['description'])
+              : null,
           isAllDay: false,
           location: e['location'],
         ),

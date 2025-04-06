@@ -147,7 +147,7 @@ class _CalendarState extends State<Calendar> {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: eventDetails.notes
+                                      text: (eventDetails.notes ?? '')
                                           .replaceAll(RegExp(r'<a[^>]*>'), '')
                                           .replaceAll('</a>', '')
                                           .split('http')[0],
@@ -156,22 +156,24 @@ class _CalendarState extends State<Calendar> {
                                           fontWeight: FontWeight.w600,
                                           color: Colors.grey.shade700),
                                     ),
-                                    TextSpan(
-                                      text: 'http' +
-                                          eventDetails.notes
-                                              .replaceAll(
-                                                  RegExp(r'<a[^>]*>'), '')
-                                              .split('http')[1]
-                                              .split(' ')[0],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.w600,
+                                    if ((eventDetails.notes ?? '')
+                                        .contains('http'))
+                                      TextSpan(
+                                        text: 'http' +
+                                            (eventDetails.notes ?? '')
+                                                .replaceAll(
+                                                    RegExp(r'<a[^>]*>'), '')
+                                                .split('http')[1]
+                                                .split(' ')[0],
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
                                     TextSpan(
-                                      text: eventDetails.notes
+                                      text: (eventDetails.notes ?? '')
                                           .replaceAll(RegExp(r'<a[^>]*>'), '')
                                           .replaceAll('</a>', '')
                                           .split('http')
@@ -191,10 +193,11 @@ class _CalendarState extends State<Calendar> {
                             )
                           else
                             Text(
-                              "${eventDetails.notes}",
+                              "${eventDetails.notes ?? ''}",
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey.shade700,
                               ),
                             ),
                         ],
