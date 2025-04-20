@@ -14,15 +14,16 @@ class _InitiativesStreamState extends State<InitiativesStream> {
   var projects = FirebaseFirestore.instance
       .collection('initiatives')
       .where('active', isEqualTo: true)
+      .orderBy('priority', descending: true)
       .orderBy('complete', descending: true);
 
   List<Color> colors = [
+    Colors.green,
     Colors.blue,
     Colors.red,
     Colors.orange,
-    Colors.green,
     Colors.purple,
-    Colors.cyan,
+    // Colors.cyan,
     Colors.indigo,
     Colors.teal,
     Colors.pink,
@@ -40,46 +41,6 @@ class _InitiativesStreamState extends State<InitiativesStream> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: DropdownButton<String>(
-        //     dropdownColor: Colors.blue,
-        //     // Dropdown items
-        //     items: (['Remove Filter'] + categories).map((String value) {
-        //       return DropdownMenuItem<String>(
-        //         value: value,
-        //         child: Text(value, style: TextStyle(color: Colors.white)),
-        //       );
-        //     }).toList(),
-
-        //     // Value of the selected item
-        //     value: selectedFilter,
-
-        //     // Hint displayed when no item is selected
-        //     hint: Text('Filter By Category',
-        //         style: TextStyle(color: Colors.white)),
-
-        //     // Action when an item is selected
-        //     onChanged: (String? newValue) {
-        //       setState(() {
-        //         selectedFilter = newValue;
-        //       });
-        //       if (selectedFilter == 'Remove Filter') {
-        //         projects = FirebaseFirestore.instance
-        //             .collection('initiatives')
-        //             .where('active', isEqualTo: true)
-        //             .orderBy('complete', descending: true);
-        //         selectedFilter = null;
-        //       } else {
-        //         projects = FirebaseFirestore.instance
-        //             .collection('initiatives')
-        //             .where('active', isEqualTo: true)
-        //             .where('category', isEqualTo: selectedFilter)
-        //             .orderBy('complete', descending: true);
-        //       }
-        //     },
-        //   ),
-        // ),
         StreamBuilder<QuerySnapshot>(
           stream: projects.snapshots(),
           builder:

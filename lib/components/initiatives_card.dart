@@ -452,6 +452,16 @@ class _InitiativeCardState extends State<InitiativeCard> {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  if (widget.data['description'] != null &&
+                      widget.data['description'].isNotEmpty)
+                    Text(
+                      widget.data['description'],
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  const SizedBox(height: 8),
                   if (widget.data['link'] != null &&
                       widget.data['link'].isNotEmpty)
                     ResourceLink(
