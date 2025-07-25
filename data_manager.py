@@ -138,6 +138,7 @@ def move_storage_files_to_gdrive():
 
         if os.path.exists(folder_name):
             shutil.rmtree(folder_name)
+    print("\nFinished Running")
 
 
 move_storage_files_to_gdrive()
