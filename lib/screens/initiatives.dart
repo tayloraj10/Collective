@@ -111,34 +111,31 @@ class _InitiativesState extends State<Initiatives> {
                   padding: EdgeInsets.only(top: 15, bottom: 75),
                   child: Column(
                     children: [
-                      // Text(
-                      //   'Main Initiatives: Trash Cleanups, Animal Welfare, Fitness',
-                      //   style: pageTextStyle,
-                      //   textAlign: TextAlign.center,
-                      // ),
-                      // SizedBox(
-                      //   height: 30,
-                      // ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            'These are the currently ongoing initiatives (click to contribute)',
-                            style: pageTextStyle,
-                            textAlign: TextAlign.center,
+                          Flexible(
+                            child: Text(
+                              'These are the currently ongoing initiatives (click to contribute)',
+                              style: pageTextStyle,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           if (isAdmin)
                             Tooltip(
                               message: 'Sync Totals',
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.update,
-                                  color: Colors.white,
+                              child: Container(
+                                margin: EdgeInsets.only(right: 20),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.update,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => updateTotals(),
                                 ),
-                                onPressed: () => updateTotals(),
                               ),
-                            )
+                            ),
                         ],
                       ),
                       SizedBox(
