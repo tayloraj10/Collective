@@ -26,7 +26,8 @@ class InitiativeCard extends StatefulWidget {
 }
 
 class _InitiativeCardState extends State<InitiativeCard> {
-  final TextEditingController contributionController = TextEditingController();
+  final TextEditingController contributionController =
+      TextEditingController(text: '1');
   int streak = 0;
   List<PlatformFile> uploadedImages = [];
   DateTime? selectedDate = DateTime.now();
