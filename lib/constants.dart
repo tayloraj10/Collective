@@ -72,3 +72,11 @@ getProjectColor(String status, [Color? color]) {
     return Colors.orange;
   else if (status == 'Inactive') return Colors.red;
 }
+
+getCurrentWeekNumber() {
+  DateTime now = DateTime.now();
+  int dayOfYear = int.parse(
+      DateFormat("D").format(now)); // Requires intl package for DateFormat
+  int weekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
+  return "${now.year}-W${weekNumber.toString().padLeft(2, '0')}";
+}
