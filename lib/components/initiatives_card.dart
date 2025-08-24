@@ -291,8 +291,10 @@ class _InitiativeCardState extends State<InitiativeCard> {
     var userData = Provider.of<AppData>(context).userData;
 
     bool checkInputError() {
-      if (contributionController.text.length > 0 &&
-          int.tryParse(contributionController.text)! > 10) {
+      if (contributionController.text.isNotEmpty &&
+          int.tryParse(contributionController.text) != null &&
+          (int.tryParse(contributionController.text)! > 10 ||
+              int.tryParse(contributionController.text)! <= 0)) {
         return true;
       } else {
         return false;
@@ -471,8 +473,15 @@ class _InitiativeCardState extends State<InitiativeCard> {
                     ),
                   const SizedBox(height: 8),
                   if (FirebaseAuth.instance.currentUser != null && streak > 0)
-                    Row(
+                    Wrap(
                       children: [
+                        Icon(
+                          Icons.local_fire_department,
+                          color: widget.color == Colors.orange
+                              ? Colors.red
+                              : Colors.orange,
+                        ),
+                        const SizedBox(width: 4),
                         Text(
                           'You are on a $streak day Streak',
                           style: const TextStyle(
@@ -480,13 +489,6 @@ class _InitiativeCardState extends State<InitiativeCard> {
                             color: Colors.white,
                             fontSize: 16,
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.local_fire_department,
-                          color: widget.color == Colors.orange
-                              ? Colors.red
-                              : Colors.orange,
                         ),
                       ],
                     ),
