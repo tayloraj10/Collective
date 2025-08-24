@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collective/components/activity_feed.dart';
 import 'package:collective/components/initiatives_stream.dart';
+import 'package:collective/components/weekly_goals_button.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
 import 'package:flutter/material.dart';
@@ -138,9 +139,7 @@ class _InitiativesState extends State<Initiatives> {
                             ),
                         ],
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
+                      WeeklyGoalsButton(),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
