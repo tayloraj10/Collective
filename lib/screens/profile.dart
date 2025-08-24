@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutterfire_ui/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -40,7 +41,7 @@ class _ProfileState extends State<Profile> {
   List<dynamic> placeList = [];
 
   void getSuggestion(String input) async {
-    const String PLACES_API_KEY = placesAPIkey;
+    String PLACES_API_KEY = dotenv.env['PLACES_API_KEY']!;
     String type = '(cities)';
     String request =
         'https://corsproxy.io?https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$PLACES_API_KEY&types=$type';

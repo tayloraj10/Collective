@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -26,10 +27,9 @@ const TextStyle pageTextStyle = TextStyle(
 
 Color? titleColor = Colors.grey[200];
 
-const String calendarAPIkey = 'AIzaSyBykyx3g2Vf986Vsd4MZ2zKvNoh7XG5zLE';
-const String placesAPIkey = 'AIzaSyCHPOORlE77Hm6KyZU6fjCgIZ-Epr-Dzdo';
-const String calendarID =
-    '494eudb3n3rsqib0id77cjklco@group.calendar.google.com';
+final String calendarAPIkey = dotenv.env['CALENDAR_API_KEY']!;
+final String placesAPIkey = dotenv.env['PLACES_API_KEY']!;
+final String calendarID = dotenv.env['CALENDAR_ID']!;
 // String calendarAPI =
 //     'https://www.googleapis.com/calendar/v3/calendars/$calendarID?key=$calendarAPIkey';
 var cutoffDate = DateFormat('yyyy-MM-dd')

@@ -5,6 +5,7 @@ collective-photo-sa.json
 firebase.json
 firebase_options.dart
 .firebase/
+.env
 
 # Miscellaneous
 *.class
