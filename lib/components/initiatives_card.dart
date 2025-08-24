@@ -11,10 +11,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:html' as html;
-// import 'package:googleapis_auth/auth_browser.dart';
-// import 'package:collective/secrets.dart';
-// import 'package:googleapis/drive/v3.dart' as gdrive;
-// import 'package:googleapis_auth/auth_io.dart';
 
 class InitiativeCard extends StatefulWidget {
   final Map data;
@@ -57,15 +53,6 @@ class _InitiativeCardState extends State<InitiativeCard> {
     }
   }
 
-  // num calculateCompleted() {
-  //   num total = 0;
-  //   if (this.widget.data['submissions'] != null) {
-  //     this.widget.data['submissions'].forEach((x) => {total += x['amount']});
-  //     return total;
-  //   } else
-  //     return 0;
-  // }
-
   Future<void> calculateCompleted(String initiativeID) async {
     num total = 0;
     await FirebaseFirestore.instance
@@ -85,22 +72,6 @@ class _InitiativeCardState extends State<InitiativeCard> {
       onError: (e) => print("Error updating initiative: $e"),
     );
   }
-
-  // List<DateTime> getUserSubmissionDates() {
-  //   List<DateTime> userSubmissions = [];
-  //   if (FirebaseAuth.instance.currentUser != null &&
-  //       this.widget.data['submissions'] != null) {
-  //     String user = FirebaseAuth.instance.currentUser!.uid;
-  //     this.widget.data['submissions'].forEach((x) => {
-  //           if (x['userID'] == user)
-  //             {
-  //               userSubmissions.add(DateTime.fromMillisecondsSinceEpoch(
-  //                   x['date'].seconds * 1000))
-  //             }
-  //         });
-  //   }
-  //   return userSubmissions;
-  // }
 
   Future<List<DateTime>> getUserSubmissionDates() async {
     List<DateTime> userSubmissions = [];
@@ -149,38 +120,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
         this.streak = userStreak;
       });
     }
-    // return 0;
   }
-
-  // void addContribution(Map userData) {
-  //   var ref = FirebaseFirestore.instance
-  //       .collection("initiatives")
-  //       .doc(this.widget.data['id']);
-
-  //   ref.update({
-  //     "complete": this.widget.data['complete'] +
-  //         int.tryParse(contributionController.text)
-  //   }).then(
-  //       (value) => {
-  //             print("DocumentSnapshot successfully updated!"),
-  //           },
-  //       onError: (e) => print("Error updating document $e"));
-
-  //   ref.update({
-  //     'submissions': FieldValue.arrayUnion([
-  //       {
-  //         'userName': userData['name'],
-  //         'userID': userData['uid'],
-  //         'amount': int.tryParse(contributionController.text),
-  //         'date': DateTime.now()
-  //       }mmm
-  //     ])
-  //   }).then(
-  //       (value) => {
-  //             print("Submissions successfully updated!"),
-  //           },
-  //       onError: (e) => print("Error updating document $e"));
-  // }
 
   void addContribution(Map userData) async {
     var ref = FirebaseFirestore.instance.collection("goal_submissions");
@@ -292,10 +232,10 @@ class _InitiativeCardState extends State<InitiativeCard> {
     var userData = Provider.of<AppData>(context).userData;
 
     bool checkInputError() {
-      if (contributionController.text.isNotEmpty &&
-          int.tryParse(contributionController.text) != null &&
-          (int.tryParse(contributionController.text)! > 10 ||
-              int.tryParse(contributionController.text)! <= 0)) {
+      if (contributionController.text.isEmpty ||
+          int.tryParse(contributionController.text) == null ||
+          int.tryParse(contributionController.text)! > 10 ||
+          int.tryParse(contributionController.text)! <= 0) {
         return true;
       } else {
         return false;
@@ -345,7 +285,7 @@ class _InitiativeCardState extends State<InitiativeCard> {
                                 labelStyle:
                                     const TextStyle(color: Colors.white),
                                 errorText: checkInputError()
-                                    ? "Please enter a value that is 10 or less"
+                                    ? "Please enter a value 1 to 10"
                                     : null,
                                 border: const OutlineInputBorder(),
                                 enabledBorder: const OutlineInputBorder(
