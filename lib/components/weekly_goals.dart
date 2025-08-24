@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class WeeklyGoals extends StatefulWidget {
   const WeeklyGoals({Key? key}) : super(key: key);
@@ -11,14 +11,6 @@ class WeeklyGoals extends StatefulWidget {
 }
 
 class _WeeklyGoalsState extends State<WeeklyGoals> {
-  getCurrentWeekNumber() {
-    DateTime now = DateTime.now();
-    int dayOfYear = int.parse(
-        DateFormat("D").format(now)); // Requires intl package for DateFormat
-    int weekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
-    return "${now.year}-W${weekNumber.toString().padLeft(2, '0')}";
-  }
-
   checkWeeklyGoalsExist() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('weekly_goals')
@@ -105,18 +97,40 @@ class _WeeklyGoalsState extends State<WeeklyGoals> {
         width: double.infinity,
         color: Colors.blue.shade700,
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
           children: [
-            Icon(Icons.flag, color: Colors.white),
-            SizedBox(width: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.flag, color: Colors.white),
+                SizedBox(width: 8),
+                Text(
+                  'Weekly Goals',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
             Text(
-              'Weekly Goals',
+              '(${getDateRangeOfCurrentWeek()})',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 14,
                 color: Colors.white,
               ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              'Record these as initiative contributions!',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -169,14 +183,40 @@ class _WeeklyGoalsState extends State<WeeklyGoals> {
                         .snapshots(),
                 builder: (context, submissionSnapshot) {
                   List<dynamic> userGoals = List.filled(goals.length, false);
+                  bool isComplete = false;
                   if (submissionSnapshot.hasData &&
                       submissionSnapshot.data!.docs.isNotEmpty) {
                     final data = submissionSnapshot.data!.docs.first;
                     userGoals = data['goals'] as List<dynamic>;
+                    isComplete = data['complete'] == true;
                   }
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (isComplete)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.emoji_events, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                "All goals complete!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ...goals.asMap().entries.map(
                         (entry) {
                           final goalIdx = entry.key;
@@ -203,8 +243,13 @@ class _WeeklyGoalsState extends State<WeeklyGoals> {
                                   Expanded(
                                     child: Text(
                                       goal.toString(),
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        decoration: isChecked
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                      ),
                                     ),
                                   ),
                                 ],

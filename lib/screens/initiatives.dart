@@ -4,6 +4,7 @@ import 'package:collective/components/initiatives_stream.dart';
 import 'package:collective/components/weekly_goals_button.dart';
 import 'package:collective/constants.dart';
 import 'package:collective/models/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class Initiatives extends StatefulWidget {
 }
 
 class _InitiativesState extends State<Initiatives> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   bool isAdmin = false;
 
   @override
@@ -139,7 +141,7 @@ class _InitiativesState extends State<Initiatives> {
                             ),
                         ],
                       ),
-                      WeeklyGoalsButton(),
+                      if (auth.currentUser != null) WeeklyGoalsButton(),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
