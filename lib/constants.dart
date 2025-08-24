@@ -80,3 +80,14 @@ getCurrentWeekNumber() {
   int weekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
   return "${now.year}-W${weekNumber.toString().padLeft(2, '0')}";
 }
+
+getDateRangeOfCurrentWeek() {
+  DateTime now = DateTime.now();
+  int currentWeekday = now.weekday;
+  DateTime startOfWeek = now.subtract(Duration(days: currentWeekday - 1));
+  DateTime endOfWeek = now.add(Duration(days: 7 - currentWeekday));
+  String formattedStart =
+      DateFormat('MMM d').format(startOfWeek); // e.g., "Jan 1"
+  String formattedEnd = DateFormat('MMM d').format(endOfWeek); // e.g., "Jan 7"
+  return "$formattedStart - $formattedEnd";
+}
