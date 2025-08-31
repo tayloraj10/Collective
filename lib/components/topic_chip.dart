@@ -7,18 +7,22 @@ class TopicChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: Colors.black,
-      label: Text(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Text(
         topic,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
         overflow: TextOverflow.ellipsis,
-        maxLines: 2,
+        maxLines: 1,
       ),
     );
   }
