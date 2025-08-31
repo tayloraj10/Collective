@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collective/components/leaderboard_dialog.dart';
 import 'package:collective/components/user_list.dart';
 import 'package:collective/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,11 +69,44 @@ class _ActivityFeedState extends State<ActivityFeed> {
         ),
         child: Column(
           children: [
-            Text('Activity Feed',
-                style: TextStyle(
-                    fontSize: largeTextSize,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Activity Feed',
+                    style: TextStyle(
+                        fontSize: largeTextSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                  ),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => const LeaderboardDialog());
+                    },
+                    icon: Icon(
+                      Icons.leaderboard,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      'Leaderboard',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                )
+              ],
+            ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('goal_submissions')
