@@ -69,8 +69,10 @@ class _ActivityFeedState extends State<ActivityFeed> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 6,
               children: [
                 Text('Activity Feed',
                     style: TextStyle(
