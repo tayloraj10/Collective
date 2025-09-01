@@ -101,60 +101,73 @@ class _InitiativesState extends State<Initiatives> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-            // maxHeight: MediaQuery.of(context).size.height,
-          ),
-          child: Scrollbar(
-            child: Container(
-              color: SecondaryColor,
-              child: Padding(
-                  padding: EdgeInsets.only(top: 15, bottom: 75),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'These are the currently ongoing initiatives (click to contribute)',
-                              style: pageTextStyle,
-                              textAlign: TextAlign.center,
-                            ),
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: viewportConstraints.maxHeight,
+        ),
+        child: Scrollbar(
+          child: Container(
+            color: SecondaryColor,
+            child: Padding(
+                padding: EdgeInsets.only(top: 15, bottom: 75),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'These are the currently ongoing initiatives (click to contribute)',
+                            style: pageTextStyle,
+                            textAlign: TextAlign.center,
                           ),
-                          if (isAdmin)
-                            Tooltip(
-                              message: 'Sync Totals',
-                              child: Container(
-                                margin: EdgeInsets.only(right: 20),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.update,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () => updateTotals(),
+                        ),
+                        if (isAdmin)
+                          Tooltip(
+                            message: 'Sync Totals',
+                            child: Container(
+                              margin: EdgeInsets.only(right: 20),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.update,
+                                  color: Colors.white,
                                 ),
+                                onPressed: () => updateTotals(),
                               ),
                             ),
-                        ],
-                      ),
-                      if (auth.currentUser != null) WeeklyGoalsButton(),
-                      Padding(
+                          ),
+                      ],
+                    ),
+                    if (auth.currentUser != null) WeeklyGoalsButton(),
+                    Expanded(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            InitiativesStream(),
-                            ActivityFeed(),
+                            Expanded(
+                              flex: MediaQuery.of(context).size.width < 600
+                                  ? 1
+                                  : 3,
+                              child: SingleChildScrollView(
+                                child: InitiativesStream(),
+                              ),
+                            ),
+                            Expanded(
+                              flex: MediaQuery.of(context).size.width < 600
+                                  ? 1
+                                  : 1,
+                              child: SingleChildScrollView(
+                                child: ActivityFeed(),
+                              ),
+                            ),
                           ],
                         ),
-                      )
-                    ],
-                  )),
-            ),
+                      ),
+                    ),
+                  ],
+                )),
           ),
         ),
       );
