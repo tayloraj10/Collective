@@ -16,12 +16,8 @@ class _TopicsStreamState extends State<TopicsStream> {
     return StreamBuilder<QuerySnapshot>(
       stream: topics.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        // if (snapshot.hasError) {
-        //   return Text('Something went wrong');
-        // }
-
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
         return Container(
           width: MediaQuery.of(context).size.width * 0.9,

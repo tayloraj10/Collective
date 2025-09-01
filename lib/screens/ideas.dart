@@ -50,7 +50,7 @@ class _IdeasState extends State<Ideas> {
       return Container(
         color: SecondaryColor,
         child: Padding(
-          padding: EdgeInsets.only(top: 15, bottom: 75),
+          padding: EdgeInsets.only(top: 15, bottom: 60),
           child: Column(
             children: [
               // ElevatedButton(
@@ -143,10 +143,7 @@ class _IdeasState extends State<Ideas> {
                                         Container(
                                           width: 150,
                                           child: DropdownSearch<String>(
-                                            // mode: Mode.MENU,
-                                            // showSelectedItem: true,
                                             items: topicList,
-                                            // hint: "Choose a Topic",
                                             onChanged: (value) {
                                               setState(() {
                                                 topic = value!;
@@ -157,22 +154,6 @@ class _IdeasState extends State<Ideas> {
                                             },
                                           ),
                                         ),
-                                        // DropdownButton<String>(
-                                        //   value: topic,
-                                        //   hint: Text("Choose a Topic"),
-                                        //   items: topicList.map((String value) {
-                                        //     return DropdownMenuItem<String>(
-                                        //       value: value,
-                                        //       child: Text(value),
-                                        //     );
-                                        //   }).toList(),
-                                        //   onChanged: (v) {
-                                        //     setState(() {
-                                        //       topic = v;
-                                        //     });
-                                        //     // print(topic);
-                                        //   },
-                                        // ),
                                         SizedBox(
                                           height: 10,
                                         ),
@@ -224,7 +205,6 @@ class _IdeasState extends State<Ideas> {
                                                       () {
                                                         topicErrorText =
                                                             "Please pick a topic option";
-                                                        ;
                                                         topicError = true;
                                                       },
                                                     );
@@ -241,7 +221,6 @@ class _IdeasState extends State<Ideas> {
                                                         () {
                                                           topicErrorText =
                                                               "Topic cannot be empty or already exist";
-                                                          ;
                                                           topicError = true;
                                                         },
                                                       );
@@ -249,7 +228,6 @@ class _IdeasState extends State<Ideas> {
                                                       setState(
                                                         () {
                                                           topicErrorText = "";
-                                                          ;
                                                           topicError = false;
                                                         },
                                                       );
@@ -331,12 +309,9 @@ class _IdeasState extends State<Ideas> {
                     ),
                   ),
                 ),
-              // Only TopicsStream is scrollable
               Expanded(
                 child: Scrollbar(
-                  child: SingleChildScrollView(
-                    child: TopicsStream(),
-                  ),
+                  child: TopicsStream(),
                 ),
               ),
             ],
