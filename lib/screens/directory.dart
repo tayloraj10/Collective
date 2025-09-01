@@ -171,6 +171,7 @@ class _DirectoryState extends State<Directory> {
                         return Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: ListView(
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             children: snapshot.data!.docs
                                 .map((DocumentSnapshot document) {
