@@ -48,109 +48,88 @@ class _ProjectsState extends State<Projects> {
           )
         : LayoutBuilder(builder:
             (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ),
-                child: Scrollbar(
-                  child: Container(
-                    color: SecondaryColor,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15, bottom: 75),
-                      child: !showProject
-                          ? Column(
-                              children: [
-                                // if (user != null)
-                                //   Padding(
-                                //     padding: const EdgeInsets.only(bottom: 20),
-                                //     child: ElevatedButton(
-                                //         onPressed: () {
-                                //           setState(() {
-                                //             showGroups = !showGroups;
-                                //           });
-                                //         },
-                                //         child: Padding(
-                                //             padding:
-                                //                 EdgeInsets.symmetric(vertical: 16),
-                                //             child: Wrap(
-                                //               crossAxisAlignment:
-                                //                   WrapCrossAlignment.center,
-                                //               children: [
-                                //                 Text(
-                                //                   'View ${showGroups ? 'Projects' : 'Groups'}',
-                                //                   style: TextStyle(
-                                //                     fontWeight: FontWeight.bold,
-                                //                     fontSize: 22,
-                                //                   ),
-                                //                 )
-                                //               ],
-                                //             ))),
-                                //   ),
-                                showGroups && !showProject
-                                    ? Groups()
-                                    : Column(
-                                        children: [
-                                          Wrap(
-                                            alignment: WrapAlignment.center,
-                                            spacing: 10,
-                                            runSpacing: 10,
-                                            children: [
-                                              Text(
-                                                'These are the currently ongoing projects (click for more info)',
-                                                style: pageTextStyle,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              ElevatedButton.icon(
-                                                onPressed: () => {
-                                                  setState(() {
-                                                    showIdeas = !showIdeas;
-                                                  })
-                                                },
-                                                icon: Icon(Icons.lightbulb),
-                                                label: Text(
-                                                  "Ideas",
-                                                  style: TextStyle(
-                                                      fontSize: mediumTextSize,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          ProjectsStream(
-                                              this.showProjectDetails)
-                                        ],
-                                      ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                ElevatedButton(
-                                    onPressed: backToProjects,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      child: Text(
-                                        'Back to Projects',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22,
-                                        ),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  height: 10,
+            return Container(
+              color: SecondaryColor,
+              child: Column(
+                children: [
+                  // Header section always visible
+                  !showProject
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              Text(
+                                'These are the currently ongoing projects (click for more info)',
+                                style: pageTextStyle,
+                                textAlign: TextAlign.center,
+                              ),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    showIdeas = !showIdeas;
+                                  });
+                                },
+                                icon: Icon(Icons.lightbulb),
+                                label: Text(
+                                  "Ideas",
+                                  style: TextStyle(
+                                      fontSize: mediumTextSize,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                ProjectDetail(this.projectData),
-                              ],
-                            ),
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 75),
+                      child: Scrollbar(
+                        child: !showProject
+                            ? (showGroups
+                                ? Groups()
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 15),
+                                        ProjectsStream(this.showProjectDetails),
+                                      ],
+                                    ),
+                                  ))
+                            : SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 12),
+                                  child: Column(
+                                    children: [
+                                      ElevatedButton(
+                                          onPressed: backToProjects,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16),
+                                            child: Text(
+                                              'Back to Projects',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      ProjectDetail(this.projectData),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             );
           });

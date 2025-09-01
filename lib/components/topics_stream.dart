@@ -23,17 +23,12 @@ class _TopicsStreamState extends State<TopicsStream> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
-
         return Container(
-          margin: EdgeInsets.only(bottom: 25),
           width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height,
           child: Accordion(
             maxOpenSections: 1,
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              // print(document.data());
               Map data = document.data() as Map;
-
               return AccordionSection(
                 isOpen: false,
                 header: Text(
