@@ -107,64 +107,62 @@ class _ActivityFeedState extends State<ActivityFeed> {
               )
             ],
           ),
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('goal_submissions')
-                .where('date',
-                    isGreaterThanOrEqualTo:
-                        DateTime.now().subtract(Duration(days: 7)))
-                .orderBy('date', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                print(snapshot.error);
-                return Text('Something went wrong',
-                    style: TextStyle(color: Colors.white));
-              }
+          // The Expanded here ensures ListView gets all available space
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('goal_submissions')
+                  .where('date',
+                      isGreaterThanOrEqualTo:
+                          DateTime.now().subtract(Duration(days: 7)))
+                  .orderBy('date', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text('Something went wrong',
+                      style: TextStyle(color: Colors.white));
+                }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else {
-                var data = (snapshot.data as QuerySnapshot).docs;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  var data = (snapshot.data as QuerySnapshot).docs;
 
-                if (data.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'No activities in the last week',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: mediumTextSize,
+                  if (data.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'No activities in the last week',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: mediumTextSize,
+                        ),
                       ),
-                    ),
-                  );
-                }
-
-                // Group data by date
-                Map<String, List<QueryDocumentSnapshot>> groupedData = {};
-                for (var doc in data) {
-                  String date = formatDate(
-                      date: doc['date'].toDate(),
-                      format: 'YYYYMMDD',
-                      divider: '-');
-
-                  if (groupedData[date] == null) {
-                    groupedData[date] = [];
+                    );
                   }
-                  groupedData[date]!.add(doc);
-                }
-                print(groupedData);
 
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * .75,
-                    ),
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: groupedData.entries.map((entry) {
-                        return Column(
+                  // Group data by date
+                  Map<String, List<QueryDocumentSnapshot>> groupedData = {};
+                  for (var doc in data) {
+                    String date = formatDate(
+                        date: doc['date'].toDate(),
+                        format: 'YYYYMMDD',
+                        divider: '-');
+
+                    if (groupedData[date] == null) {
+                      groupedData[date] = [];
+                    }
+                    groupedData[date]!.add(doc);
+                  }
+
+                  return ListView(
+                    padding: EdgeInsets.zero,
+                    children: groupedData.entries.map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
@@ -295,7 +293,6 @@ class _ActivityFeedState extends State<ActivityFeed> {
                                             ),
                                       title: Text(
                                         "${doc['amount'].toString()} ${formatActionString(doc['amount'], doc['action'].toString())}",
-                                        // "${doc['amount'].toString()} Completed",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
@@ -381,13 +378,13 @@ class _ActivityFeedState extends State<ActivityFeed> {
                               );
                             }).toList(),
                           ],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                );
-              }
-            },
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
