@@ -74,76 +74,81 @@ class _DirectoryState extends State<Directory> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        DropdownButton<String>(
-                          style: TextStyle(color: Colors.white),
-                          dropdownColor: Colors.grey[800],
-                          hint: Text('Select Category',
-                              style: TextStyle(color: Colors.white)),
-                          items: categories.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                              ),
-                            );
-                          }).toList(),
-                          value: categoryFilter.isEmpty ? null : categoryFilter,
-                          onChanged: (String? newValue) {
-                            if (newValue == 'Reset') {
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        children: [
+                          DropdownButton<String>(
+                            style: TextStyle(color: Colors.white),
+                            dropdownColor: Colors.grey[800],
+                            hint: Text('Select Category',
+                                style: TextStyle(color: Colors.white)),
+                            items: categories.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
+                            value:
+                                categoryFilter.isEmpty ? null : categoryFilter,
+                            onChanged: (String? newValue) {
+                              if (newValue == 'Reset') {
+                                setState(() {
+                                  categoryFilter = '';
+                                });
+                                return;
+                              }
                               setState(() {
-                                categoryFilter = '';
+                                categoryFilter = newValue!;
                               });
-                              return;
-                            }
-                            setState(() {
-                              categoryFilter = newValue!;
-                            });
-                          },
-                        ),
-                      ],
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        DropdownButton<String>(
-                          style: TextStyle(color: Colors.white),
-                          dropdownColor: Colors.grey[800],
-                          hint: Text('Select Location',
-                              style: TextStyle(color: Colors.white)),
-                          items: locations.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                              ),
-                            );
-                          }).toList(),
-                          value: locationFilter.isEmpty ? null : locationFilter,
-                          onChanged: (String? newValue) {
-                            if (newValue == 'Reset') {
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        children: [
+                          DropdownButton<String>(
+                            style: TextStyle(color: Colors.white),
+                            dropdownColor: Colors.grey[800],
+                            hint: Text('Select Location',
+                                style: TextStyle(color: Colors.white)),
+                            items: locations.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
+                            value:
+                                locationFilter.isEmpty ? null : locationFilter,
+                            onChanged: (String? newValue) {
+                              if (newValue == 'Reset') {
+                                setState(() {
+                                  locationFilter = '';
+                                });
+                                return;
+                              }
                               setState(() {
-                                locationFilter = '';
+                                locationFilter = newValue!;
                               });
-                              return;
-                            }
-                            setState(() {
-                              locationFilter = newValue!;
-                            });
-                          },
-                        ),
-                      ],
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Expanded(
                 child: Center(
@@ -168,7 +173,7 @@ class _DirectoryState extends State<Directory> {
                           }
 
                           return ListView(
-                            padding: const EdgeInsets.only(top: 15, bottom: 75),
+                            padding: const EdgeInsets.only(bottom: 75),
                             children: snapshot.data!.docs
                                 .map((DocumentSnapshot document) {
                               Map<String, dynamic> data =
