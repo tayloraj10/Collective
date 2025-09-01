@@ -99,64 +99,69 @@ class _InitiativesState extends State<Initiatives> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: viewportConstraints.maxHeight,
-        ),
-        child: Container(
-          color: SecondaryColor,
-          child: Padding(
-              padding: EdgeInsets.only(top: 15, bottom: 75),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          'These are the currently ongoing initiatives (click to contribute)',
-                          style: pageTextStyle,
-                          textAlign: TextAlign.center,
+    return Padding(
+      padding: EdgeInsets.only(bottom: isMobile(context) ? 60 : 30),
+      child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: viewportConstraints.maxHeight,
+          ),
+          child: Container(
+            color: SecondaryColor,
+            child: Padding(
+                padding: EdgeInsets.only(
+                  top: 15,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'These are the currently ongoing initiatives (click to contribute)',
+                            style: pageTextStyle,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      if (isAdmin)
-                        Tooltip(
-                          message: 'Sync Totals',
-                          child: Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.update,
-                                color: Colors.white,
+                        if (isAdmin)
+                          Tooltip(
+                            message: 'Sync Totals',
+                            child: Container(
+                              margin: EdgeInsets.only(right: 20),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.update,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () => updateTotals(),
                               ),
-                              onPressed: () => updateTotals(),
                             ),
                           ),
+                      ],
+                    ),
+                    if (auth.currentUser != null) WeeklyGoalsButton(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SingleChildScrollView(
+                              child: InitiativesStream(),
+                            ),
+                            Flexible(child: ActivityFeed()),
+                          ],
                         ),
-                    ],
-                  ),
-                  if (auth.currentUser != null) WeeklyGoalsButton(),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SingleChildScrollView(
-                            child: InitiativesStream(),
-                          ),
-                          Flexible(child: ActivityFeed()),
-                        ],
                       ),
                     ),
-                  ),
-                ],
-              )),
-        ),
-      );
-    });
+                  ],
+                )),
+          ),
+        );
+      }),
+    );
   }
 }
