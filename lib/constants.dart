@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 isMobile(context) {
-  return MediaQuery.of(context).size.width < 1300;
+  return MediaQuery.of(context).size.width < 1000;
 }
 
 const double smallTextSize = 14;
