@@ -132,9 +132,14 @@ class _ActivityFeedState extends State<ActivityFeed> {
                   if (data.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('No activities in the last week',
-                          style: TextStyle(
-                              color: Colors.white, fontSize: mediumTextSize)),
+                      child: Text(
+                        'No activities in the last week',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: mediumTextSize,
+                        ),
+                      ),
                     );
                   }
 
