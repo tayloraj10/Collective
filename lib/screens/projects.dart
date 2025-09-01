@@ -87,7 +87,7 @@ class _ProjectsState extends State<Projects> {
                       : Container(),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 75),
+                      padding: const EdgeInsets.only(bottom: 60),
                       child: Scrollbar(
                         child: !showProject
                             ? (showGroups
@@ -109,7 +109,7 @@ class _ProjectsState extends State<Projects> {
                                           onPressed: backToProjects,
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
+                                                vertical: 8),
                                             child: Text(
                                               'Back to Projects',
                                               style: TextStyle(
